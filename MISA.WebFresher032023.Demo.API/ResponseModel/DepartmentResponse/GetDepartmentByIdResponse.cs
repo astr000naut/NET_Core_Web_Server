@@ -1,4 +1,4 @@
-﻿using MISA.WebFresher032023.Demo.BusinessLayer.DepartmentService.Dto.Output;
+﻿using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output;
 
 namespace MISA.WebFresher032023.Demo.ResponseModel.DepartmentResponse
 {

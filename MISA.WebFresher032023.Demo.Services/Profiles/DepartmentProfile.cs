@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using MISA.WebFresher032023.Demo.BusinessLayer.DepartmentService.Dto.FromClient;
-using MISA.WebFresher032023.Demo.BusinessLayer.DepartmentService.Dto.Output;
+using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input;
+using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Output;
 

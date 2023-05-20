@@ -9,14 +9,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 {
-    public interface IDepartmentRepository
+    public interface IDepartmentRepository : IBaseRepository<Department, DepartmentCreate, DepartmentUpdate>
     {
-        Task<DbConnection> GetOpenConnectionAsync();
-        Task DeleteByIdAsync(Guid id);
-        
-        Task<Department?> GetAsync(Guid departmentId);
-        Task<IEnumerable<Department?>> GetAllAsync();
-        Task CreateAsync(DepartmentCreate departmentCreate);
-        Task UpdateAsync(Guid departmentId, DepartmentUpdate departmentUpdate);
     }
 }

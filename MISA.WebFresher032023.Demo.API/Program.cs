@@ -1,5 +1,4 @@
-using MISA.WebFresher032023.Demo.BusinessLayer.DepartmentService;
-using MISA.WebFresher032023.Demo.BusinessLayer.EmployeeService;
+using MISA.WebFresher032023.Demo.BusinessLayer.Services;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);

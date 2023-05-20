@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MISA.WebFresher032023.Demo.BusinessLayer.EmployeeService;
-using MISA.WebFresher032023.Demo.BusinessLayer.EmployeeService.Dto.Input;
+using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input;
+using MISA.WebFresher032023.Demo.BusinessLayer.Services;
 using MISA.WebFresher032023.Demo.ResponseModel;
 using MISA.WebFresher032023.Demo.ResponseModel.EmployeeResponse;
 
@@ -31,14 +31,14 @@ namespace MISA.WebFresher032023.Demo.Controllers
         // GET: api/v1/Employees/filter
         [Route("filter")]
         [HttpGet]
-        public async Task<FilterEmployeeResponse> FilterAsync(int skip, int take, string? employeeFilter)
+        public async Task<FilterEmployeeResponse> FilterAsync(int skip, int take, string? keySearch)
         {
 
             var response = new FilterEmployeeResponse();
 
             try 
             {
-                response.Data = await _employeeService.FilterAsync(skip, take, employeeFilter); 
+                response.Data = await _employeeService.FilterAsync(skip, take, keySearch ?? ""); 
             }
             catch (Exception ex) 
             {
@@ -47,7 +47,7 @@ namespace MISA.WebFresher032023.Demo.Controllers
             }
             
             return response;
-        }
+        }   
 
         /// <summary>
         /// API Lấy mã nhân viên mới - DONE

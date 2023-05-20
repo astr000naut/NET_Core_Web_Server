@@ -10,23 +10,12 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 {
-    public interface IEmployeeRepository
+    public interface IEmployeeRepository : IBaseRepository<Employee, EmployeeCreate, EmployeeUpdate>
     {
-        Task<DbConnection> GetOpenConnectionAsync();
 
         Task<Boolean> CheckCodeExistAsync(Guid? id, string employeeCode);
 
-        Task DeleteByIdAsync(Guid id);
-
-        Task<EmployeeFilteredList> FilterAsync(int skip, int take, string? employeeSearch);
-
         Task<string> GetNewCodeAsync();
 
-        Task<Employee?> GetAsync(Guid employeeId);
-
-        Task CreateAsync(EmployeeCreate employeeCreate);
-
-        Task UpdateAsync(Guid employeeId, EmployeeUpdate employeeUpdate);
-        
     }
 }

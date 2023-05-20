@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MISA.WebFresher032023.Demo.BusinessLayer.DepartmentService;
-using MISA.WebFresher032023.Demo.BusinessLayer.DepartmentService.Dto.FromClient;
+using MISA.WebFresher032023.Demo.API.ResponseModel.DepartmentResponse;
+using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input;
+using MISA.WebFresher032023.Demo.BusinessLayer.Services;
 using MISA.WebFresher032023.Demo.ResponseModel;
 using MISA.WebFresher032023.Demo.ResponseModel.DepartmentResponse;
+using MISA.WebFresher032023.Demo.ResponseModel.EmployeeResponse;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,21 +25,24 @@ namespace MISA.WebFresher032023.Demo.Controllers
         /// </summary>
         /// <returns></returns>
         // GET: api/<DepartmentsController>
+        [Route("filter")]
         [HttpGet]
-        public async Task<GetDepartmentListResponse> GetAllAsync()
+        public async Task<FilterDepartmentResponse> FilterDepartmentAsync(int skip, int take, string? keySearch)
         {
-            var response = new GetDepartmentListResponse();
+
+            var response = new FilterDepartmentResponse();
+
             try
             {
-                response.Data = await _departmentService.GetAllAsync();
+                response.Data = await _departmentService.FilterAsync(skip, take, keySearch ?? "");
             }
             catch (Exception ex)
             {
                 response.Success = false;
                 response.Message = ex.Message;
             }
-            return response;
 
+            return response;
         }
 
         /// <summary>

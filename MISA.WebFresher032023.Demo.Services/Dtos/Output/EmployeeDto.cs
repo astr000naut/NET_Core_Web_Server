@@ -5,16 +5,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MISA.WebFresher032023.Demo.BusinessLayer.EmployeeService.Dto.Input
+namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output
 {
-    public class EmployeeUpdateDto
+    public class EmployeeDto
     {
+        // ID nhân viên Char(36)
+        public Guid EmployeeId { get; set; }
         // Mã nhân viên Varchar(50)
         public string EmployeeCode { get; set; }
         // Tên nhân viên Varchar(100)
         public string EmployeeFullName { get; set; }
         // ID đơn vị Char(36)
         public Guid DepartmentId { get; set; }
+        // Mã đơn vị Varchar(50)
+        public string DepartmentCode { get; set; }
+        // Tên đơn vị Varchar(255)
+        public string DepartmentName { get; set; }
         // Vị trí Varchar(255)
         public string? PositionName { get; set; }
         // Ngày sinh Date

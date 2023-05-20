@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MISA.WebFresher032023.Demo.BusinessLayer.EmployeeService.Dto.Input
+namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input
 {
-    public class EmployeeCreateDto
+    public class EmployeeUpdateDto
     {
         // Mã nhân viên Varchar(50)
         public string EmployeeCode { get; set; }
