@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input;
 using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output;
+using MISA.WebFresher032023.Demo.Common.Enums;
+using MISA.WebFresher032023.Demo.Common.Exceptions;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Output;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories;
@@ -24,8 +26,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         public override async Task<Guid?> CreateAsync(DepartmentCreateDto departmentCreateDto)
         {
             var departmentCreate = _mapper.Map<DepartmentCreate>(departmentCreateDto);
-            departmentCreate.DepartmentId = new Guid();
-            departmentCreate.DepartmentCode = "";
+            departmentCreate.DepartmentId = Guid.NewGuid();
             departmentCreate.CreatedDate = DateTime.Now.ToLocalTime();
             departmentCreate.CreatedBy = "Dux";
             departmentCreate.ModifiedDate = DateTime.Now.ToLocalTime();
@@ -40,14 +41,20 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <param name="departmentId"></param>
         /// <param name="departmentUpdateDto"></param>
         /// <returns></returns>
-        public override async Task UpdateAsync(Guid departmentId, DepartmentUpdateDto departmentUpdateDto)
+        public override async Task<bool> UpdateAsync(Guid departmentId, DepartmentUpdateDto departmentUpdateDto)
         {
+            // Kiểm tra mã đã tồn tại
+            var isDepartmentCodeExist = await _departmentRepository.CheckCodeExistAsync(departmentId, departmentUpdateDto.DepartmentCode);
+            if (isDepartmentCodeExist)
+            {
+                throw new ConflictException(Error.ConflictCode, Error.DepartmentCodeHasExist, Error.DepartmentCodeHasExist);
+            }
+
             var departmentUpdate = _mapper.Map<DepartmentUpdate>(departmentUpdateDto);
             departmentUpdate.ModifiedDate = DateTime.Now.ToLocalTime();
             departmentUpdate.ModifiedBy = "Dux";
-            await _departmentRepository.UpdateAsync(departmentId, departmentUpdate);
+            return await _departmentRepository.UpdateAsync(departmentId, departmentUpdate);
         }
-
 
     }
 }

@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input
 {
-    public class DepartmentCreateDto
-    {
-        public string DepartmentName { get; set; }
-    }
+    public class DepartmentCreateDto : BaseDepartmentInputDto
+    {}
 }

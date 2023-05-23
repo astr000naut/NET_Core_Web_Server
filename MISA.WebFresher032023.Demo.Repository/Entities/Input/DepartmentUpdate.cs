@@ -12,8 +12,8 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Entities.Input
         // ID của đơn vị
         public Guid DepartmentId { get; set; }
         // Mã đơn vị
-        public string? DepartmentCode { get; set; }
+        public string DepartmentCode { get; set; }
         // Tên đơn vị
-        public string? DepartmentName { get; set; }
+        public string DepartmentName { get; set; }
     }
 }

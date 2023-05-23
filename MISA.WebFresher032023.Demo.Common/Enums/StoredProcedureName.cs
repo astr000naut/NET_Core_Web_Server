@@ -17,18 +17,23 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
         public const string FilterEmployee = "Proc_FilterEmployee";
         public const string UpdateEmployee = "Proc_UpdateEmployee";
         public const string DeleteEmployee = "Proc_DeleteEmployeeById";
+        public const string CheckDepartmentCodeExist = "Proc_CheckDepartmentCodeExist";
 
 
+        public const string GetDepartmentById = "Proc_GetDepartmentById";
         public const string CreateDepartment = "Proc_InsertDepartment";
         public const string UpdateDepartment = "Proc_UpdateDepartment";
         public const string FilterDepartment = "Proc_FilterDepartment";
         public const string DeleteDepartment = "Proc_DeleteDepartmentById";
+        public const string CheckEmployeeCodeExist = "Proc_CheckEmployeeCodeExist";
 
 
         public static string GetProcedureNameByEntityClassName(string entityClassName)
         {
             switch (entityClassName)
             {
+                case "Department":
+                    return GetDepartmentById;
                 case "DepartmentCreate":
                     return CreateDepartment;
                 case "DepartmentUpdate":
@@ -37,15 +42,21 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
                     return FilterDepartment;
                 case "DepartmentDelete":
                     return DeleteDepartment;
+                case "DepartmentCheckCodeExist":
+                    return CheckDepartmentCodeExist;
 
                 case "Employee":
                     return GetEmployeeById;
+                case "EmployeeCreate":
+                    return CreateEmployee;
                 case "EmployeeUpdate":
                     return UpdateEmployee;
                 case "FilteredList<Employee>":
                     return FilterEmployee;
                 case "EmployeeDelete":
                     return DeleteEmployee;
+                case "EmployeeCheckCodeExist":
+                    return CheckEmployeeCodeExist;
 
                 default: throw new Exception("Không tìm thấy tên Stored Procedure");
             }

@@ -22,32 +22,32 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output
         // Tên đơn vị Varchar(255)
         public string DepartmentName { get; set; }
         // Vị trí Varchar(255)
-        public string? PositionName { get; set; }
+        public string PositionName { get; set; }
         // Ngày sinh Date
         public DateTime? DateOfBirth { get; set; }
         // Giới tính Tiny Int 0 - 1 - 2
         public Gender? Gender { get; set; }
         // Giới tính Varchar(25)
-        public string? GenderName { get; set; }
+        public string GenderName { get; set; }
         // Số CMND Varchar(25)
-        public string? IdentityNumber { get; set; }
+        public string IdentityNumber { get; set; }
         // Ngày cấp Date
         public DateTime? IdentityDate { get; set; }
         // Nơi cấp Varchar(255)
-        public string? IdentityPlace { get; set; }
+        public string IdentityPlace { get; set; }
         // Địa chỉ Varchar(255)
-        public string? Address { get; set; }
+        public string Address { get; set; }
         // Số ĐT di động varchar(50)
-        public string? PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
         // Số ĐT cố định varchar(50)
-        public string? LandlineNumber { get; set; }
+        public string LandlineNumber { get; set; }
         // Địa chỉ Email varchar(50)
-        public string? Email { get; set; }
+        public string Email { get; set; }
         // Số tài khoản varchar(50)
-        public string? BankAccount { get; set; }
+        public string BankAccount { get; set; }
         // Tên ngân hàng varchar(255)
-        public string? BankName { get; set; }
+        public string BankName { get; set; }
         // Chi nhánh varchar(255)
-        public string? BankBranch { get; set; }
+        public string BankBranch { get; set; }
     }
 }

@@ -1,14 +1,17 @@
-﻿using System;
+﻿using MISA.WebFresher032023.Demo.Common.Enums;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input
 {
-    public class DepartmentUpdateDto
+    public class DepartmentUpdateDto : BaseDepartmentInputDto
     {
-        public string? DepartmentName { get; set; }
+        // Mã đơn vị
+        [StringLength(50)]
         public string? DepartmentCode { get; set; }
     }
 }

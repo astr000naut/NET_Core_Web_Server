@@ -8,8 +8,11 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
 {
     public enum Gender
     {
+        // Nam
         Male,
+        // Nữ
         Female,
+        // Giới tính khác
         Other
     }
 }

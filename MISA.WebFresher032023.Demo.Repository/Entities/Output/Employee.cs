@@ -51,9 +51,5 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Entities.Output
         public string BankName { get; set; }
         // Chi nhánh ngân hàng
         public string BankBranch { get; set; }
-        // Ngày tạo
-        public DateTime CreatedDate { get; set; }
-        // Tạo bởi
-        public string CreatedBy { get; set; }
     }
 }

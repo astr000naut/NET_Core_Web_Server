@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input;
 using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output;
+using MISA.WebFresher032023.Demo.Common.Enums;
+using MISA.WebFresher032023.Demo.Common.Exceptions;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Output;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories;
@@ -29,31 +31,54 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
        
         public override async Task<Guid?> CreateAsync(EmployeeCreateDto employeeCreateDto)
         {
-            // Validate
+            // Kiểm tra đơn vị có tồn tại
+            var isDepartmentIdValid = await _employeeRepository.ValidateDepartmentId(employeeCreateDto.DepartmentId);
+            if (!isDepartmentIdValid)
+            {
+                throw new ConflictException(Error.ConflictCode, Error.InvalidDepartmentId, Error.InvalidDepartmentId);
+            }
+            // Kiểm tra mã đã tồn tại
+            var isEmployeeCodeExist = await _employeeRepository.CheckCodeExistAsync(null, employeeCreateDto.EmployeeCode);
+            if (isEmployeeCodeExist)
+            {
+                throw new ConflictException(Error.ConflictCode, Error.EmployeeCodeHasExist, Error.EmployeeCodeHasExist);
+            }
 
-            // Create
-           /* var employeeCreate = _mapper.Map<EmployeeCreate>(employeeCreateDto);
-            employeeCreate.EmployeeId = new Guid();
-            employeeCreate.CreatedDate = DateTime.Now.ToLocalTime();
-            employeeCreate.CreatedBy = "Dux";
-            employeeCreate.ModifiedDate = DateTime.Now.ToLocalTime();
-            employeeCreate.ModifiedBy = "Dux";
-            await _employeeRepository.CreateAsync(employeeCreate);
+            // Tạo mới nhân viên 
+             var employeeCreate = _mapper.Map<EmployeeCreate>(employeeCreateDto);
+             employeeCreate.EmployeeId = Guid.NewGuid();
+             employeeCreate.CreatedDate = DateTime.Now.ToLocalTime();
+             employeeCreate.CreatedBy = "Dux";
+             employeeCreate.ModifiedDate = DateTime.Now.ToLocalTime();
+             employeeCreate.ModifiedBy = "Dux";
+             var isCreated = await _employeeRepository.CreateAsync(employeeCreate);
 
-            return employeeCreate.EmployeeId;*/
-           throw new NotImplementedException();
+             return isCreated ? employeeCreate.EmployeeId : null;
         }
        
-        public override async Task UpdateAsync(Guid id, EmployeeUpdateDto employeeUpdateDto)
+        public override async Task<bool> UpdateAsync(Guid id, EmployeeUpdateDto employeeUpdateDto)
         {
-            // Validate
+            _ = await _employeeRepository.GetAsync(id) ?? throw new ConflictException(Error.ConflictCode, Error.InvalidEmployeeId, Error.InvalidEmployeeId);
 
-            // Update
-            /*var employeeUpdate = _mapper.Map<EmployeeUpdate>(employeeUpdateDto);
+            // Kiểm tra đơn vị có tồn tại
+            var isDepartmentIdValid = await _employeeRepository.ValidateDepartmentId(employeeUpdateDto.DepartmentId);
+            if (!isDepartmentIdValid)
+            {
+                throw new ConflictException(Error.ConflictCode, Error.InvalidDepartmentId, Error.InvalidDepartmentId);
+            }
+            // Kiểm tra mã đã tồn tại
+            var isEmployeeCodeExist = await _employeeRepository.CheckCodeExistAsync(id, employeeUpdateDto.EmployeeCode);
+            if (isEmployeeCodeExist)
+            {
+                throw new ConflictException(Error.ConflictCode, Error.EmployeeCodeHasExist, Error.EmployeeCodeHasExist);
+            }
+
+            // Cập nhật thông tin nhân viên 
+            var employeeUpdate = _mapper.Map<EmployeeUpdate>(employeeUpdateDto);
+            employeeUpdate.EmployeeId = id;
             employeeUpdate.ModifiedDate = DateTime.Now.ToLocalTime();
-            employeeUpdate.ModifiedBy = "DUX";
-            await _employeeRepository.UpdateAsync(id, employeeUpdate);*/
-            throw new NotImplementedException();
+            employeeUpdate.ModifiedBy = "Dux";
+            return await _employeeRepository.UpdateAsync(id, employeeUpdate);
         }
     }
 }

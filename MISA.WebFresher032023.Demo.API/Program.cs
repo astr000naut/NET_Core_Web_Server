@@ -1,3 +1,4 @@
+using MISA.WebFresher032023.Demo.API.Middleware;
 using MISA.WebFresher032023.Demo.BusinessLayer.Services;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories;
 
@@ -17,6 +18,7 @@ builder.Services.AddCors(options =>
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -31,6 +33,9 @@ builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+app.UseMiddleware<ExceptionHandler>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
