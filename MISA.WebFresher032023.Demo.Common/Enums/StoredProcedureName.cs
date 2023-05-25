@@ -18,6 +18,7 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
         public const string UpdateEmployee = "Proc_UpdateEmployee";
         public const string DeleteEmployee = "Proc_DeleteEmployeeById";
         public const string CheckDepartmentCodeExist = "Proc_CheckDepartmentCodeExist";
+        public const string DeleteMultipleEmployee = "Proc_DeleteMultipleEmployee";
 
 
         public const string GetDepartmentById = "Proc_GetDepartmentById";
@@ -26,8 +27,14 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
         public const string FilterDepartment = "Proc_FilterDepartment";
         public const string DeleteDepartment = "Proc_DeleteDepartmentById";
         public const string CheckEmployeeCodeExist = "Proc_CheckEmployeeCodeExist";
+        public const string DeleteMultipleDepartment = "Proc_DeleteMultipleDepartment";
 
-
+        /// <summary>
+        /// Lấy Stored procedure từ string tạo bởi EntityClassName và kiểu hành động
+        /// </summary>
+        /// <param name="entityClassName"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public static string GetProcedureNameByEntityClassName(string entityClassName)
         {
             switch (entityClassName)
@@ -44,6 +51,8 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
                     return DeleteDepartment;
                 case "DepartmentCheckCodeExist":
                     return CheckDepartmentCodeExist;
+                case "DepartmentDeleteMultiple":
+                    return DeleteMultipleDepartment;
 
                 case "Employee":
                     return GetEmployeeById;
@@ -57,6 +66,8 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
                     return DeleteEmployee;
                 case "EmployeeCheckCodeExist":
                     return CheckEmployeeCodeExist;
+                case "EmployeeDeleteMultiple":
+                    return DeleteMultipleEmployee;
 
                 default: throw new Exception("Không tìm thấy tên Stored Procedure");
             }

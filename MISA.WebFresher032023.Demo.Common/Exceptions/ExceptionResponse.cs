@@ -15,6 +15,10 @@ namespace MISA.WebFresher032023.Demo.Common.Exceptions
         public string? DevMessage { get; set; }
         public string? TraceId { get; set; }
 
+        /// <summary>
+        /// Override hàm ép kiểu sang String
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return JsonSerializer.Serialize(this);

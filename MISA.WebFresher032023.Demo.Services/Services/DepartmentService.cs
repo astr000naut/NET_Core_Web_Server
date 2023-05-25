@@ -23,6 +23,11 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
             _departmentRepository = departmentRepository;
         }
        
+        /// <summary>
+        /// Tạo mới một đơn vị
+        /// </summary>
+        /// <param name="departmentCreateDto"></param>
+        /// <returns></returns>
         public override async Task<Guid?> CreateAsync(DepartmentCreateDto departmentCreateDto)
         {
             var departmentCreate = _mapper.Map<DepartmentCreate>(departmentCreateDto);

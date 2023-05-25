@@ -23,12 +23,22 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         }
    
        
+        /// <summary>
+        /// Lấy mã nhân viên mới
+        /// </summary>
+        /// <returns></returns>
         public async Task<string> GetNewCodeAsync()
         {
             var newCode = await _employeeRepository.GetNewCodeAsync();
             return newCode;
         }
        
+        /// <summary>
+        /// Tạo mới một nhân viên
+        /// </summary>
+        /// <param name="employeeCreateDto"></param>
+        /// <returns></returns>
+        /// <exception cref="ConflictException"></exception>
         public override async Task<Guid?> CreateAsync(EmployeeCreateDto employeeCreateDto)
         {
             // Kiểm tra đơn vị có tồn tại
@@ -38,7 +48,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                 throw new ConflictException(Error.ConflictCode, Error.InvalidDepartmentId, Error.InvalidDepartmentId);
             }
             // Kiểm tra mã đã tồn tại
-            var isEmployeeCodeExist = await _employeeRepository.CheckCodeExistAsync(null, employeeCreateDto.EmployeeCode);
+            var isEmployeeCodeExist = await _baseRepository.CheckCodeExistAsync(null, employeeCreateDto.EmployeeCode);
             if (isEmployeeCodeExist)
             {
                 throw new ConflictException(Error.ConflictCode, Error.EmployeeCodeHasExist, Error.EmployeeCodeHasExist);
@@ -56,6 +66,13 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
              return isCreated ? employeeCreate.EmployeeId : null;
         }
        
+        /// <summary>
+        /// Cập nhật thông tin nhân viên
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="employeeUpdateDto"></param>
+        /// <returns></returns>
+        /// <exception cref="ConflictException"></exception>
         public override async Task<bool> UpdateAsync(Guid id, EmployeeUpdateDto employeeUpdateDto)
         {
             _ = await _employeeRepository.GetAsync(id) ?? throw new ConflictException(Error.ConflictCode, Error.InvalidEmployeeId, Error.InvalidEmployeeId);
@@ -67,7 +84,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                 throw new ConflictException(Error.ConflictCode, Error.InvalidDepartmentId, Error.InvalidDepartmentId);
             }
             // Kiểm tra mã đã tồn tại
-            var isEmployeeCodeExist = await _employeeRepository.CheckCodeExistAsync(id, employeeUpdateDto.EmployeeCode);
+            var isEmployeeCodeExist = await _baseRepository.CheckCodeExistAsync(id, employeeUpdateDto.EmployeeCode);
             if (isEmployeeCodeExist)
             {
                 throw new ConflictException(Error.ConflictCode, Error.EmployeeCodeHasExist, Error.EmployeeCodeHasExist);

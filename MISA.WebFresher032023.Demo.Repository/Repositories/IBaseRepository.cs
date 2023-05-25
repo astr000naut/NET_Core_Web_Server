@@ -73,5 +73,12 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// <param name="code"></param>
         /// <returns></returns>
         Task<bool> CheckCodeExistAsync(Guid? id, string code);
+
+        /// <summary>
+        /// Xóa hàng loạt
+        /// </summary>
+        /// <param name="stringIdList"></param>
+        /// <returns></returns>
+        Task<int> DeleteMultipleAsync(string stringIdList);
     }
 }

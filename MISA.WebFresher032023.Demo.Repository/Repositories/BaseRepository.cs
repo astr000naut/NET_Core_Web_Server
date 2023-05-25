@@ -217,6 +217,36 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         }
 
         /// <summary>
+        /// Xoa hang loat
+        /// </summary>
+        /// <param name="stringIdList"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<int> DeleteMultipleAsync(string stringIdList)
+        {
+            var connection = await GetOpenConnectionAsync();
+            try
+            {
+                var dynamicParams = new DynamicParameters();
+                dynamicParams.Add("p_idList", stringIdList);
+
+                var entityClassName = typeof(TEntity).Name;
+                var storedProcedureKey = entityClassName + "DeleteMultiple";
+
+                var proceduredName = StoredProcedureName.GetProcedureNameByEntityClassName(storedProcedureKey);
+
+                var rowAffected = await connection.ExecuteAsync(proceduredName, commandType: CommandType.StoredProcedure, param: dynamicParams);
+                await connection.CloseAsync();
+                return rowAffected;
+            }
+            catch (Exception ex)
+            {
+                await connection.CloseAsync();
+                throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
+            }
+        }
+
+        /// <summary>
         /// Kiểm tra mã  đã tồn tại
         /// </summary>
         /// <param name="id"></param>

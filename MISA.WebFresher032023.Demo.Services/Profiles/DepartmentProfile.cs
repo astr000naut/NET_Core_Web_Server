@@ -15,8 +15,13 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Profiles
     {
        public DepartmentProfile()
         {
+            // Map từ Department sang DepartmentDto
             CreateMap<Department, DepartmentDto>();
+
+            // Map từ DepartmentCreateDto sang DepartmentCreate
             CreateMap<DepartmentCreateDto, DepartmentCreate>();
+
+            // Map từ DepartmentUpdateDto sang DepartmentUpdate
             CreateMap<DepartmentUpdateDto, DepartmentUpdate>();
         }
 

@@ -11,7 +11,11 @@ namespace MISA.WebFresher032023.Demo.API.Middleware
         {
             _next = next;
         }
-
+        /// <summary>
+        /// Hàm bắt sự kiện của middleware
+        /// </summary>
+        /// <param name="httpContext"></param>
+        /// <returns></returns>
         public async Task InvokeAsync(HttpContext httpContext)
         {
             try
@@ -24,6 +28,12 @@ namespace MISA.WebFresher032023.Demo.API.Middleware
             }
         }
 
+        /// <summary>
+        /// Xử lý khi nhận được exception
+        /// </summary>
+        /// <param name="httpContext"></param>
+        /// <param name="exception"></param>
+        /// <returns></returns>
         private async Task HandleExceptionAsync(HttpContext httpContext, Exception exception)
         {
             httpContext.Response.ContentType = "application/json";
@@ -54,6 +64,7 @@ namespace MISA.WebFresher032023.Demo.API.Middleware
 
 
             } else
+            // Trường hợp lỗi chung chung, không xác định được kiểu của Exception
             {
                 httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 exceptionText = new ExceptionResponse()

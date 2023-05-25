@@ -24,7 +24,7 @@ namespace MISA.WebFresher032023.Demo.Controllers
 
 
         /// <summary>
-        /// API Lấy mã nhân viên mới - DONE
+        /// API Lấy mã nhân viên mới
         /// </summary>
         /// <returns></returns>
         [Route("NewEmployeeCode")]

@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.DataLayer.Entities.Input
 {
-    public class DepartmentCreate : BaseInputEntity
+    public class DepartmentCreate : BaseDepartmentInput
     {
-        // ID của đơn vị
-        public Guid DepartmentId { get; set; }
-        // Tên đơn vị
-        public string DepartmentName { get; set; }
         // Ngày tạo
         public DateTime CreatedDate { get; set; }
         // Tạo bởi

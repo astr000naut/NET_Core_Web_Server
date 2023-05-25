@@ -20,34 +20,6 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         public EmployeeRepository(IConfiguration configuration): base(configuration) { }
 
         /// <summary>
-        /// Kiểm tra mã nhân viên đã tồn tại
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="employeeCode"></param>
-        /// <returns></returns>
-        /// Author: DNT(20/05/2023)
-        public async Task<Boolean> CheckCodeExistAsync(Guid? id, string employeeCode)
-        {
-            var connection = await GetOpenConnectionAsync();
-            try
-            {
-                var dynamicParams = new DynamicParameters();
-                dynamicParams.Add("p_employeeId", id);
-                dynamicParams.Add("p_employeeCode", employeeCode);
-                dynamicParams.Add("o_isExist", direction: ParameterDirection.Output);
-
-                await connection.ExecuteAsync("Proc_CheckEmployeeCodeExist", commandType: CommandType.StoredProcedure, param: dynamicParams);
-                var isExist = dynamicParams.Get<Boolean>("o_isExist");
-                await connection.CloseAsync();
-                return isExist;
-            } catch (Exception ex)
-            {
-                await connection.CloseAsync();
-                throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
-            }
-        }
-
-        /// <summary>
         /// Lấy mã nhân viên mới
         /// </summary>
         /// <returns></returns>

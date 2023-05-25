@@ -12,14 +12,6 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 {
     public interface IEmployeeRepository : IBaseRepository<Employee, EmployeeCreate, EmployeeUpdate>
     {
-        /// <summary>
-        /// Kiểm tra mã nhân viên có tồn tại hay không
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="employeeCode"></param>
-        /// <returns></returns>
-        /// Author: DNT(20/05/2023)
-        Task<Boolean> CheckCodeExistAsync(Guid? id, string employeeCode);
 
         /// <summary>
         /// Lấy mã nhân viên mới

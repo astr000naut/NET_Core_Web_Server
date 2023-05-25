@@ -10,6 +10,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 {
     public interface IEmployeeService : IBaseService<EmployeeDto, EmployeeCreateDto, EmployeeUpdateDto>
     {
+        /// <summary>
+        /// Sinh mã nhân viên mới
+        /// </summary>
+        /// <returns></returns>
         Task<string> GetNewCodeAsync();
     }
 }

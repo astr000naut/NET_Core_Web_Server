@@ -23,9 +23,26 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Tạo một Entity
+        /// </summary>
+        /// <param name="tEntityCreateDto"></param>
+        /// <returns></returns>
         public abstract Task<Guid?> CreateAsync(TEntityCreateDto tEntityCreateDto);
+
+        /// <summary>
+        /// Cập nhật thông tin một Entity
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="tEntityUpdateDto"></param>
+        /// <returns></returns>
         public abstract Task<bool> UpdateAsync(Guid id, TEntityUpdateDto tEntityUpdateDto);
 
+        /// <summary>
+        /// Lấy một Entity theo ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<TEntityDto?> GetAsync(Guid id)
         {
             var entity = await _baseRepository.GetAsync(id);
@@ -33,6 +50,13 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
             return entityDto;
         }
 
+        /// <summary>
+        /// Filter danh sách Entity
+        /// </summary>
+        /// <param name="skip"></param>
+        /// <param name="take"></param>
+        /// <param name="keySearch"></param>
+        /// <returns></returns>
         public async Task<FilteredListDto<TEntityDto>> FilterAsync(int skip, int? take, string keySearch)
         {
             var tEntityFilteredList = await _baseRepository.FilterAsync(skip, take, keySearch);
@@ -49,14 +73,37 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
             return tEntityFilteredListDto;
         }
 
+        /// <summary>
+        /// Xóa một Entity theo ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<bool> DeleteByIdAsync(Guid id)
         {
             return await _baseRepository.DeleteByIdAsync(id);
         }
 
+        /// <summary>
+        /// Kiểm tra trùng mã 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
         public async Task<bool> CheckCodeExistAsync(Guid? id, string code)
         {
             return await _baseRepository.CheckCodeExistAsync(id, code);
+        }
+
+        /// <summary>
+        /// Xóa nhiều Entity
+        /// </summary>
+        /// <param name="entityIdList"></param>
+        /// <returns></returns>
+        public async Task<int> DeleteMultipleAsync(List<Guid> entityIdList)
+        {
+            // Transform list to string
+            var stringIdList = string.Join(",", entityIdList);
+            return await _baseRepository.DeleteMultipleAsync(stringIdList);
         }
     }
 }

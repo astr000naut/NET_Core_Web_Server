@@ -36,10 +36,6 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input
         [Range(0, 2)]
         public int? Gender { get; set; }
 
-        // Giới tính Varchar(25)
-        [StringLength(25)]
-        public string? GenderName { get; set; }
-
         // Số CMND Varchar(25)
         [StringLength(25)]
         public string? IdentityNumber { get; set; }

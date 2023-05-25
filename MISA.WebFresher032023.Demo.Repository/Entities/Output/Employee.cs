@@ -29,8 +29,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Entities.Output
         public DateTime? DateOfBirth { get; set; }
         // Giá trị giới tính
         public Gender? Gender { get; set; }
-        // Giới tính
-        public string GenderName { get; set; }
+
         // Số CMND
         public string IdentityNumber { get; set; }
         // Ngày cấp CMND
