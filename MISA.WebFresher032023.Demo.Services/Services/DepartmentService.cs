@@ -34,8 +34,6 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
             departmentCreate.DepartmentId = Guid.NewGuid();
             departmentCreate.CreatedDate = DateTime.Now.ToLocalTime();
             departmentCreate.CreatedBy = "Dux";
-            departmentCreate.ModifiedDate = DateTime.Now.ToLocalTime();
-            departmentCreate.ModifiedBy = "Dux";
             await _departmentRepository.CreateAsync(departmentCreate);
             return departmentCreate.DepartmentId;
         }

@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "MISA.WebFresher032023.Demo.BusinessLayer": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:60205;http://localhost:60206"
+    }
+  }
+}

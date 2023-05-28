@@ -32,17 +32,20 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
             {
                 var dynamicParams = new DynamicParameters();
                 dynamicParams.Add("o_newEmployeeCode", direction: ParameterDirection.Output);
-
+              
                 await connection.ExecuteAsync("Proc_GenerateNewEmployeeCode", commandType: CommandType.StoredProcedure, param: dynamicParams);
                 var newEmployeeCode = dynamicParams.Get<string>("o_newEmployeeCode");
-                await connection.CloseAsync();
 
                 return newEmployeeCode;
             } catch (Exception ex)
+            {   
+                throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
+
+            } finally 
             {
                 await connection.CloseAsync();
-                throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
             }
+
         }
 
         /// <summary>
@@ -60,14 +63,17 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                 dynamicParams.Add("p_id", id);
 
                 var department = await connection.QueryFirstOrDefaultAsync<Department>("Proc_GetDepartmentById", commandType: CommandType.StoredProcedure, param: dynamicParams);
-                await connection.CloseAsync();
 
                 return (department != null);
             }
             catch (Exception ex)
             {
-                await connection.CloseAsync();
+                
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
+            }
+            finally
+            {
+                await connection.CloseAsync();
             }
         }
     }

@@ -17,4 +17,8 @@
     <ProjectReference Include="..\MISA.WebFresher032023.Demo.Services\MISA.WebFresher032023.Demo.BusinessLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Documents\" />
+  </ItemGroup>
+
 </Project>

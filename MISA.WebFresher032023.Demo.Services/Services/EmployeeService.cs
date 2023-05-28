@@ -59,8 +59,6 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
              employeeCreate.EmployeeId = Guid.NewGuid();
              employeeCreate.CreatedDate = DateTime.Now.ToLocalTime();
              employeeCreate.CreatedBy = "Dux";
-             employeeCreate.ModifiedDate = DateTime.Now.ToLocalTime();
-             employeeCreate.ModifiedBy = "Dux";
              var isCreated = await _employeeRepository.CreateAsync(employeeCreate);
 
              return isCreated ? employeeCreate.EmployeeId : null;

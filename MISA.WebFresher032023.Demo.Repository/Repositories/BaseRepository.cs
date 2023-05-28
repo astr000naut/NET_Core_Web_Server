@@ -74,12 +74,17 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                 }
                 var entityClassName = typeof(TEntityCreate).Name;
                 var rowAffected = await connection.ExecuteAsync(StoredProcedureName.GetProcedureNameByEntityClassName(entityClassName), commandType: CommandType.StoredProcedure, param: dynamicParams);
-                await connection.CloseAsync();
+
                 return (rowAffected != 0);
+
             } catch (Exception ex)
             {
-                await connection.CloseAsync();
+
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
+            }
+            finally
+            {
+                await connection.CloseAsync();
             }
         }
 
@@ -104,12 +109,14 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                 var entity = await connection.QueryFirstOrDefaultAsync<TEntity?>(StoredProcedureName.GetProcedureNameByEntityClassName(entityClassName),
                     commandType: CommandType.StoredProcedure, param: dynamicParams);
 
-                await connection.CloseAsync();
                 return entity;
             } catch (Exception ex)
             {
-                await connection.CloseAsync();
+               
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
+            } finally
+            {
+                await connection.CloseAsync();
             }
    
         }
@@ -148,14 +155,15 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                     ListData = listData,
                     TotalRecord = totalRecord
                 };
-                await connection.CloseAsync();
                 return filteredList;
             }
             catch (Exception ex)
             {
-                await connection.CloseAsync();
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
-            }       
+            } finally
+            {
+                await connection.CloseAsync();
+            }
         }
 
         /// <summary>
@@ -179,14 +187,18 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                     var paramValue = property.GetValue(tEntityUpdate);
                     dynamicParams.Add(paramName, paramValue);
                 }
+             
                 var entityClassName = typeof(TEntityUpdate).Name;
                 var rowAffected = await connection.ExecuteAsync(StoredProcedureName.GetProcedureNameByEntityClassName(entityClassName), commandType: CommandType.StoredProcedure, param: dynamicParams);
-                await connection.CloseAsync();
+                
+
                 return (rowAffected != 0);
             } catch (Exception ex)
             {
-                await connection.CloseAsync();
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
+            } finally
+            {
+                await connection.CloseAsync();
             }
         }
 
@@ -206,13 +218,16 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                 var entityClassName = typeof(TEntity).Name;
                 var storedProcedureKey = entityClassName + "Delete";
                 dynamicParams.Add("p_id", id);
+                
                 var rowAffected = await connection.ExecuteAsync(StoredProcedureName.GetProcedureNameByEntityClassName(storedProcedureKey), commandType: CommandType.StoredProcedure, param: dynamicParams);
-                await connection.CloseAsync();
+               
                 return (rowAffected != 0);
             } catch(Exception ex)
             {
-                await connection.CloseAsync();
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
+            } finally
+            {
+                await connection.CloseAsync();
             }
         }
 
@@ -229,20 +244,22 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
             {
                 var dynamicParams = new DynamicParameters();
                 dynamicParams.Add("p_idList", stringIdList);
-
+               
                 var entityClassName = typeof(TEntity).Name;
                 var storedProcedureKey = entityClassName + "DeleteMultiple";
 
                 var proceduredName = StoredProcedureName.GetProcedureNameByEntityClassName(storedProcedureKey);
-
+                
                 var rowAffected = await connection.ExecuteAsync(proceduredName, commandType: CommandType.StoredProcedure, param: dynamicParams);
-                await connection.CloseAsync();
+               
                 return rowAffected;
             }
             catch (Exception ex)
             {
-                await connection.CloseAsync();
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
+            } finally
+            {
+                await connection.CloseAsync();
             }
         }
 
@@ -270,13 +287,15 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 
                 await connection.ExecuteAsync(proceduredName, commandType: CommandType.StoredProcedure, param: dynamicParams);
                 var isExist = dynamicParams.Get<bool>("o_isExist");
-                await connection.CloseAsync();
                 return isExist;
             }
             catch (Exception ex)
             {
-                await connection.CloseAsync();
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
+            }
+            finally
+            {
+                await connection.CloseAsync();
             }
         }
     }

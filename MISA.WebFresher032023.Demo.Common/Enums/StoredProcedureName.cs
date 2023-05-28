@@ -11,7 +11,7 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
 {
     public static class StoredProcedureName
     {
-
+        #region Employee Stored procedure name
         public const string CreateEmployee = "Proc_InsertEmployee";
         public const string GetEmployeeById = "Proc_GetEmployeeById";
         public const string FilterEmployee = "Proc_FilterEmployee";
@@ -19,8 +19,9 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
         public const string DeleteEmployee = "Proc_DeleteEmployeeById";
         public const string CheckDepartmentCodeExist = "Proc_CheckDepartmentCodeExist";
         public const string DeleteMultipleEmployee = "Proc_DeleteMultipleEmployee";
+        #endregion
 
-
+        #region Department Stored procedure name
         public const string GetDepartmentById = "Proc_GetDepartmentById";
         public const string CreateDepartment = "Proc_InsertDepartment";
         public const string UpdateDepartment = "Proc_UpdateDepartment";
@@ -28,6 +29,7 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
         public const string DeleteDepartment = "Proc_DeleteDepartmentById";
         public const string CheckEmployeeCodeExist = "Proc_CheckEmployeeCodeExist";
         public const string DeleteMultipleDepartment = "Proc_DeleteMultipleDepartment";
+        #endregion
 
         /// <summary>
         /// Lấy Stored procedure từ string tạo bởi EntityClassName và kiểu hành động
@@ -39,6 +41,7 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
         {
             switch (entityClassName)
             {
+                #region Department proc
                 case "Department":
                     return GetDepartmentById;
                 case "DepartmentCreate":
@@ -53,7 +56,9 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
                     return CheckDepartmentCodeExist;
                 case "DepartmentDeleteMultiple":
                     return DeleteMultipleDepartment;
+                #endregion
 
+                #region Employee proc
                 case "Employee":
                     return GetEmployeeById;
                 case "EmployeeCreate":
@@ -68,7 +73,7 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
                     return CheckEmployeeCodeExist;
                 case "EmployeeDeleteMultiple":
                     return DeleteMultipleEmployee;
-
+                #endregion
                 default: throw new Exception("Không tìm thấy tên Stored Procedure");
             }
 

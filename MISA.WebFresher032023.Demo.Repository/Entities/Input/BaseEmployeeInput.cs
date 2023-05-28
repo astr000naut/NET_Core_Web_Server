@@ -44,10 +44,5 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Entities.Input
         public string BankName { get; set; }
         // Chi nhánh ngân hàng
         public string BankBranch { get; set; }
-
-        // Ngày cập nhật cuối cùng
-        public DateTime ModifiedDate { get; set; }
-        // Cập nhật lần cuối bởi
-        public string ModifiedBy { get; set; }
     }
 }
