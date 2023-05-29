@@ -129,7 +129,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// <param name="keySearch"></param>
         /// <returns></returns>
         /// Author: DNT(20/05/2023)
-        public async Task<FilteredList<TEntity>> FilterAsync(int skip, int? take, string keySearch)
+        public async Task<FilteredList<TEntity>> FilterAsync(EntityFilter entityFilter)
         {
             var connection = await GetOpenConnectionAsync();
             try
@@ -141,9 +141,9 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 
                 var proceduredName = StoredProcedureName.GetProcedureNameByEntityClassName(storedProcedureKey);
 
-                dynamicParams.Add("p_skip", skip);
-                dynamicParams.Add("p_take", take);
-                dynamicParams.Add("p_keySearch", keySearch);
+                dynamicParams.Add("p_skip", entityFilter.Skip);
+                dynamicParams.Add("p_take", entityFilter.Take);
+                dynamicParams.Add("p_keySearch", entityFilter.KeySearch);
                 dynamicParams.Add("o_totalRecord", direction: ParameterDirection.Output);
 
                 var listData = await connection.QueryAsync<TEntity?>(proceduredName,

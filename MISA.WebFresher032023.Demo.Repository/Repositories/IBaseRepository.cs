@@ -45,7 +45,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// <param name="keySearch"></param>
         /// <returns></returns>
         /// /// Author: DNT(20/05/2023)
-        Task<FilteredList<TEntity>> FilterAsync(int skip, int? take, string keySearch);
+        Task<FilteredList<TEntity>> FilterAsync(EntityFilter entityFilter);
 
 
         /// <summary>

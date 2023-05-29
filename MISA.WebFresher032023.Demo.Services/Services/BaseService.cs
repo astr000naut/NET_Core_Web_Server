@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input;
 using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Output;
@@ -57,9 +58,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <param name="take"></param>
         /// <param name="keySearch"></param>
         /// <returns></returns>
-        public async Task<FilteredListDto<TEntityDto>> FilterAsync(int skip, int? take, string keySearch)
+        public async Task<FilteredListDto<TEntityDto>> FilterAsync(EntityFilterDto entityFilterDto)
         {
-            var tEntityFilteredList = await _baseRepository.FilterAsync(skip, take, keySearch);
+            var entityFilter = _mapper.Map<EntityFilter>(entityFilterDto);
+            var tEntityFilteredList = await _baseRepository.FilterAsync(entityFilter);
             var tEntityFilteredListDto = new FilteredListDto<TEntityDto>
             {
                 TotalRecord = tEntityFilteredList.TotalRecord,

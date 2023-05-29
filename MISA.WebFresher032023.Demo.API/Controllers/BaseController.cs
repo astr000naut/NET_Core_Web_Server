@@ -49,9 +49,9 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// <returns></returns>
         [Route("Filter")]
         [HttpGet]
-        public async Task<FilteredListDto<TEntityDto>> FilterAsync(int skip, int? take, string? keySearch)
+        public async Task<FilteredListDto<TEntityDto>> FilterAsync([FromQuery] EntityFilterDto entityFilterDto)
         {
-            return await _baseService.FilterAsync(skip, take, keySearch ?? "");
+            return await _baseService.FilterAsync(entityFilterDto);
         }
 
         /// <summary>

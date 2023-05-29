@@ -1,4 +1,5 @@
-﻿using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output;
+﻿using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input;
+using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <param name="take"></param>
         /// <param name="keySearch"></param>
         /// <returns></returns>
-        Task<FilteredListDto<TEntityDto>> FilterAsync(int skip, int? take, string keySearch);
+        Task<FilteredListDto<TEntityDto>> FilterAsync(EntityFilterDto entityFilterDto);
 
         /// <summary>
         /// Cập nhật một Entity
