@@ -21,24 +21,26 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         public EmployeeService(IEmployeeRepository employeeRepository, IMapper mapper) : base(employeeRepository, mapper) {
             _employeeRepository = employeeRepository;
         }
-   
-       
+
+
         /// <summary>
         /// Lấy mã nhân viên mới
         /// </summary>
         /// <returns></returns>
+        /// Author: DNT(26/05/2023)
         public async Task<string> GetNewCodeAsync()
         {
             var newCode = await _employeeRepository.GetNewCodeAsync();
             return newCode;
         }
-       
+
         /// <summary>
         /// Tạo mới một nhân viên
         /// </summary>
         /// <param name="employeeCreateDto"></param>
         /// <returns></returns>
         /// <exception cref="ConflictException"></exception>
+        /// Author: DNT(26/05/2023)
         public override async Task<Guid?> CreateAsync(EmployeeCreateDto employeeCreateDto)
         {
             // Kiểm tra đơn vị có tồn tại
@@ -63,7 +65,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 
              return isCreated ? employeeCreate.EmployeeId : null;
         }
-       
+
         /// <summary>
         /// Cập nhật thông tin nhân viên
         /// </summary>
@@ -71,6 +73,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <param name="employeeUpdateDto"></param>
         /// <returns></returns>
         /// <exception cref="ConflictException"></exception>
+        /// Author: DNT(26/05/2023)
         public override async Task<bool> UpdateAsync(Guid id, EmployeeUpdateDto employeeUpdateDto)
         {
             _ = await _employeeRepository.GetAsync(id) ?? throw new ConflictException(Error.ConflictCode, Error.InvalidEmployeeId, Error.InvalidEmployeeId);

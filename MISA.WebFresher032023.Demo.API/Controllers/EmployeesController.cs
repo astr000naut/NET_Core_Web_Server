@@ -27,6 +27,7 @@ namespace MISA.WebFresher032023.Demo.Controllers
         /// API Lấy mã nhân viên mới
         /// </summary>
         /// <returns></returns>
+        /// Author: DNT(24/05/2023)
         [Route("NewEmployeeCode")]
         [HttpGet]
         public async Task<string> GetNewEmployeeCodeAsync()

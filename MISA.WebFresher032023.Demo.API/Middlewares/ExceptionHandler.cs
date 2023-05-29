@@ -16,6 +16,7 @@ namespace MISA.WebFresher032023.Demo.API.Middleware
         /// </summary>
         /// <param name="httpContext"></param>
         /// <returns></returns>
+        /// Author: DNT(26/05/2023)
         public async Task InvokeAsync(HttpContext httpContext)
         {
             try
@@ -34,6 +35,7 @@ namespace MISA.WebFresher032023.Demo.API.Middleware
         /// <param name="httpContext"></param>
         /// <param name="exception"></param>
         /// <returns></returns>
+        /// Author: DNT(26/05/2023)
         private async Task HandleExceptionAsync(HttpContext httpContext, Exception exception)
         {
             httpContext.Response.ContentType = "application/json";

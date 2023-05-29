@@ -27,6 +27,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// Hàm khởi tạo
         /// </summary>
         /// <param name="configuration"></param>
+        /// Author: DNT(20/05/2023)
         public BaseRepository(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("SqlConnection") ?? "";
@@ -122,13 +123,12 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         }
 
         /// <summary>
-        /// Filter Entity
+        /// Filter danh sách Entity
         /// </summary>
-        /// <param name="skip"></param>
-        /// <param name="take"></param>
-        /// <param name="keySearch"></param>
+        /// <param name="entityFilter"></param>
         /// <returns></returns>
-        /// Author: DNT(20/05/2023)
+        /// <exception cref="DbException"></exception>
+        /// Author: DNT(29/05/2023)
         public async Task<FilteredList<TEntity>> FilterAsync(EntityFilter entityFilter)
         {
             var connection = await GetOpenConnectionAsync();
@@ -237,6 +237,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// <param name="stringIdList"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
+        /// Author: DNT(26/05/2023)
         public async Task<int> DeleteMultipleAsync(string stringIdList)
         {
             var connection = await GetOpenConnectionAsync();

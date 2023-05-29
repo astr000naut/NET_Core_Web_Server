@@ -23,6 +23,7 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// </summary>
         /// <param name="tEntityCreateDto"></param>
         /// <returns></returns>
+        /// Author: DNT(24/05/2023)
         [HttpPost]
         public async Task<Guid?> PostAsync([FromBody] TEntityCreateDto tEntityCreateDto)
         {
@@ -34,6 +35,7 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// Author: DNT(24/05/2023)
         [HttpGet("{id}")]
         public async Task<TEntityDto?> GetAsync(Guid id)
         {
@@ -43,10 +45,9 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// <summary>
         /// Filter danh sách đối tượng
         /// </summary>
-        /// <param name="skip"></param>
-        /// <param name="take"></param>
-        /// <param name="keySearch"></param>
+        /// <param name="entityFilterDto"></param>
         /// <returns></returns>
+        /// Author: DNT(29/05/2023)
         [Route("Filter")]
         [HttpGet]
         public async Task<FilteredListDto<TEntityDto>> FilterAsync([FromQuery] EntityFilterDto entityFilterDto)
@@ -60,6 +61,7 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// <param name="id"></param>
         /// <param name="tEntityUpdateDto"></param>
         /// <returns></returns>
+        /// Author: DNT(24/05/2023)
         [HttpPut("{id}")]
         public async Task<bool> PutAsync(Guid id, [FromBody] TEntityUpdateDto tEntityUpdateDto)
         {
@@ -71,6 +73,7 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// Author: DNT(24/05/2023)
         [HttpDelete("{id}")]
         public async Task<bool> DeleteAsync(Guid id)
         {
@@ -84,6 +87,7 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// <param name="entityIdList"></param>
         /// <returns></returns>
         /// <exception cref="BadInputException"></exception>
+        /// Author: DNT(24/05/2023)
         [Route("DeleteMultiple")]
         [HttpPost]
         public async Task<int> DeleteMultipleAsync([FromBody] List<Guid> entityIdList)
@@ -102,6 +106,7 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// <param name="id"></param>
         /// <param name="code"></param>
         /// <returns></returns>
+        /// Author: DNT(24/05/2023)
         [Route("CheckCodeExist")]
         [HttpGet]
         public async Task<bool> CheckCodeExistAsync(Guid? id, string code)

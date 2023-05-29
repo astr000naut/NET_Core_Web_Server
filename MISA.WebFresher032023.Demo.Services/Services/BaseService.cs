@@ -29,6 +29,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// </summary>
         /// <param name="tEntityCreateDto"></param>
         /// <returns></returns>
+        /// Author: DNT(26/05/2023)
         public abstract Task<Guid?> CreateAsync(TEntityCreateDto tEntityCreateDto);
 
         /// <summary>
@@ -37,6 +38,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <param name="id"></param>
         /// <param name="tEntityUpdateDto"></param>
         /// <returns></returns>
+        /// Author: DNT(26/05/2023)
         public abstract Task<bool> UpdateAsync(Guid id, TEntityUpdateDto tEntityUpdateDto);
 
         /// <summary>
@@ -44,6 +46,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// Author: DNT(26/05/2023)
         public async Task<TEntityDto?> GetAsync(Guid id)
         {
             var entity = await _baseRepository.GetAsync(id);
@@ -54,10 +57,9 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <summary>
         /// Filter danh sách Entity
         /// </summary>
-        /// <param name="skip"></param>
-        /// <param name="take"></param>
-        /// <param name="keySearch"></param>
+        /// <param name="entityFilterDto"></param>
         /// <returns></returns>
+        /// Author: DNT(29/05/2023)
         public async Task<FilteredListDto<TEntityDto>> FilterAsync(EntityFilterDto entityFilterDto)
         {
             var entityFilter = _mapper.Map<EntityFilter>(entityFilterDto);
@@ -80,6 +82,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// Author: DNT(26/05/2023)
         public async Task<bool> DeleteByIdAsync(Guid id)
         {
             return await _baseRepository.DeleteByIdAsync(id);
@@ -91,6 +94,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <param name="id"></param>
         /// <param name="code"></param>
         /// <returns></returns>
+        /// Author: DNT(27/05/2023)
         public async Task<bool> CheckCodeExistAsync(Guid? id, string code)
         {
             return await _baseRepository.CheckCodeExistAsync(id, code);
@@ -101,6 +105,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// </summary>
         /// <param name="entityIdList"></param>
         /// <returns></returns>
+        /// Author: DNT(26/05/2023)
         public async Task<int> DeleteMultipleAsync(List<Guid> entityIdList)
         {
             // Transform list to string

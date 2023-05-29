@@ -54,6 +54,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// <param name="id"></param>
         /// <returns></returns>
         /// <exception cref="DbException"></exception>
+        /// Author: DNT(20/05/2023)
         public async Task<bool> ValidateDepartmentId(Guid? id)
         {
             var connection = await GetOpenConnectionAsync();

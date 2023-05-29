@@ -16,6 +16,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// </summary>
         /// <param name="tEntityCreateDto"></param>
         /// <returns></returns>
+        /// Author: DNT(26/05/2023)
         Task<Guid?> CreateAsync(TEntityCreateDto tEntityCreateDto);
 
         /// <summary>
@@ -23,15 +24,15 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// Author: DNT(26/05/2023)
         Task<TEntityDto?> GetAsync(Guid id);
 
         /// <summary>
-        /// Filter danh sách Entity
+        /// Filter danh sách đối Entity
         /// </summary>
-        /// <param name="skip"></param>
-        /// <param name="take"></param>
-        /// <param name="keySearch"></param>
+        /// <param name="entityFilterDto"></param>
         /// <returns></returns>
+        /// Author: DNT(29/05/2023)
         Task<FilteredListDto<TEntityDto>> FilterAsync(EntityFilterDto entityFilterDto);
 
         /// <summary>
@@ -40,6 +41,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <param name="id"></param>
         /// <param name="tEntityUpdateDto"></param>
         /// <returns></returns>
+        /// Author: DNT(26/05/2023)
         Task<bool> UpdateAsync(Guid id, TEntityUpdateDto tEntityUpdateDto);
 
         /// <summary>
@@ -47,6 +49,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// Author: DNT(26/05/2023)
         Task<bool> DeleteByIdAsync(Guid id);
 
         /// <summary>
@@ -55,6 +58,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <param name="id"></param>
         /// <param name="code"></param>
         /// <returns></returns>
+        /// Author: DNT(26/05/2023)
         Task<bool> CheckCodeExistAsync(Guid? id, string code);
 
         /// <summary>
@@ -62,6 +66,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// </summary>
         /// <param name="entityIdList"></param>
         /// <returns></returns>
+        /// Author: DNT(26/05/2023)
 
         Task<int> DeleteMultipleAsync(List<Guid> entityIdList);
     }

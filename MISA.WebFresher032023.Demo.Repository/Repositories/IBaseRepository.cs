@@ -33,18 +33,16 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        /// /// Author: DNT(20/05/2023)
+        /// Author: DNT(20/05/2023)
         Task<TEntity?> GetAsync(Guid id);
 
 
         /// <summary>
         /// Filter danh sách Entity
         /// </summary>
-        /// <param name="skip"></param>
-        /// <param name="take"></param>
-        /// <param name="keySearch"></param>
+        /// <param name="entityFilter"></param>
         /// <returns></returns>
-        /// /// Author: DNT(20/05/2023)
+        /// Author: DNT(29/05/2023)
         Task<FilteredList<TEntity>> FilterAsync(EntityFilter entityFilter);
 
 
@@ -72,6 +70,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// <param name="id"></param>
         /// <param name="code"></param>
         /// <returns></returns>
+        /// Author: DNT(20/05/2023)
         Task<bool> CheckCodeExistAsync(Guid? id, string code);
 
         /// <summary>
@@ -79,6 +78,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// </summary>
         /// <param name="stringIdList"></param>
         /// <returns></returns>
+        /// Author: DNT(20/05/2023)
         Task<int> DeleteMultipleAsync(string stringIdList);
     }
 }

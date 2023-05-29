@@ -22,12 +22,13 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         {
             _departmentRepository = departmentRepository;
         }
-       
+
         /// <summary>
         /// Tạo mới một đơn vị
         /// </summary>
         /// <param name="departmentCreateDto"></param>
         /// <returns></returns>
+        /// Author: DNT(25/05/2023)
         public override async Task<Guid?> CreateAsync(DepartmentCreateDto departmentCreateDto)
         {
             var departmentCreate = _mapper.Map<DepartmentCreate>(departmentCreateDto);
@@ -44,6 +45,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <param name="departmentId"></param>
         /// <param name="departmentUpdateDto"></param>
         /// <returns></returns>
+        /// Author: DNT(25/05/2023)
         public override async Task<bool> UpdateAsync(Guid departmentId, DepartmentUpdateDto departmentUpdateDto)
         {
             // Kiểm tra mã đã tồn tại

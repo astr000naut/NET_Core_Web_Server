@@ -25,6 +25,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// Author: DNT(20/05/2023)
         Task<bool> ValidateDepartmentId(Guid? id);
 
     }
