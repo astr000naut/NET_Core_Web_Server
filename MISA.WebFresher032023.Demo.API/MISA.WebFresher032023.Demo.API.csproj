@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MISA.WebFresher032023.Demo.Repository\MISA.WebFresher032023.Demo.DataLayer.csproj" />
     <ProjectReference Include="..\MISA.WebFresher032023.Demo.Services\MISA.WebFresher032023.Demo.BusinessLayer.csproj" />
   </ItemGroup>
 
