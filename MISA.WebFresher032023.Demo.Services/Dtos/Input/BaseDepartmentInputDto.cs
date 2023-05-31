@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input
 {
+    // Base DTO cho Department
     public abstract class BaseDepartmentInputDto
     {
         // Tên đơn vị

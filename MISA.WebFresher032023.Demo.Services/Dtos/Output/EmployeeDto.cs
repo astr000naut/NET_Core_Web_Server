@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output
 {
+    // Thông tin Employee trả về cho client
     public class EmployeeDto
     {
         // ID nhân viên Char(36)

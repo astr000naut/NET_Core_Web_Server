@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.DataLayer.Entities.Output
 {
+    // Department Output Entity
     public class Department : BaseOutputEntity
     {
         // ID đơn vị

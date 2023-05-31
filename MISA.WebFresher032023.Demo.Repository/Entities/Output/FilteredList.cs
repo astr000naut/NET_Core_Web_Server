@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.DataLayer.Entities.Output
 {
+    // Filtered Lít output Entity
     public class FilteredList<TEntity>
     {
         // Tổng số bản ghi tìm được

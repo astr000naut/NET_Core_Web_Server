@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input
 {
+    // DTO cập nhật thông tin Department
     public class DepartmentUpdateDto : BaseDepartmentInputDto
     {
         // Mã đơn vị

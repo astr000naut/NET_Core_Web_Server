@@ -31,11 +31,17 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(25/05/2023)
         public override async Task<Guid?> CreateAsync(DepartmentCreateDto departmentCreateDto)
         {
+            // Map từ DepartmentCreateDto sang DepartmentCreate
             var departmentCreate = _mapper.Map<DepartmentCreate>(departmentCreateDto);
+
             departmentCreate.DepartmentId = Guid.NewGuid();
             departmentCreate.CreatedDate = DateTime.Now.ToLocalTime();
             departmentCreate.CreatedBy = "Dux";
+
+            // Gọi repository tạo mới Department
             await _departmentRepository.CreateAsync(departmentCreate);
+            
+            // Trả về Id
             return departmentCreate.DepartmentId;
         }
 
@@ -50,6 +56,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         {
             // Kiểm tra mã đã tồn tại
             var isDepartmentCodeExist = await _departmentRepository.CheckCodeExistAsync(departmentId, departmentUpdateDto.DepartmentCode);
+
             if (isDepartmentCodeExist)
             {
                 throw new ConflictException(Error.ConflictCode, Error.DepartmentCodeHasExist, Error.DepartmentCodeHasExist);

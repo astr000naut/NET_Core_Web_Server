@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input
 {
+    // query params DTO để filter Department hoặc Employee
     public class EntityFilterDto
     {
         // Bỏ qua bao nhiêu bản ghi

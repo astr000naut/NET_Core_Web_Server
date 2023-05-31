@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output
 {
+    // Thông tin Department trả về cho client
     public class DepartmentDto
     {
         // ID  đơn vị char(36)

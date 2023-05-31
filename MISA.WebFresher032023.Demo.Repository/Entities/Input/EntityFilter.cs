@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.DataLayer.Entities.Input
 {
+    // Input class của Proc filter nhân viên, filter đơn vị
     public class EntityFilter
     {
         // Bỏ qua bao nhiêu bản ghi

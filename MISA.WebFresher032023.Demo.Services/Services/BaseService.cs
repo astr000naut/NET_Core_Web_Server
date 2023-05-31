@@ -62,18 +62,26 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(29/05/2023)
         public async Task<FilteredListDto<TEntityDto>> FilterAsync(EntityFilterDto entityFilterDto)
         {
+            // Map từ EntityFilterDto sang EntityFilter
             var entityFilter = _mapper.Map<EntityFilter>(entityFilterDto);
+
+            // Lấy dữ liệu từ Repository 
             var tEntityFilteredList = await _baseRepository.FilterAsync(entityFilter);
+
+            // Khởi tạo kêt quả trả về
             var tEntityFilteredListDto = new FilteredListDto<TEntityDto>
             {
                 TotalRecord = tEntityFilteredList.TotalRecord,
                 FilteredList = new List<TEntityDto?>()
             };
+
+            // Map dữ liệu nhận được từ Repository sang Dto
             foreach (var tEntity in tEntityFilteredList.ListData)
             {
                 var tEntityDto = _mapper.Map<TEntityDto>(tEntity);
                 tEntityFilteredListDto.FilteredList.Add(tEntityDto);
             }
+
             return tEntityFilteredListDto;
         }
 

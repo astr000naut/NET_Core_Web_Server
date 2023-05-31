@@ -7,7 +7,7 @@ using MISA.WebFresher032023.Demo.Common.Exceptions;
 
 namespace MISA.WebFresher032023.Demo.API.Controllers
 {
-    
+
     [ApiController]
     public abstract class BaseController<TEntityDto, TEntityCreateDto, TEntityUpdateDto> : ControllerBase
     {

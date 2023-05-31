@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output
 {
+    // Kết quả danh sách filter trả về cho client
     public class FilteredListDto<EntityDto>
     {
         // Tổng số bản ghi tìm thấy

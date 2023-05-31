@@ -7,5 +7,6 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input
 {
+    // DTO thêm mới nhân viên
     public class EmployeeCreateDto : BaseEmployeeInputDto {}
 }

@@ -62,6 +62,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         public async Task<bool> CreateAsync(TEntityCreate tEntityCreate)
         {
             var connection = await GetOpenConnectionAsync();
+            var createTransaction = await connection.BeginTransactionAsync();
             try
             {
                 var dynamicParams = new DynamicParameters();
@@ -74,17 +75,19 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                     dynamicParams.Add(paramName, paramValue);
                 }
                 var entityClassName = typeof(TEntityCreate).Name;
-                var rowAffected = await connection.ExecuteAsync(StoredProcedureName.GetProcedureNameByEntityClassName(entityClassName), commandType: CommandType.StoredProcedure, param: dynamicParams);
+                var rowAffected = await connection.ExecuteAsync(StoredProcedureName.GetProcedureNameByEntityClassName(entityClassName), commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: createTransaction);
+                await createTransaction.CommitAsync();
 
                 return (rowAffected != 0);
 
             } catch (Exception ex)
             {
-
+                await createTransaction.RollbackAsync();
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
             }
             finally
             {
+                await createTransaction.DisposeAsync();
                 await connection.CloseAsync();
             }
         }
@@ -176,6 +179,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         public async Task<bool> UpdateAsync(Guid id, TEntityUpdate tEntityUpdate)
         {
             var connection = await GetOpenConnectionAsync();
+            var updateTransaction = await connection.BeginTransactionAsync();
             try
             {
                 var dynamicParams = new DynamicParameters();
@@ -187,17 +191,20 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                     var paramValue = property.GetValue(tEntityUpdate);
                     dynamicParams.Add(paramName, paramValue);
                 }
-             
-                var entityClassName = typeof(TEntityUpdate).Name;
-                var rowAffected = await connection.ExecuteAsync(StoredProcedureName.GetProcedureNameByEntityClassName(entityClassName), commandType: CommandType.StoredProcedure, param: dynamicParams);
-                
 
+                var entityClassName = typeof(TEntityUpdate).Name;
+                var rowAffected = await connection.ExecuteAsync(StoredProcedureName.GetProcedureNameByEntityClassName(entityClassName), commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: updateTransaction);
+                await updateTransaction.CommitAsync();
                 return (rowAffected != 0);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
+                await updateTransaction.RollbackAsync();
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
-            } finally
+            }
+            finally
             {
+                await updateTransaction.DisposeAsync();
                 await connection.CloseAsync();
             }
         }
@@ -211,6 +218,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         public async Task<bool> DeleteByIdAsync(Guid id)
         {
             var connection = await GetOpenConnectionAsync();
+            var deleteTransaction = await connection.BeginTransactionAsync();
             try
             {
                 var dynamicParams = new DynamicParameters();
@@ -219,14 +227,16 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                 var storedProcedureKey = entityClassName + "Delete";
                 dynamicParams.Add("p_id", id);
                 
-                var rowAffected = await connection.ExecuteAsync(StoredProcedureName.GetProcedureNameByEntityClassName(storedProcedureKey), commandType: CommandType.StoredProcedure, param: dynamicParams);
-               
+                var rowAffected = await connection.ExecuteAsync(StoredProcedureName.GetProcedureNameByEntityClassName(storedProcedureKey), commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: deleteTransaction);
+                await deleteTransaction.CommitAsync();
                 return (rowAffected != 0);
             } catch(Exception ex)
             {
+                await deleteTransaction.RollbackAsync();
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
             } finally
             {
+                await deleteTransaction.DisposeAsync(); 
                 await connection.CloseAsync();
             }
         }
@@ -241,6 +251,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         public async Task<int> DeleteMultipleAsync(string stringIdList)
         {
             var connection = await GetOpenConnectionAsync();
+            var deleteTransaction = await connection.BeginTransactionAsync();
             try
             {
                 var dynamicParams = new DynamicParameters();
@@ -251,15 +262,17 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 
                 var proceduredName = StoredProcedureName.GetProcedureNameByEntityClassName(storedProcedureKey);
                 
-                var rowAffected = await connection.ExecuteAsync(proceduredName, commandType: CommandType.StoredProcedure, param: dynamicParams);
-               
+                var rowAffected = await connection.ExecuteAsync(proceduredName, commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: deleteTransaction);
+                await deleteTransaction.CommitAsync();
                 return rowAffected;
             }
             catch (Exception ex)
             {
+                await deleteTransaction.RollbackAsync();
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
             } finally
             {
+                await deleteTransaction.DisposeAsync();
                 await connection.CloseAsync();
             }
         }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.DataLayer.Entities.Input
 {
+    // Input class của Proc thêm mới đơn vị
     public class DepartmentCreate : BaseDepartmentInput
     {
         // Ngày tạo

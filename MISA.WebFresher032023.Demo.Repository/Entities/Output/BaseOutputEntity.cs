@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.DataLayer.Entities.Output
 {
+    // Base của các Output Entity
     public abstract class BaseOutputEntity
     {
         // Ngày tạo

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.DataLayer.Entities.Input
 {
+    // Base Input của Proc thêm hoặc cập nhật thông tin đơn vị
     public abstract class BaseDepartmentInput 
     {
         // ID của đơn vị

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.DataLayer.Entities.Output
 {
+    // Employee Output Entity
     public class Employee : BaseOutputEntity
     {
         // ID nhân viên
