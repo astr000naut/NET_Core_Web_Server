@@ -178,22 +178,29 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// Author: DNT(20/05/2023)
         public async Task<bool> UpdateAsync(Guid id, TEntityUpdate tEntityUpdate)
         {
+
             var connection = await GetOpenConnectionAsync();
             var updateTransaction = await connection.BeginTransactionAsync();
             try
             {
-                var dynamicParams = new DynamicParameters();
+                var entityName = typeof(TEntity).Name;
 
+                var queryString = $"UPDATE {entityName} SET ";
+                
                 foreach (var property in typeof(TEntityUpdate).GetProperties())
                 {
-                    var propertyNameToCamelCase = char.ToLower(property.Name[0]) + property.Name[1..];
-                    var paramName = "p_" + propertyNameToCamelCase;
                     var paramValue = property.GetValue(tEntityUpdate);
-                    dynamicParams.Add(paramName, paramValue);
-                }
 
-                var entityClassName = typeof(TEntityUpdate).Name;
-                var rowAffected = await connection.ExecuteAsync(StoredProcedureName.GetProcedureNameByEntityClassName(entityClassName), commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: updateTransaction);
+                    if (paramValue?.ToString()?.Length > 0 && property.Name != $"{entityName}Id")
+                    {
+                        queryString += $"{property.Name} = @{property.Name} ,";
+                    }
+                }
+               
+                queryString = queryString.Remove(queryString.Length - 1);
+                queryString += $"WHERE {entityName}Id = @{entityName}Id;";
+
+                var rowAffected = await connection.ExecuteAsync(queryString, tEntityUpdate, transaction: updateTransaction);
                 await updateTransaction.CommitAsync();
                 return (rowAffected != 0);
             }
