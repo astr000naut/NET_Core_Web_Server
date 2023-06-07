@@ -35,5 +35,17 @@ namespace MISA.WebFresher032023.Demo.Controllers
             return await _employeeService.GetNewCodeAsync();
         }
 
+        [Route("ExportEmployeesData")]
+        [HttpGet]
+        public async Task<IActionResult> ExportEmployeeData()
+        {
+            byte[] excelFileBytes = await _employeeService.ExportEmployeesToExcelAsync();
+            if (excelFileBytes == null)
+            {
+                return NotFound();
+            }
+            return File(excelFileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "employees.xlsx");
+        }
+
     }
 }

@@ -16,5 +16,5 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
 
         // Giới tính khác
         Other = 2,
-    }
+    }   
 }

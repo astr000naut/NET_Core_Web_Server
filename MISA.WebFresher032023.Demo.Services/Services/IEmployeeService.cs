@@ -15,5 +15,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// </summary>
         /// <returns></returns>
         Task<string> GetNewCodeAsync();
+
+        Task<byte[]> ExportEmployeesToExcelAsync();
     }
 }
