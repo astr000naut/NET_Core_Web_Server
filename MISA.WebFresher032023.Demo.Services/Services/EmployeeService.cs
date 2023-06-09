@@ -112,119 +112,140 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(06/06/2023)
         public async Task<byte[]> ExportEmployeesToExcelAsync()
         {
-            // Tạo data table
-            var dt = new DataTable
+            try
             {
-                TableName = "DANH SÁCH NHÂN VIÊN"
-            };
-            
-            // Cấu trúc của data table
-            dt.Columns.Add("STT", typeof(int));
-            dt.Columns.Add("Mã nhân viên", typeof(string));
-            dt.Columns.Add("Tên nhân viên", typeof(string));
-            dt.Columns.Add("Giới tính", typeof(string));
-            dt.Columns.Add("Ngày sinh", typeof(DateTime));
-            dt.Columns.Add("Số CMND", typeof(string));
-            dt.Columns.Add("Chức danh", typeof(string));
-            dt.Columns.Add("Tên đơn vị", typeof(string));
-            dt.Columns.Add("Số tài khoản", typeof(string));
-            dt.Columns.Add("Tên ngân hàng", typeof(string));
-            dt.Columns.Add("Chi nhánh TK ngân hàng", typeof(string));
-
-            // Tạo filter param
-            var employeeFilter = new EntityFilter()
-            {
-                Skip = 0,
-                Take = null,
-                KeySearch = null,
-            };
-            // Lấy danh sách nhân viên
-            var employeeList = await _employeeRepository.FilterAsync(employeeFilter);
-
-            // Thông tin số thứ tự
-            int index = 0;
-            // Thêm nhân viên vào data table
-            foreach (var employee in employeeList.ListData)
-            {
-                if (employee == null) continue;
-
-                ++index;
-                var genderName = employee.Gender switch
+                // Tạo data table
+                var dt = new DataTable
                 {
-                    Gender.Male => "Nam",
-                    Gender.Female => "Nữ",
-                    Gender.Other => "Khác",
-                    _ => ""
+                    TableName = "DANH SÁCH NHÂN VIÊN"
                 };
-                dt.Rows.Add(
-                    index,
-                    employee.EmployeeCode,
-                    employee.EmployeeFullName,
-                    genderName,
-                    employee.DateOfBirth,
-                    employee.IdentityNumber,
-                    employee.PositionName,
-                    employee.DepartmentName,
-                    employee.BankAccount,
-                    employee.BankName,
-                    employee.BankBranch
-                );
-            }
 
-            var workbook = new XLWorkbook();
-            // Thêm worksheet
-            var worksheet = workbook.AddWorksheet("DANH SÁCH NHÂN VIÊN");
+                // Dựng cấu trúc của data table
+                dt.Columns.Add("STT", typeof(int));
+                dt.Columns.Add("Mã nhân viên", typeof(string));
+                dt.Columns.Add("Tên nhân viên", typeof(string));
+                dt.Columns.Add("Giới tính", typeof(string));
+                dt.Columns.Add("Ngày sinh", typeof(DateTime));
+                dt.Columns.Add("Số CMND", typeof(string));
+                dt.Columns.Add("Chức danh", typeof(string));
+                dt.Columns.Add("Tên đơn vị", typeof(string));
+                dt.Columns.Add("Số tài khoản", typeof(string));
+                dt.Columns.Add("Tên ngân hàng", typeof(string));
+                dt.Columns.Add("Chi nhánh TK ngân hàng", typeof(string));
 
-            // Tạo header cho bảng thông tin nhân viên
-            var headerRange = worksheet.Range("A3:K3"); 
-            headerRange.Style.Fill.BackgroundColor = XLColor.LightGray; 
-            headerRange.Style.Font.Bold = true; 
+                // Tạo filter param
+                var employeeFilter = new EntityFilter()
+                {
+                    Skip = 0,
+                    Take = null,
+                    KeySearch = null,
+                };
+                // Lấy danh sách nhân viên từ repository
+                var employeeList = await _employeeRepository.FilterAsync(employeeFilter);
 
-            worksheet.Cell("A3").Value = "STT";
-            worksheet.Cell("B3").Value = "Mã nhân viên";
-            worksheet.Cell("C3").Value = "Tên nhân viên";
-            worksheet.Cell("D3").Value = "Giới tính";
-            worksheet.Cell("E3").Value = "Ngày sinh";
-            worksheet.Cell("F3").Value = "Số CMND";
-            worksheet.Cell("G3").Value = "Chức danh";
-            worksheet.Cell("H3").Value = "Tên đơn vị";
-            worksheet.Cell("I3").Value = "Số tài khoản";
-            worksheet.Cell("J3").Value = "Tên ngân hàng";
-            worksheet.Cell("K3").Value = "Chi nhánh TK ngân hàng";
-            worksheet.Row(3).Height = 30;
+                // Số thứ tự của nhân viên
+                int index = 0;
 
-            // Insert dữ liệu từ datatable vào worksheet
-            worksheet.Cell("A4").InsertData(dt);
+                // Thêm nhân viên vào data table
+                foreach (var employee in employeeList.ListData)
+                {
+                    if (employee == null) continue;
 
-            int[] colWidths = { 5, 20, 30, 10, 16, 20, 20, 40, 24, 18, 30 };
+                    ++index;
+                    var genderName = employee.Gender switch
+                    {
+                        Gender.Male => "Nam",
+                        Gender.Female => "Nữ",
+                        Gender.Other => "Khác",
+                        _ => ""
+                    };
+                    dt.Rows.Add(
+                        index,
+                        employee.EmployeeCode,
+                        employee.EmployeeFullName,
+                        genderName,
+                        employee.DateOfBirth,
+                        employee.IdentityNumber,
+                        employee.PositionName,
+                        employee.DepartmentName,
+                        employee.BankAccount,
+                        employee.BankName,
+                        employee.BankBranch
+                    );
+                }
 
-            // Thay đổi độ rộng của các cột
-            for (char  col = 'A'; col <= (char) 'A' + 10;  ++col)
+                var workbook = new XLWorkbook();
+                // Thêm worksheet vào workbook
+                var worksheet = workbook.AddWorksheet("DANH SÁCH NHÂN VIÊN");
+
+                // Tạo tiêu đề của các cột cho bảng thông tin nhân viên
+                var headerRange = worksheet.Range("A3:K3");
+                headerRange.Style.Fill.BackgroundColor = XLColor.LightGray;
+                headerRange.Style.Font.Bold = true;
+
+                worksheet.Cell("A3").Value = "STT";
+                worksheet.Cell("B3").Value = "Mã nhân viên";
+                worksheet.Cell("C3").Value = "Tên nhân viên";
+                worksheet.Cell("D3").Value = "Giới tính";
+                worksheet.Cell("E3").Value = "Ngày sinh";
+                worksheet.Cell("F3").Value = "Số CMND";
+                worksheet.Cell("G3").Value = "Chức danh";
+                worksheet.Cell("H3").Value = "Tên đơn vị";
+                worksheet.Cell("I3").Value = "Số tài khoản";
+                worksheet.Cell("J3").Value = "Tên ngân hàng";
+                worksheet.Cell("K3").Value = "Chi nhánh TK ngân hàng";
+                worksheet.Row(3).Height = 30;
+
+                // Insert dữ liệu từ datatable vào worksheet
+                worksheet.Cell("A4").InsertData(dt);
+
+                // Thay đổi độ rộng của các cột
+
+                int[] colWidths = { 5, 20, 30, 10, 16, 20, 20, 30, 24, 18, 30 };
+
+                for (int i = 1; i <= 11; ++i)
+                {
+                    worksheet.Column(i).Width = colWidths[i - 1];
+
+                    // Chỉnh text align cho các cột
+                    if (i != 5)
+                    {
+                        worksheet.Column(i).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                    }
+                    else
+                    {
+                        worksheet.Column(i).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                    }
+                }
+
+                // Align các th của bảng
+                worksheet.Row(3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                worksheet.Row(3).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+
+                // Thêm header 
+                var header = worksheet.Range("A1:K1").Merge();
+                header.Value = "DANH SÁCH NHÂN VIÊN";
+                header.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                header.Style.Font.Bold = true;
+                header.Style.Font.FontSize = 16;
+
+                // Thêm border cho bảng
+                var tableRange = worksheet.Range("A3:K" + (employeeList.ListData.ToList().Count + 3));
+                tableRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                tableRange.Style.Border.OutsideBorderColor = XLColor.Black;
+                tableRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                tableRange.Style.Border.InsideBorderColor = XLColor.Black;
+                
+                // Bật wrap text cho bảng
+                tableRange.Style.Alignment.WrapText = true;
+
+                var stream = new MemoryStream();
+                workbook.SaveAs(stream);
+                return stream.ToArray();
+            } catch (Exception ex)
             {
-                worksheet.Column(col.ToString()).Width = colWidths[(int)col - 'A'];
-                worksheet.Column(col.ToString()).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+                throw new InternalException( Error.ExportFail, ex.Message, Error.ExportFailMsg);
             }
-            // Align các th của bảng
-            worksheet.Row(3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-            worksheet.Row(3).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
-
-            // Thêm header 
-            var header = worksheet.Range("A1:K1").Merge();
-            header.Value = "DANH SÁCH NHÂN VIÊN";
-            header.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
-            header.Style.Font.Bold = true;
-            header.Style.Font.FontSize = 16;
-
-            // Thêm border cho bảng
-            var tableRange = worksheet.Range("A3:K" + (employeeList.ListData.ToList().Count + 3));
-            tableRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-            tableRange.Style.Border.OutsideBorderColor = XLColor.Black;
-            tableRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-            tableRange.Style.Border.InsideBorderColor = XLColor.Black;
-
-            var stream = new MemoryStream();
-            workbook.SaveAs(stream);
-            return stream.ToArray();
         }
     }
 }

@@ -191,7 +191,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                 {
                     var paramValue = property.GetValue(tEntityUpdate);
 
-                    if (paramValue?.ToString()?.Length > 0 && property.Name != $"{entityName}Id")
+                    if (paramValue?.ToString()?.Length >= 0 && property.Name != $"{entityName}Id")
                     {
                         queryString += $"{property.Name} = @{property.Name} ,";
                     }

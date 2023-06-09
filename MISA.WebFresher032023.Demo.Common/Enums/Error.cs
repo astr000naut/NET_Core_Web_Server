@@ -17,6 +17,8 @@ namespace MISA.WebFresher032023.Demo.Common.Enums
         public const string DbConnectFailMessage = "Xảy ra lỗi khi kết nối đến cơ sở dữ liệu";
         public const int DbQueryFail = 507;
         public const string DbQueryFailMsg = "Xảy ra lỗi khi truy vấn cơ sở dữ liệu";
+        public const int ExportFail = 507;
+        public const string ExportFailMsg = "Xảy ra lỗi khi xuất khẩu dữ liệu";
         #endregion
 
         #region BadInput

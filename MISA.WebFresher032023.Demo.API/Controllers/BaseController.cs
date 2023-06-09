@@ -65,7 +65,7 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         [HttpPut("{id}")]
         public async Task<bool> PutAsync(Guid id, [FromBody] TEntityUpdateDto tEntityUpdateDto)
         {
-            return await _baseService.UpdateAsync(id, tEntityUpdateDto);
+           return await _baseService.UpdateAsync(id, tEntityUpdateDto);
         }
 
         /// <summary>
