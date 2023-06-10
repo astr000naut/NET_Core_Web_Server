@@ -30,7 +30,29 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <param name="tEntityCreateDto"></param>
         /// <returns></returns>
         /// Author: DNT(26/05/2023)
-        public abstract Task<Guid?> CreateAsync(TEntityCreateDto tEntityCreateDto);
+        /// Modified: DNT(09/06/2023)
+        public virtual async Task<Guid?> CreateAsync(TEntityCreateDto tEntityCreateDto)
+        {
+
+            var entityCreate = _mapper.Map<TEntityCreate>(tEntityCreateDto);
+            Type type = typeof(TEntityCreate);
+            var entityName = typeof(TEntity).Name;
+            var newId = Guid.NewGuid();
+
+            var idProperty = type.GetProperty($"{entityName}Id");
+            idProperty?.SetValue(entityCreate, newId);
+
+            var createdDateProperty = type.GetProperty("CreatedDate");
+            createdDateProperty?.SetValue(entityCreate, DateTime.Now.ToLocalTime());
+
+            var createdByProperty = type.GetProperty("CreatedBy");
+            createdByProperty?.SetValue(entityCreate, "Dux");
+
+            var isCreated = await _baseRepository.CreateAsync(entityCreate);
+
+            return isCreated ? newId : null;
+
+        }
 
         /// <summary>
         /// Cập nhật thông tin một Entity
@@ -39,7 +61,26 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <param name="tEntityUpdateDto"></param>
         /// <returns></returns>
         /// Author: DNT(26/05/2023)
-        public abstract Task<bool> UpdateAsync(Guid id, TEntityUpdateDto tEntityUpdateDto);
+        /// Modified: DNT(09/06/2023)
+        public virtual async Task<bool> UpdateAsync(Guid id, TEntityUpdateDto tEntityUpdateDto)
+        {
+            var entityUpdate = _mapper.Map<TEntityUpdate>(tEntityUpdateDto);
+
+            Type type = typeof(TEntityUpdate);
+            var entityName = typeof(TEntity).Name;
+
+     
+            var idProperty = type.GetProperty($"{entityName}Id");
+            idProperty?.SetValue(entityUpdate, id);
+
+            var modifiedDateProperty = type.GetProperty("ModifiedDate");
+            modifiedDateProperty?.SetValue(entityUpdate, DateTime.Now.ToLocalTime());
+
+            var modifiedByProperty = type.GetProperty("ModifiedBy");
+            modifiedByProperty?.SetValue(entityUpdate, "Dux");
+
+            return await _baseRepository.UpdateAsync(id, entityUpdate);
+        }
 
         /// <summary>
         /// Lấy một Entity theo ID

@@ -29,20 +29,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <param name="departmentCreateDto"></param>
         /// <returns></returns>
         /// Author: DNT(25/05/2023)
+        /// Modified: DNT(09/06/2023)
         public override async Task<Guid?> CreateAsync(DepartmentCreateDto departmentCreateDto)
         {
-            // Map từ DepartmentCreateDto sang DepartmentCreate
-            var departmentCreate = _mapper.Map<DepartmentCreate>(departmentCreateDto);
-
-            departmentCreate.DepartmentId = Guid.NewGuid();
-            departmentCreate.CreatedDate = DateTime.Now.ToLocalTime();
-            departmentCreate.CreatedBy = "Dux";
-
-            // Gọi repository tạo mới Department
-            await _departmentRepository.CreateAsync(departmentCreate);
-            
-            // Trả về Id
-            return departmentCreate.DepartmentId;
+            return await base.CreateAsync(departmentCreateDto);
         }
 
         /// <summary>
@@ -52,6 +42,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <param name="departmentUpdateDto"></param>
         /// <returns></returns>
         /// Author: DNT(25/05/2023)
+        /// Modified: DNT(09/06/2023)
         public override async Task<bool> UpdateAsync(Guid departmentId, DepartmentUpdateDto departmentUpdateDto)
         {
             // Kiểm tra mã đã tồn tại
@@ -62,10 +53,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                 throw new ConflictException(Error.ConflictCode, Error.DepartmentCodeHasExist, Error.DepartmentCodeHasExist);
             }
 
-            var departmentUpdate = _mapper.Map<DepartmentUpdate>(departmentUpdateDto);
-            departmentUpdate.ModifiedDate = DateTime.Now.ToLocalTime();
-            departmentUpdate.ModifiedBy = "Dux";
-            return await _departmentRepository.UpdateAsync(departmentId, departmentUpdate);
+            return await base.UpdateAsync(departmentId, departmentUpdateDto);
         }
 
     }

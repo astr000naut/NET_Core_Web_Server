@@ -47,6 +47,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <returns></returns>
         /// <exception cref="ConflictException"></exception>
         /// Author: DNT(26/05/2023)
+        /// Modified: DNT(09/06/2023)
         public override async Task<Guid?> CreateAsync(EmployeeCreateDto employeeCreateDto)
         {
             // Kiểm tra đơn vị có tồn tại
@@ -62,14 +63,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                 throw new ConflictException(Error.ConflictCode, Error.EmployeeCodeHasExist, Error.EmployeeCodeHasExist);
             }
 
-            // Tạo mới nhân viên 
-             var employeeCreate = _mapper.Map<EmployeeCreate>(employeeCreateDto);
-             employeeCreate.EmployeeId = Guid.NewGuid();
-             employeeCreate.CreatedDate = DateTime.Now.ToLocalTime();
-             employeeCreate.CreatedBy = "Dux";
-             var isCreated = await _employeeRepository.CreateAsync(employeeCreate);
-
-             return isCreated ? employeeCreate.EmployeeId : null;
+            return await base.CreateAsync(employeeCreateDto);
         }
 
         /// <summary>
@@ -80,6 +74,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <returns></returns>
         /// <exception cref="ConflictException"></exception>
         /// Author: DNT(26/05/2023)
+        /// Modified: DNT(09/06/2023)
         public override async Task<bool> UpdateAsync(Guid id, EmployeeUpdateDto employeeUpdateDto)
         {
             _ = await _employeeRepository.GetAsync(id) ?? throw new ConflictException(Error.ConflictCode, Error.InvalidEmployeeId, Error.InvalidEmployeeId);
@@ -98,11 +93,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
             }
 
             // Cập nhật thông tin nhân viên 
-            var employeeUpdate = _mapper.Map<EmployeeUpdate>(employeeUpdateDto);
-            employeeUpdate.EmployeeId = id;
-            employeeUpdate.ModifiedDate = DateTime.Now.ToLocalTime();
-            employeeUpdate.ModifiedBy = "Dux";
-            return await _employeeRepository.UpdateAsync(id, employeeUpdate);
+            return await base.UpdateAsync(id, employeeUpdateDto);
         }
 
         /// <summary>
