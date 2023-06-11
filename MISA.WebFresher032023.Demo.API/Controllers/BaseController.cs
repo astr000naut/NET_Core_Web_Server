@@ -25,9 +25,10 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// <returns></returns>
         /// Author: DNT(24/05/2023)
         [HttpPost]
-        public async Task<Guid?> PostAsync([FromBody] TEntityCreateDto tEntityCreateDto)
+        public async Task<IActionResult> PostAsync([FromBody] TEntityCreateDto tEntityCreateDto)
         {
-            return await _baseService.CreateAsync(tEntityCreateDto);
+            var newId =  await _baseService.CreateAsync(tEntityCreateDto);
+            return Created("", newId);
         }
 
         /// <summary>
@@ -37,9 +38,12 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// <returns></returns>
         /// Author: DNT(24/05/2023)
         [HttpGet("{id}")]
-        public async Task<TEntityDto?> GetAsync(Guid id)
+        public async Task<IActionResult> GetAsync(Guid id)
         {
-            return await _baseService.GetAsync(id);
+            var entity = await _baseService.GetAsync(id);
+            return entity == null
+                ? throw new NotFoundException(Error.NotFound, Error.NotFoundEmployeeMsg, Error.NotFoundEmployeeMsg)
+                : (IActionResult)Ok(entity);
         }
 
         /// <summary>
@@ -50,9 +54,10 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// Author: DNT(29/05/2023)
         [Route("Filter")]
         [HttpGet]
-        public async Task<FilteredListDto<TEntityDto>> FilterAsync([FromQuery] EntityFilterDto entityFilterDto)
+        public async Task<IActionResult> FilterAsync([FromQuery] EntityFilterDto entityFilterDto)
         {
-            return await _baseService.FilterAsync(entityFilterDto);
+            var filteredList =  await _baseService.FilterAsync(entityFilterDto);
+            return Ok(filteredList);
         }
 
         /// <summary>
@@ -63,9 +68,10 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// <returns></returns>
         /// Author: DNT(24/05/2023)
         [HttpPut("{id}")]
-        public async Task<bool> PutAsync(Guid id, [FromBody] TEntityUpdateDto tEntityUpdateDto)
+        public async Task<IActionResult> PutAsync(Guid id, [FromBody] TEntityUpdateDto tEntityUpdateDto)
         {
-           return await _baseService.UpdateAsync(id, tEntityUpdateDto);
+           var isUpdated = await _baseService.UpdateAsync(id, tEntityUpdateDto);
+            return Ok(isUpdated);
         }
 
         /// <summary>
@@ -75,9 +81,10 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// <returns></returns>
         /// Author: DNT(24/05/2023)
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<IActionResult> DeleteAsync(Guid id)
         {
-            return await _baseService.DeleteByIdAsync(id);
+            var isDeleted = await _baseService.DeleteByIdAsync(id);
+            return Ok(isDeleted);
         }
 
 
@@ -90,14 +97,15 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// Author: DNT(24/05/2023)
         [Route("DeleteMultiple")]
         [HttpPost]
-        public async Task<int> DeleteMultipleAsync([FromBody] List<Guid> entityIdList)
+        public async Task<IActionResult> DeleteMultipleAsync([FromBody] List<Guid> entityIdList)
         {
             // Nếu danh sách đối tượng quá lớn thì trả về Exception
             if (entityIdList.Count > 50)
             {
                 throw new BadInputException(Error.BadInput, Error.IdListOversizeMsg, Error.IdListOversizeMsg);
             }
-            return await _baseService.DeleteMultipleAsync(entityIdList);
+            var deletedAmount = await _baseService.DeleteMultipleAsync(entityIdList);
+            return Ok(deletedAmount);
         }
 
         /// <summary>
@@ -109,10 +117,10 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// Author: DNT(24/05/2023)
         [Route("CheckCodeExist")]
         [HttpGet]
-        public async Task<bool> CheckCodeExistAsync(Guid? id, string code)
+        public async Task<IActionResult> CheckCodeExistAsync(Guid? id, string code)
         {
-            return await _baseService.CheckCodeExistAsync(id, code);
+            var isExist = await _baseService.CheckCodeExistAsync(id, code);
+            return Ok(isExist);
         }
-
     }
 }

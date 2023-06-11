@@ -30,9 +30,10 @@ namespace MISA.WebFresher032023.Demo.Controllers
         /// Author: DNT(24/05/2023)
         [Route("NewEmployeeCode")]
         [HttpGet]
-        public async Task<string> GetNewEmployeeCodeAsync()
+        public async Task<IActionResult> GetNewEmployeeCodeAsync()
         {
-            return await _employeeService.GetNewCodeAsync();
+            var newCode = await _employeeService.GetNewCodeAsync();
+            return Ok(newCode);
         }
 
         [Route("ExportEmployeesData")]

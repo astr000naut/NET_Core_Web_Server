@@ -11,7 +11,7 @@ namespace MISA.WebFresher032023.Demo.Common.Enums
         #region Server Error
         // 500 - Server Error
         public const int ServerFailed = 500;
-        public const string ServerFailedMessage = "Server đã xảy ra lỗi không xác định";
+        public const string ServerFailedMessage = "Server đã xảy ra lỗi, vui lòng liên hệ nhân viên hỗ trợ";
 
         public const int DbConnectFail = 506;
         public const string DbConnectFailMessage = "Xảy ra lỗi khi kết nối đến cơ sở dữ liệu";
@@ -39,7 +39,7 @@ namespace MISA.WebFresher032023.Demo.Common.Enums
         #region Notfound
         // 404 - Not Found
         public const int NotFound = 404;
-        public const string NotFoundEmployeeMsg = "Không tìm thấy nhân viên";
+        public const string NotFoundEmployeeMsg = "Không tồn tại nhân viên này";
         public const string NotFoundDepartmentMsg = "Không tìm thấy đơn vị";
         #endregion
     }
