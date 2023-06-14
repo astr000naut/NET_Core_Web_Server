@@ -28,7 +28,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Tạo một Entity
         /// </summary>
         /// <param name="tEntityCreateDto"></param>
-        /// <returns></returns>
+        /// <returns>ID của engity mới được tạo</returns>
         /// Author: DNT(26/05/2023)
         /// Modified: DNT(09/06/2023)
         public virtual async Task<Guid?> CreateAsync(TEntityCreateDto tEntityCreateDto)
@@ -59,7 +59,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// </summary>
         /// <param name="id"></param>
         /// <param name="tEntityUpdateDto"></param>
-        /// <returns></returns>
+        /// <returns>Giá trị boolean biểu thị entity đã được cập nhật</returns>
         /// Author: DNT(26/05/2023)
         /// Modified: DNT(09/06/2023)
         public virtual async Task<bool> UpdateAsync(Guid id, TEntityUpdateDto tEntityUpdateDto)
@@ -85,8 +85,8 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <summary>
         /// Lấy một Entity theo ID
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">ID của entity</param>
+        /// <returns>Entity DTO chứa thông tin của entity</returns>
         /// Author: DNT(26/05/2023)
         public async Task<TEntityDto?> GetAsync(Guid id)
         {
@@ -99,7 +99,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Filter danh sách Entity
         /// </summary>
         /// <param name="entityFilterDto"></param>
-        /// <returns></returns>
+        /// <returns>FilteredListDto chứa danh sách EntityDto tìm được</returns>
         /// Author: DNT(29/05/2023)
         public async Task<FilteredListDto<TEntityDto>> FilterAsync(EntityFilterDto entityFilterDto)
         {
@@ -130,7 +130,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Xóa một Entity theo ID
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>true - false : xóa thành công hay không</returns>
         /// Author: DNT(26/05/2023)
         public async Task<bool> DeleteByIdAsync(Guid id)
         {
@@ -140,9 +140,9 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <summary>
         /// Kiểm tra trùng mã 
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="code"></param>
-        /// <returns></returns>
+        /// <param name="id">id của entity (chỉ yêu cầu trong trường hợp cập nhật)</param>
+        /// <param name="code">Mã</param>
+        /// <returns>true - false : có bị trùng hay không</returns>
         /// Author: DNT(27/05/2023)
         public async Task<bool> CheckCodeExistAsync(Guid? id, string code)
         {
@@ -152,8 +152,8 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <summary>
         /// Xóa nhiều Entity
         /// </summary>
-        /// <param name="entityIdList"></param>
-        /// <returns></returns>
+        /// <param name="entityIdList">Mảng ID của Entity cần xóa</param>
+        /// <returns>Số entity đã xóa thành công</returns>
         /// Author: DNT(26/05/2023)
         public async Task<int> DeleteMultipleAsync(List<Guid> entityIdList)
         {

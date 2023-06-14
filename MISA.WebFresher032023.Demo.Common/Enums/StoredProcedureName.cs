@@ -35,7 +35,7 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
         /// Lấy Stored procedure từ string tạo bởi EntityClassName và kiểu hành động
         /// </summary>
         /// <param name="entityClassName"></param>
-        /// <returns></returns>
+        /// <returns>Tên stored procedured</returns>
         /// <exception cref="Exception"></exception>
         public static string GetProcedureNameByEntityClassName(string entityClassName)
         {

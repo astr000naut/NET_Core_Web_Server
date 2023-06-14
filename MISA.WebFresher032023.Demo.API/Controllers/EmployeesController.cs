@@ -26,7 +26,7 @@ namespace MISA.WebFresher032023.Demo.Controllers
         /// <summary>
         /// API Lấy mã nhân viên mới
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Trả về một mã nhân viên mới</returns>
         /// Author: DNT(24/05/2023)
         [Route("NewEmployeeCode")]
         [HttpGet]
@@ -36,6 +36,11 @@ namespace MISA.WebFresher032023.Demo.Controllers
             return Ok(newCode);
         }
 
+        /// <summary>
+        /// API xuất file excel thông tin nhân viên
+        /// </summary>
+        /// <returns>Trả về một file excel chứa thông tin nhân viên</returns>
+        /// Author: DNT(10/06/2023)
         [Route("ExportEmployeesData")]
         [HttpGet]
         public async Task<IActionResult> ExportEmployeeData()

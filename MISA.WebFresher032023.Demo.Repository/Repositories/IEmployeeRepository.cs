@@ -16,15 +16,15 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// <summary>
         /// Lấy mã nhân viên mới
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Mã nhân viên mới</returns>
         /// /// Author: DNT(20/05/2023)
         Task<string> GetNewCodeAsync();
 
         /// <summary>
         /// Kiểm tra ID của đơn vị khi tạo mới nhân viên
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">ID của đơn vị</param>
+        /// <returns>Giá trị boolean biểu thị ID của đơn vị là hợp lệ hay không</returns>
         /// Author: DNT(20/05/2023)
         Task<bool> ValidateDepartmentId(Guid? id);
 

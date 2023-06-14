@@ -22,7 +22,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// <summary>
         /// Lấy mã nhân viên mới
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Mã nhân viên mới</returns>
         /// Author: DNT(20/05/2023)
         public async Task<string> GetNewCodeAsync()
         {
@@ -52,7 +52,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// Kiểm tra ID của đơn vị khi tạo nhân viên mới
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>Giá trị boolean biểu thị ID đơn vị đưa vào là hợp lệ</returns>
         /// <exception cref="DbException"></exception>
         /// Author: DNT(20/05/2023)
         public async Task<bool> ValidateDepartmentId(Guid? id)

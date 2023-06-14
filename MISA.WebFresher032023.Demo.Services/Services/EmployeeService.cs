@@ -32,7 +32,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <summary>
         /// Lấy mã nhân viên mới
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Mã nhân viên mới</returns>
         /// Author: DNT(26/05/2023)
         public async Task<string> GetNewCodeAsync()
         {
@@ -44,7 +44,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Tạo mới một nhân viên
         /// </summary>
         /// <param name="employeeCreateDto"></param>
-        /// <returns></returns>
+        /// <returns>ID của nhân viên mới tạo</returns>
         /// <exception cref="ConflictException"></exception>
         /// Author: DNT(26/05/2023)
         /// Modified: DNT(09/06/2023)
@@ -69,9 +69,9 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <summary>
         /// Cập nhật thông tin nhân viên
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">ID của nhân viên</param>
         /// <param name="employeeUpdateDto"></param>
-        /// <returns></returns>
+        /// <returns>Giá trị boolean biểu thị việc cập nhật thành công hay không</returns>
         /// <exception cref="ConflictException"></exception>
         /// Author: DNT(26/05/2023)
         /// Modified: DNT(09/06/2023)
@@ -99,7 +99,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <summary>
         /// Tạo file excel thông tin nhân viên
         /// </summary>
-        /// <returns></returns>
+        /// <returns>File Excel được chuyển sang dạng byte[]</returns>
         /// Author: DNT(06/06/2023)
         public async Task<byte[]> ExportEmployeesToExcelAsync()
         {

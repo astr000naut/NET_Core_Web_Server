@@ -13,9 +13,13 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <summary>
         /// Sinh mã nhân viên mới
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Mã nhân viên mới</returns>
         Task<string> GetNewCodeAsync();
 
+        /// <summary>
+        /// Xuất file excel thông tin của nhân viên
+        /// </summary>
+        /// <returns>Woorkbook thông tin nhân viên được chuyển sang mảng byte[]</returns>
         Task<byte[]> ExportEmployeesToExcelAsync();
     }
 }

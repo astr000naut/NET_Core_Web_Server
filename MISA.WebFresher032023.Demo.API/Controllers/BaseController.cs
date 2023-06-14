@@ -19,10 +19,10 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         }
 
         /// <summary>
-        /// Tạo mới một đối tượng
+        /// API Tạo mới một đối tượng
         /// </summary>
         /// <param name="tEntityCreateDto"></param>
-        /// <returns></returns>
+        /// <returns>Id của đối tượng được tạo</returns>
         /// Author: DNT(24/05/2023)
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] TEntityCreateDto tEntityCreateDto)
@@ -35,7 +35,7 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// Lấy một đối tượng theo ID
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>Thông tin của đối tượng</returns>
         /// Author: DNT(24/05/2023)
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync(Guid id)
@@ -50,7 +50,7 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// Filter danh sách đối tượng
         /// </summary>
         /// <param name="entityFilterDto"></param>
-        /// <returns></returns>
+        /// <returns>filtered List</returns>
         /// Author: DNT(29/05/2023)
         [Route("Filter")]
         [HttpGet]
@@ -63,9 +63,9 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// <summary>
         /// Cập nhật một đối tượng
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="tEntityUpdateDto"></param>
-        /// <returns></returns>
+        /// <param name="id">Id của đối tượng</param>
+        /// <param name="tEntityUpdateDto">EntityUpdateDto của đối tượng</param>
+        /// <returns>Giá trị boolean đã cập nhật hay chưa</returns>
         /// Author: DNT(24/05/2023)
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAsync(Guid id, [FromBody] TEntityUpdateDto tEntityUpdateDto)
@@ -77,8 +77,8 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// <summary>
         /// Xóa một đối tượng theo ID
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">Id của đối tượng</param>
+        /// <returns>Giá trị boolean biểu thị đã xóa hay chưa</returns>
         /// Author: DNT(24/05/2023)
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(Guid id)
@@ -91,8 +91,8 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// <summary>
         /// Xóa nhiều đối tượng theo danh sách ID
         /// </summary>
-        /// <param name="entityIdList"></param>
-        /// <returns></returns>
+        /// <param name="entityIdList">Mảng Id các đối tượng</param>
+        /// <returns>int : số lượng đối tượng đã xóa thành công</returns>
         /// <exception cref="BadInputException"></exception>
         /// Author: DNT(24/05/2023)
         [Route("DeleteMultiple")]
@@ -111,9 +111,9 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// <summary>
         /// Kiểm tra mã đã tồn tại
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="code"></param>
-        /// <returns></returns>
+        /// <param name="id">Id của đối tượng (chỉ cần trong trường hợp cập nhật)</param>
+        /// <param name="code">Mã</param>
+        /// <returns>Giá trị boolean biểu thị mã đã tồn tại hay chưa</returns>
         /// Author: DNT(24/05/2023)
         [Route("CheckCodeExist")]
         [HttpGet]
