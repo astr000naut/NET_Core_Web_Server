@@ -17,6 +17,7 @@ using System.Data;
 using DataTable = System.Data.DataTable;
 using ClosedXML.Excel;
 using MISA.WebFresher032023.Demo.Common.Enum;
+using MISA.WebFresher032023.Demo.Common.Resources;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 {
@@ -108,21 +109,21 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                 // Tạo data table
                 var dt = new DataTable
                 {
-                    TableName = "DANH SÁCH NHÂN VIÊN"
+                    TableName = EmployeeExport.TableName
                 };
 
                 // Dựng cấu trúc của data table
-                dt.Columns.Add("STT", typeof(int));
-                dt.Columns.Add("Mã nhân viên", typeof(string));
-                dt.Columns.Add("Tên nhân viên", typeof(string));
-                dt.Columns.Add("Giới tính", typeof(string));
-                dt.Columns.Add("Ngày sinh", typeof(DateTime));
-                dt.Columns.Add("Số CMND", typeof(string));
-                dt.Columns.Add("Chức danh", typeof(string));
-                dt.Columns.Add("Tên đơn vị", typeof(string));
-                dt.Columns.Add("Số tài khoản", typeof(string));
-                dt.Columns.Add("Tên ngân hàng", typeof(string));
-                dt.Columns.Add("Chi nhánh TK ngân hàng", typeof(string));
+                dt.Columns.Add(EmployeeExport.Col_1, typeof(int));
+                dt.Columns.Add(EmployeeExport.Col_2, typeof(string));
+                dt.Columns.Add(EmployeeExport.Col_3, typeof(string));
+                dt.Columns.Add(EmployeeExport.Col_4, typeof(string));
+                dt.Columns.Add(EmployeeExport.Col_5, typeof(DateTime));
+                dt.Columns.Add(EmployeeExport.Col_6, typeof(string));
+                dt.Columns.Add(EmployeeExport.Col_7, typeof(string));
+                dt.Columns.Add(EmployeeExport.Col_8, typeof(string));
+                dt.Columns.Add(EmployeeExport.Col_9, typeof(string));
+                dt.Columns.Add(EmployeeExport.Col_10, typeof(string));
+                dt.Columns.Add(EmployeeExport.Col_11, typeof(string));
 
                 // Tạo filter param
                 var employeeFilter = new EntityFilter()
@@ -167,24 +168,24 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 
                 var workbook = new XLWorkbook();
                 // Thêm worksheet vào workbook
-                var worksheet = workbook.AddWorksheet("DANH SÁCH NHÂN VIÊN");
+                var worksheet = workbook.AddWorksheet(EmployeeExport.WorksheetName);
 
                 // Tạo tiêu đề của các cột cho bảng thông tin nhân viên
                 var headerRange = worksheet.Range("A3:K3");
                 headerRange.Style.Fill.BackgroundColor = XLColor.LightGray;
                 headerRange.Style.Font.Bold = true;
 
-                worksheet.Cell("A3").Value = "STT";
-                worksheet.Cell("B3").Value = "Mã nhân viên";
-                worksheet.Cell("C3").Value = "Tên nhân viên";
-                worksheet.Cell("D3").Value = "Giới tính";
-                worksheet.Cell("E3").Value = "Ngày sinh";
-                worksheet.Cell("F3").Value = "Số CMND";
-                worksheet.Cell("G3").Value = "Chức danh";
-                worksheet.Cell("H3").Value = "Tên đơn vị";
-                worksheet.Cell("I3").Value = "Số tài khoản";
-                worksheet.Cell("J3").Value = "Tên ngân hàng";
-                worksheet.Cell("K3").Value = "Chi nhánh TK ngân hàng";
+                worksheet.Cell("A3").Value = EmployeeExport.Col_1;
+                worksheet.Cell("B3").Value = EmployeeExport.Col_2;
+                worksheet.Cell("C3").Value = EmployeeExport.Col_3;
+                worksheet.Cell("D3").Value = EmployeeExport.Col_4;
+                worksheet.Cell("E3").Value = EmployeeExport.Col_5;
+                worksheet.Cell("F3").Value = EmployeeExport.Col_6;
+                worksheet.Cell("G3").Value = EmployeeExport.Col_7;
+                worksheet.Cell("H3").Value = EmployeeExport.Col_8;
+                worksheet.Cell("I3").Value = EmployeeExport.Col_9;
+                worksheet.Cell("J3").Value = EmployeeExport.Col_10;
+                worksheet.Cell("K3").Value = EmployeeExport.Col_11;
                 worksheet.Row(3).Height = 30;
 
                 // Insert dữ liệu từ datatable vào worksheet
@@ -205,6 +206,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                     }
                     else
                     {
+                        // i == 5 : Cột ngày sinh thì căn giữa
                         worksheet.Column(i).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                     }
                 }
@@ -215,7 +217,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 
                 // Thêm header 
                 var header = worksheet.Range("A1:K1").Merge();
-                header.Value = "DANH SÁCH NHÂN VIÊN";
+                header.Value = EmployeeExport.TableHeader;
                 header.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                 header.Style.Font.Bold = true;
                 header.Style.Font.FontSize = 16;

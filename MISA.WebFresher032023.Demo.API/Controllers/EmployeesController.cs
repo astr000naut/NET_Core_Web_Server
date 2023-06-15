@@ -5,6 +5,7 @@ using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output;
 using MISA.WebFresher032023.Demo.BusinessLayer.Services;
 using MISA.WebFresher032023.Demo.Common.Enums;
 using MISA.WebFresher032023.Demo.Common.Exceptions;
+using MISA.WebFresher032023.Demo.Common.Resources;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -46,11 +47,7 @@ namespace MISA.WebFresher032023.Demo.Controllers
         public async Task<IActionResult> ExportEmployeeData()
         {
             byte[] excelFileBytes = await _employeeService.ExportEmployeesToExcelAsync();
-            if (excelFileBytes == null)
-            {
-                return NotFound();
-            }
-            return File(excelFileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "employees.xlsx");
+            return File(excelFileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", EmployeeExport.FileName);
         }
 
     }

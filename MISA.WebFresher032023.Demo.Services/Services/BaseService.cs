@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input;
 using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output;
+using MISA.WebFresher032023.Demo.Common.Resources;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Output;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories;
@@ -46,7 +47,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
             createdDateProperty?.SetValue(entityCreate, DateTime.Now.ToLocalTime());
 
             var createdByProperty = type.GetProperty("CreatedBy");
-            createdByProperty?.SetValue(entityCreate, "Dux");
+            createdByProperty?.SetValue(entityCreate, Value.CreatedBy);
 
             var isCreated = await _baseRepository.CreateAsync(entityCreate);
 
@@ -77,7 +78,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
             modifiedDateProperty?.SetValue(entityUpdate, DateTime.Now.ToLocalTime());
 
             var modifiedByProperty = type.GetProperty("ModifiedBy");
-            modifiedByProperty?.SetValue(entityUpdate, "Dux");
+            modifiedByProperty?.SetValue(entityUpdate, Value.ModifiedBy);
 
             return await _baseRepository.UpdateAsync(id, entityUpdate);
         }
