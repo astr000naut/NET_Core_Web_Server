@@ -49,7 +49,7 @@ namespace MISA.WebFresher032023.Demo.UnitTests.Services
 
             // Act & Assert
             var ex = Assert.ThrowsAsync<ConflictException>(async () => await employeeService.CreateAsync(employeeCreateDto));
-            Assert.That(ex.Message, Is.EqualTo(Error.InvalidDepartmentId));
+            Assert.That(ex.Message, Is.EqualTo(Error.InvalidDepartmentIdMsg));
         }
 
         // Th2 - Department ID valid - Code Exist
@@ -74,7 +74,7 @@ namespace MISA.WebFresher032023.Demo.UnitTests.Services
 
             // Act & Assert
             var ex = Assert.ThrowsAsync<ConflictException>(async () => await employeeService.CreateAsync(employeeCreateDto));
-            Assert.That(ex.Message, Is.EqualTo(Error.EmployeeCodeHasExist));
+            Assert.That(ex.Message, Is.EqualTo(Error.EmployeeCodeHasExistMsg));
         }
 
         // Th3 - Department ID valid - Code Valid - ReturnGuid

@@ -54,13 +54,13 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
             var isDepartmentIdValid = await _employeeRepository.ValidateDepartmentId(employeeCreateDto.DepartmentId);
             if (!isDepartmentIdValid)
             {
-                throw new ConflictException(Error.ConflictCode, Error.InvalidDepartmentId, Error.InvalidDepartmentId);
+                throw new ConflictException(Error.ConflictCode, Error.InvalidDepartmentIdMsg, Error.InvalidDepartmentIdMsg);
             }
             // Kiểm tra mã đã tồn tại
             var isEmployeeCodeExist = await _baseRepository.CheckCodeExistAsync(null, employeeCreateDto.EmployeeCode);
             if (isEmployeeCodeExist)
             {
-                throw new ConflictException(Error.ConflictCode, Error.EmployeeCodeHasExist, Error.EmployeeCodeHasExist);
+                throw new ConflictException(Error.ConflictCode, Error.EmployeeCodeHasExistMsg, Error.EmployeeCodeHasExistMsg);
             }
 
             return await base.CreateAsync(employeeCreateDto);
@@ -77,19 +77,19 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Modified: DNT(09/06/2023)
         public override async Task<bool> UpdateAsync(Guid id, EmployeeUpdateDto employeeUpdateDto)
         {
-            _ = await _employeeRepository.GetAsync(id) ?? throw new ConflictException(Error.ConflictCode, Error.InvalidEmployeeId, Error.InvalidEmployeeId);
+            _ = await _employeeRepository.GetAsync(id) ?? throw new ConflictException(Error.ConflictCode, Error.InvalidEmployeeIdMsg, Error.InvalidEmployeeIdMsg);
 
             // Kiểm tra đơn vị có tồn tại
             var isDepartmentIdValid = await _employeeRepository.ValidateDepartmentId(employeeUpdateDto.DepartmentId);
             if (!isDepartmentIdValid)
             {
-                throw new ConflictException(Error.ConflictCode, Error.InvalidDepartmentId, Error.InvalidDepartmentId);
+                throw new ConflictException(Error.ConflictCode, Error.InvalidDepartmentIdMsg, Error.InvalidDepartmentIdMsg);
             }
             // Kiểm tra mã đã tồn tại
             var isEmployeeCodeExist = await _baseRepository.CheckCodeExistAsync(id, employeeUpdateDto.EmployeeCode);
             if (isEmployeeCodeExist)
             {
-                throw new ConflictException(Error.ConflictCode, Error.EmployeeCodeHasExist, Error.EmployeeCodeHasExist);
+                throw new ConflictException(Error.ConflictCode, Error.EmployeeCodeHasExistMsg, Error.EmployeeCodeHasExistMsg);
             }
 
             // Cập nhật thông tin nhân viên 

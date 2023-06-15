@@ -9,6 +9,7 @@ namespace MISA.WebFresher032023.Demo.Common.Exceptions
 {
     public class NotFoundException : BaseException
     {
+        // Exception biểu thị không tìm thấy một đối tượng
         public NotFoundException(int errorCode, string message, string userMessage) : base(errorCode, message, userMessage) { }
     }
 }

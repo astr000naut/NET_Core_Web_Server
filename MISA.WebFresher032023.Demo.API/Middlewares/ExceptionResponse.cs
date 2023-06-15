@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.Common.Exceptions
 {
+    // Dữ liệu trả về cho người dùng khi gặp exception
     public class ExceptionResponse
     {
         public int ErrorCode { get; set; }

@@ -50,7 +50,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 
             if (isDepartmentCodeExist)
             {
-                throw new ConflictException(Error.ConflictCode, Error.DepartmentCodeHasExist, Error.DepartmentCodeHasExist);
+                throw new ConflictException(Error.ConflictCode, Error.DepartmentCodeHasExistMsg, Error.DepartmentCodeHasExistMsg);
             }
 
             return await base.UpdateAsync(departmentId, departmentUpdateDto);

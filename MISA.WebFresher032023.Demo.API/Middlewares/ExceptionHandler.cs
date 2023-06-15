@@ -72,7 +72,7 @@ namespace MISA.WebFresher032023.Demo.API.Middleware
                 exceptionText = new ExceptionResponse()
                 {
                     ErrorCode = Error.ServerFailed,
-                    UserMessage = Error.ServerFailedMessage,
+                    UserMessage = Error.ServerFailedMsg,
                     DevMessage = exception.Message,
                     TraceId = httpContext.TraceIdentifier
 

@@ -9,6 +9,7 @@ namespace MISA.WebFresher032023.Demo.Common.Exceptions
 {
     public class InternalException : BaseException
     {
+        // Exception biểu thị có lỗi xảy ra bên trong server
         public InternalException(int errorCode, string message, string userMessage) : base(errorCode, message, userMessage) { }
     }
 }

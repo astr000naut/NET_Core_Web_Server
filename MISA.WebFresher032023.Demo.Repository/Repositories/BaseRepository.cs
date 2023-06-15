@@ -49,7 +49,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
             } catch (Exception ex)
             {
                 await connection.CloseAsync();
-                throw new DbException(Error.DbConnectFail, ex.Message, Error.DbConnectFailMessage);
+                throw new DbException(Error.DbConnectFail, ex.Message, Error.DbConnectFailMsg);
             }
         }
 

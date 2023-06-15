@@ -11,12 +11,14 @@ namespace MISA.WebFresher032023.Demo.Common.Enums
         #region Server Error
         // 500 - Server Error
         public const int ServerFailed = 500;
-        public const string ServerFailedMessage = "Server đã xảy ra lỗi, vui lòng liên hệ nhân viên hỗ trợ";
+        public const string ServerFailedMsg = "Server đã xảy ra lỗi, vui lòng liên hệ nhân viên hỗ trợ";
 
         public const int DbConnectFail = 506;
-        public const string DbConnectFailMessage = "Xảy ra lỗi khi kết nối đến cơ sở dữ liệu";
+        public const string DbConnectFailMsg = "Xảy ra lỗi khi kết nối đến cơ sở dữ liệu";
+
         public const int DbQueryFail = 507;
         public const string DbQueryFailMsg = "Xảy ra lỗi khi truy vấn cơ sở dữ liệu";
+
         public const int ExportFail = 507;
         public const string ExportFailMsg = "Xảy ra lỗi khi xuất khẩu dữ liệu";
         #endregion
@@ -30,10 +32,10 @@ namespace MISA.WebFresher032023.Demo.Common.Enums
         #region Conflict
         //409 - Conflict
         public const int ConflictCode = 409;
-        public const string InvalidDepartmentId = "Sai thông tin ID của đơn vị, vui lòng kiểm tra lại";
-        public const string EmployeeCodeHasExist = "Mã nhân viên đã tồn tại, vui lòng kiểm tra lại";
-        public const string DepartmentCodeHasExist = "Mã nhân đơn vị đã tồn tại, vui lòng kiểm tra lại";
-        public const string InvalidEmployeeId = "Không tồn tại nhân viên với ID này";
+        public const string InvalidDepartmentIdMsg = "Sai thông tin ID của đơn vị, vui lòng kiểm tra lại";
+        public const string EmployeeCodeHasExistMsg = "Mã nhân viên đã tồn tại, vui lòng kiểm tra lại";
+        public const string DepartmentCodeHasExistMsg = "Mã nhân đơn vị đã tồn tại, vui lòng kiểm tra lại";
+        public const string InvalidEmployeeIdMsg = "Không tồn tại nhân viên với ID này";
         #endregion
 
         #region Notfound
