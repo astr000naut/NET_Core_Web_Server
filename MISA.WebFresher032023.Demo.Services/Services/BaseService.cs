@@ -3,7 +3,6 @@ using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input;
 using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output;
 using MISA.WebFresher032023.Demo.Common.Resources;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
-using MISA.WebFresher032023.Demo.DataLayer.Entities.Output;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories;
 using System;
 using System.Collections.Generic;

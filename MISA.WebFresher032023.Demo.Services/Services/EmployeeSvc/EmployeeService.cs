@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
 using DocumentFormat.OpenXml.Drawing.Charts;
-using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input;
 using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output;
 using MISA.WebFresher032023.Demo.Common.Enums;
 using MISA.WebFresher032023.Demo.Common.Exceptions;
-using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Output;
-using MISA.WebFresher032023.Demo.DataLayer.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +15,9 @@ using DataTable = System.Data.DataTable;
 using ClosedXML.Excel;
 using MISA.WebFresher032023.Demo.Common.Enum;
 using MISA.WebFresher032023.Demo.Common.Resources;
+using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
+using MISA.WebFresher032023.Demo.DataLayer.Repositories;
+using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 {
@@ -25,7 +25,8 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
     {
         private readonly IEmployeeRepository _employeeRepository;
 
-        public EmployeeService(IEmployeeRepository employeeRepository, IMapper mapper) : base(employeeRepository, mapper) {
+        public EmployeeService(IEmployeeRepository employeeRepository, IMapper mapper) : base(employeeRepository, mapper)
+        {
             _employeeRepository = employeeRepository;
         }
 
@@ -228,16 +229,17 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                 tableRange.Style.Border.OutsideBorderColor = XLColor.Black;
                 tableRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
                 tableRange.Style.Border.InsideBorderColor = XLColor.Black;
-                
+
                 // Bật wrap text cho bảng
                 tableRange.Style.Alignment.WrapText = true;
 
                 var stream = new MemoryStream();
                 workbook.SaveAs(stream);
                 return stream.ToArray();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
-                throw new InternalException( Error.ExportFail, ex.Message, Error.ExportFailMsg);
+                throw new InternalException(Error.ExportFail, ex.Message, Error.ExportFailMsg);
             }
         }
     }

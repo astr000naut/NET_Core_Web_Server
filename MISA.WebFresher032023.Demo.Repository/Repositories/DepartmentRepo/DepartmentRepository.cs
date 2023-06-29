@@ -15,7 +15,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 {
     public class DepartmentRepository : BaseRepository<Department, DepartmentCreate, DepartmentUpdate>, IDepartmentRepository
     {
-        public DepartmentRepository(IConfiguration configuration): base(configuration) { }
+        public DepartmentRepository(IConfiguration configuration) : base(configuration) { }
 
     }
 }

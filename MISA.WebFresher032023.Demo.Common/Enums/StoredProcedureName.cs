@@ -31,6 +31,15 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
         public const string DeleteMultipleDepartment = "Proc_DeleteMultipleDepartment";
         #endregion
 
+        public const string CreateCustomer = "Proc_InsertCustomer";
+        public const string GetCustomerById = "Proc_GetCustomerById";
+        public const string FilterCustomer = "Proc_FilterCustomer";
+        public const string CheckCustomerCodeExist = "Proc_CheckCustomerCodeExist";
+        public const string DeleteCustomer = "Proc_DeleteCustomerById";
+        public const string DeleteMultipleCustomer = "Proc_DeleteMultipleCustomer";
+
+        public const string FilterGroup = "Proc_FilterGroup";
+
         /// <summary>
         /// Lấy Stored procedure từ string tạo bởi EntityClassName và kiểu hành động
         /// </summary>
@@ -73,6 +82,26 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
                     return CheckEmployeeCodeExist;
                 case "EmployeeDeleteMultiple":
                     return DeleteMultipleEmployee;
+                #endregion
+
+                #region Customer proc
+                case "Customer":
+                    return GetCustomerById;
+                case "CustomerCreate":
+                    return CreateCustomer;
+                case "FilteredList<Customer>":
+                    return FilterCustomer;
+                case "CustomerCheckCodeExist":
+                    return CheckCustomerCodeExist;
+                case "CustomerDelete":
+                    return DeleteCustomer;
+                case "CustomerDeleteMultiple":
+                    return DeleteMultipleCustomer;
+                #endregion
+
+                #region Group proc
+                case "FilteredList<Group>":
+                    return FilterGroup;
                 #endregion
                 default: throw new Exception("Không tìm thấy tên Stored Procedure");
             }

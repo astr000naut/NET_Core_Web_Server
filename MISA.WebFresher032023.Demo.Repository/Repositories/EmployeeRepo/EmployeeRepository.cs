@@ -16,8 +16,8 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 {
     public class EmployeeRepository : BaseRepository<Employee, EmployeeCreate, EmployeeUpdate>, IEmployeeRepository
     {
-      
-        public EmployeeRepository(IConfiguration configuration): base(configuration) { }
+
+        public EmployeeRepository(IConfiguration configuration) : base(configuration) { }
 
         /// <summary>
         /// Lấy mã nhân viên mới
@@ -27,21 +27,23 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         public async Task<string> GetNewCodeAsync()
         {
             var connection = await GetOpenConnectionAsync();
-           
+
             try
             {
                 var dynamicParams = new DynamicParameters();
                 dynamicParams.Add("o_newEmployeeCode", direction: ParameterDirection.Output);
-              
+
                 await connection.ExecuteAsync("Proc_GenerateNewEmployeeCode", commandType: CommandType.StoredProcedure, param: dynamicParams);
                 var newEmployeeCode = dynamicParams.Get<string>("o_newEmployeeCode");
 
                 return newEmployeeCode;
-            } catch (Exception ex)
-            {   
+            }
+            catch (Exception ex)
+            {
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
 
-            } finally 
+            }
+            finally
             {
                 await connection.CloseAsync();
             }
@@ -65,11 +67,11 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 
                 var department = await connection.QueryFirstOrDefaultAsync<Department>("Proc_GetDepartmentById", commandType: CommandType.StoredProcedure, param: dynamicParams);
 
-                return (department != null);
+                return department != null;
             }
             catch (Exception ex)
             {
-                
+
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
             }
             finally

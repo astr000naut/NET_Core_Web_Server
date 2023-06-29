@@ -1,5 +1,4 @@
 ﻿using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input;
-using MISA.WebFresher032023.Demo.DataLayer.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +10,9 @@ using MISA.WebFresher032023.Demo.BusinessLayer.Services;
 using AutoMapper;
 using MISA.WebFresher032023.Demo.Common.Exceptions;
 using MISA.WebFresher032023.Demo.Common.Enums;
-using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
 using NSubstitute.ExceptionExtensions;
+using MISA.WebFresher032023.Demo.DataLayer.Repositories;
+using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
 
 namespace MISA.WebFresher032023.Demo.UnitTests.Services
 {
