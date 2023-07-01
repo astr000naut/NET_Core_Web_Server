@@ -176,7 +176,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// <param name="tEntityUpdate"></param>
         /// <returns>Giá trị boolean biểu thị cập nhật thành công hay chưa</returns>
         /// Author: DNT(20/05/2023)
-        public async Task<bool> UpdateAsync(Guid id, TEntityUpdate tEntityUpdate)
+        public virtual async Task<bool> UpdateAsync(Guid id, TEntityUpdate tEntityUpdate)
         {
 
             var connection = await GetOpenConnectionAsync();

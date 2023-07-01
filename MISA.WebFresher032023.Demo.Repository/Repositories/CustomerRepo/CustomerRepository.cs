@@ -48,5 +48,35 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 
         }
 
+        public override async Task<bool> UpdateAsync(Guid id, CustomerUpdate customerUpdate)
+        {
+            var connection = await GetOpenConnectionAsync();
+
+            try
+            {
+                var dynamicParams = new DynamicParameters();
+                // dynamicParams.Add("o_newCustomerCode", direction: ParameterDirection.Output);
+
+                foreach (var property in typeof(CustomerUpdate).GetProperties())
+                {
+                    var propertyNameToCamelCase = char.ToLower(property.Name[0]) + property.Name[1..];
+                    var paramName = "p_" + propertyNameToCamelCase;
+                    var paramValue = property.GetValue(customerUpdate);
+                    dynamicParams.Add(paramName, paramValue);
+                }
+
+                int rowAffected = await connection.ExecuteAsync("Proc_UpdateCustomer", commandType: CommandType.StoredProcedure, param: dynamicParams);
+                return rowAffected > 0;
+            }
+            catch (Exception ex)
+            {
+                throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
+            }
+            finally
+            {
+                await connection.CloseAsync();
+            }
+        }
+
     }
 }

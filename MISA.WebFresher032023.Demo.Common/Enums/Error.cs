@@ -34,8 +34,11 @@ namespace MISA.WebFresher032023.Demo.Common.Enums
         public const int ConflictCode = 409;
         public const string InvalidDepartmentIdMsg = "Sai thông tin ID của đơn vị, vui lòng kiểm tra lại";
         public const string EmployeeCodeHasExistMsg = "Mã nhân viên đã tồn tại, vui lòng kiểm tra lại";
+        public const string CustomerCodeHasExistMsg = "Mã khách hàng đã tồn tại, vui lòng kiểm tra lại";
         public const string DepartmentCodeHasExistMsg = "Mã nhân đơn vị đã tồn tại, vui lòng kiểm tra lại";
         public const string InvalidEmployeeIdMsg = "Không tồn tại nhân viên với ID này";
+        public const string InvalidCustomerIdMsg = "Không tồn tại khách hàng với ID này";
+
         #endregion
 
         #region Notfound

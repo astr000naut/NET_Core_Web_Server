@@ -79,6 +79,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Modified: DNT(09/06/2023)
         public override async Task<bool> UpdateAsync(Guid id, EmployeeUpdateDto employeeUpdateDto)
         {
+            // Kiểm tra nhân viên có tồn tại
             _ = await _employeeRepository.GetAsync(id) ?? throw new ConflictException(Error.ConflictCode, Error.InvalidEmployeeIdMsg, Error.InvalidEmployeeIdMsg);
 
             // Kiểm tra đơn vị có tồn tại
