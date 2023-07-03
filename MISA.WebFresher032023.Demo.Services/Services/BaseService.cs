@@ -12,13 +12,13 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 {
-    public abstract class BaseService<TEntity, TEntityDto, TEntityCreate, TEntityCreateDto, TEntityUpdate, TEntityUpdateDto>
-        : IBaseService<TEntityDto, TEntityCreateDto, TEntityUpdateDto>
+    public abstract class BaseService<TEntity, TEntityDto, TEntityInput, TEntityInputDto>
+        : IBaseService<TEntityDto, TEntityInputDto>
     {
-        protected readonly IBaseRepository<TEntity, TEntityCreate, TEntityUpdate> _baseRepository;
+        protected readonly IBaseRepository<TEntity, TEntityInput> _baseRepository;
         protected readonly IMapper _mapper;
 
-        public BaseService(IBaseRepository<TEntity, TEntityCreate, TEntityUpdate> repository, IMapper mapper)
+        public BaseService(IBaseRepository<TEntity, TEntityInput> repository, IMapper mapper)
         {
             _baseRepository = repository;
             _mapper = mapper;
@@ -27,28 +27,28 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <summary>
         /// Tạo một Entity
         /// </summary>
-        /// <param name="tEntityCreateDto"></param>
+        /// <param name="tEntityInputDto"></param>
         /// <returns>ID của engity mới được tạo</returns>
         /// Author: DNT(26/05/2023)
         /// Modified: DNT(09/06/2023)
-        public virtual async Task<Guid?> CreateAsync(TEntityCreateDto tEntityCreateDto)
+        public virtual async Task<Guid?> CreateAsync(TEntityInputDto tEntityInputDto)
         {
 
-            var entityCreate = _mapper.Map<TEntityCreate>(tEntityCreateDto);
-            Type type = typeof(TEntityCreate);
+            var entityInput = _mapper.Map<TEntityInput>(tEntityInputDto);
+            Type type = typeof(TEntityInput);
             var entityName = typeof(TEntity).Name;
             var newId = Guid.NewGuid();
 
             var idProperty = type.GetProperty($"{entityName}Id");
-            idProperty?.SetValue(entityCreate, newId);
+            idProperty?.SetValue(entityInput, newId);
 
             var createdDateProperty = type.GetProperty("CreatedDate");
-            createdDateProperty?.SetValue(entityCreate, DateTime.Now.ToLocalTime());
+            createdDateProperty?.SetValue(entityInput, DateTime.Now.ToLocalTime());
 
             var createdByProperty = type.GetProperty("CreatedBy");
-            createdByProperty?.SetValue(entityCreate, Value.CreatedBy);
+            createdByProperty?.SetValue(entityInput, Value.CreatedBy);
 
-            var isCreated = await _baseRepository.CreateAsync(entityCreate);
+            var isCreated = await _baseRepository.CreateAsync(entityInput);
 
             return isCreated ? newId : null;
 
@@ -58,28 +58,28 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Cập nhật thông tin một Entity
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="tEntityUpdateDto"></param>
+        /// <param name="tEntityInputDto"></param>
         /// <returns>Giá trị boolean biểu thị entity đã được cập nhật</returns>
         /// Author: DNT(26/05/2023)
         /// Modified: DNT(09/06/2023)
-        public virtual async Task<bool> UpdateAsync(Guid id, TEntityUpdateDto tEntityUpdateDto)
+        public virtual async Task<bool> UpdateAsync(Guid id, TEntityInputDto tEntityInputDto)
         {
-            var entityUpdate = _mapper.Map<TEntityUpdate>(tEntityUpdateDto);
+            var entityInput = _mapper.Map<TEntityInput>(tEntityInputDto);
 
-            Type type = typeof(TEntityUpdate);
+            Type type = typeof(TEntityInput);
             var entityName = typeof(TEntity).Name;
 
      
             var idProperty = type.GetProperty($"{entityName}Id");
-            idProperty?.SetValue(entityUpdate, id);
+            idProperty?.SetValue(entityInput, id);
 
             var modifiedDateProperty = type.GetProperty("ModifiedDate");
-            modifiedDateProperty?.SetValue(entityUpdate, DateTime.Now.ToLocalTime());
+            modifiedDateProperty?.SetValue(entityInput, DateTime.Now.ToLocalTime());
 
             var modifiedByProperty = type.GetProperty("ModifiedBy");
-            modifiedByProperty?.SetValue(entityUpdate, Value.ModifiedBy);
+            modifiedByProperty?.SetValue(entityInput, Value.ModifiedBy);
 
-            return await _baseRepository.UpdateAsync(id, entityUpdate);
+            return await _baseRepository.UpdateAsync(entityInput);
         }
 
         /// <summary>

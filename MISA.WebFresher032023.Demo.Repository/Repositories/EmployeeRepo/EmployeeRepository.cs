@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 {
-    public class EmployeeRepository : BaseRepository<Employee, EmployeeCreate, EmployeeUpdate>, IEmployeeRepository
+    public class EmployeeRepository : BaseRepository<Employee, EmployeeInput>, IEmployeeRepository
     {
 
         public EmployeeRepository(IConfiguration configuration) : base(configuration) { }

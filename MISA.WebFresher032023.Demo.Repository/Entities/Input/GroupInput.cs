@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.DataLayer.Entities.Input
 {
-    public class GroupCreate
+    public class GroupInput
     {
     }
 }

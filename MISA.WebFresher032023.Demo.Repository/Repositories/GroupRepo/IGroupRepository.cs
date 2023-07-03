@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.DataLayer.Repositories.GroupRepo
 {
-    public interface IGroupRepository: IBaseRepository<Group, GroupCreate, GroupUpdate>
+    public interface IGroupRepository: IBaseRepository<Group, GroupInput>
     {
     }
 }

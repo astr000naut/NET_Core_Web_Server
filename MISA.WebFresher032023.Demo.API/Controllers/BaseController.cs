@@ -9,11 +9,11 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
 {
 
     [ApiController]
-    public abstract class BaseController<TEntityDto, TEntityCreateDto, TEntityUpdateDto> : ControllerBase
+    public abstract class BaseController<TEntityDto, TEntityInputDto> : ControllerBase
     {
-        protected readonly IBaseService<TEntityDto, TEntityCreateDto, TEntityUpdateDto> _baseService;
+        protected readonly IBaseService<TEntityDto, TEntityInputDto> _baseService;
 
-        public BaseController(IBaseService<TEntityDto, TEntityCreateDto, TEntityUpdateDto> baseService)
+        public BaseController(IBaseService<TEntityDto, TEntityInputDto> baseService)
         {
             _baseService = baseService;
         }
@@ -21,13 +21,13 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// <summary>
         /// API Tạo mới một đối tượng
         /// </summary>
-        /// <param name="tEntityCreateDto"></param>
+        /// <param name="tEntityInputDto"></param>
         /// <returns>Id của đối tượng được tạo</returns>
         /// Author: DNT(24/05/2023)
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] TEntityCreateDto tEntityCreateDto)
+        public async Task<IActionResult> PostAsync([FromBody] TEntityInputDto tEntityInputDto)
         {
-            var newId =  await _baseService.CreateAsync(tEntityCreateDto);
+            var newId =  await _baseService.CreateAsync(tEntityInputDto);
             return Created("", newId);
         }
 
@@ -64,13 +64,13 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
         /// Cập nhật một đối tượng
         /// </summary>
         /// <param name="id">Id của đối tượng</param>
-        /// <param name="tEntityUpdateDto">EntityUpdateDto của đối tượng</param>
+        /// <param name="tEntityInputDto">EntityUpdateDto của đối tượng</param>
         /// <returns>Giá trị boolean đã cập nhật hay chưa</returns>
         /// Author: DNT(24/05/2023)
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(Guid id, [FromBody] TEntityUpdateDto tEntityUpdateDto)
+        public async Task<IActionResult> PutAsync(Guid id, [FromBody] TEntityInputDto tEntityInputDto)
         {
-           var isUpdated = await _baseService.UpdateAsync(id, tEntityUpdateDto);
+           var isUpdated = await _baseService.UpdateAsync(id, tEntityInputDto);
             return Ok(isUpdated);
         }
 

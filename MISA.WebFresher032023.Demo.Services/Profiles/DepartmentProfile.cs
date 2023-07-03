@@ -19,10 +19,8 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Profiles
             CreateMap<Department, DepartmentDto>();
 
             // Map từ DepartmentCreateDto sang DepartmentCreate
-            CreateMap<DepartmentCreateDto, DepartmentCreate>();
+            CreateMap<DepartmentInputDto, DepartmentInput>();
 
-            // Map từ DepartmentUpdateDto sang DepartmentUpdate
-            CreateMap<DepartmentUpdateDto, DepartmentUpdate>();
         }
 
     }

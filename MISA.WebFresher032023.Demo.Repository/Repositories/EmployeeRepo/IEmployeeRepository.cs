@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 {
-    public interface IEmployeeRepository : IBaseRepository<Employee, EmployeeCreate, EmployeeUpdate>
+    public interface IEmployeeRepository : IBaseRepository<Employee, EmployeeInput>
     {
 
         /// <summary>

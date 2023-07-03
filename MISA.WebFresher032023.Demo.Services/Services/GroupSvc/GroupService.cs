@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input.Group;
+using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input;
 using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Output;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.GroupSvc
 {
-    public class GroupService : BaseService<Group, GroupDto, GroupCreate, GroupCreateDto, GroupUpdate, GroupUpdateDto>, IGroupService
+    public class GroupService : BaseService<Group, GroupDto, GroupInput, GroupInputDto>, IGroupService
     {
         private readonly IGroupRepository _groupRepository;
 

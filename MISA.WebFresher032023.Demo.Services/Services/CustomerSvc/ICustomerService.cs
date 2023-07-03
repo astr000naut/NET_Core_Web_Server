@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 {
-    public interface ICustomerService : IBaseService<CustomerDto, CustomerCreateDto, CustomerUpdateDto>
+    public interface ICustomerService : IBaseService<CustomerDto, CustomerInputDto>
     {
         /// <summary>
         /// Sinh mã KH mới

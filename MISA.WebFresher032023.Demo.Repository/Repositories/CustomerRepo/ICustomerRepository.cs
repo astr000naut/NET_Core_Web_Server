@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 {
-    public interface ICustomerRepository : IBaseRepository<Customer, CustomerCreate, CustomerUpdate>
+    public interface ICustomerRepository : IBaseRepository<Customer, CustomerInput>
     {
         /// <summary>
         /// Lấy mã KH mới

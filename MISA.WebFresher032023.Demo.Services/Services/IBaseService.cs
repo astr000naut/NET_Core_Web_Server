@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 {
-    public interface IBaseService<TEntityDto, TEntityCreateDto, TEntityUpdateDto>
+    public interface IBaseService<TEntityDto, TEntityInputDto>
     {
 
         /// <summary>
         /// Tạo mới Entity
         /// </summary>
-        /// <param name="tEntityCreateDto"></param>
+        /// <param name="tEntityInputDto"></param>
         /// <returns>ID của entity mới tạo</returns>
         /// Author: DNT(26/05/2023)
-        Task<Guid?> CreateAsync(TEntityCreateDto tEntityCreateDto);
+        Task<Guid?> CreateAsync(TEntityInputDto tEntityInputDto);
 
         /// <summary>
         /// Lấy Entity theo ID
@@ -39,10 +39,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Cập nhật một Entity
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="tEntityUpdateDto"></param>
+        /// <param name="tEntityInputDto"></param>
         /// <returns>Giá trị boolean biểu thị việc cập nhật thành công hay không</returns>
         /// Author: DNT(26/05/2023)
-        Task<bool> UpdateAsync(Guid id, TEntityUpdateDto tEntityUpdateDto);
+        Task<bool> UpdateAsync(Guid id, TEntityInputDto tEntityInputDto);
 
         /// <summary>
         /// Xóa một Entity theo ID

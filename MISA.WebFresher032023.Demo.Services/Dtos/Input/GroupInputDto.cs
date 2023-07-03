@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input.Group
+namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input
 {
-    public class GroupUpdateDto
+    public class GroupInputDto
     {
     }
 }

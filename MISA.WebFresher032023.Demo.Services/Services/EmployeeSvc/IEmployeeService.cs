@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 {
-    public interface IEmployeeService : IBaseService<EmployeeDto, EmployeeCreateDto, EmployeeUpdateDto>
+    public interface IEmployeeService : IBaseService<EmployeeDto,EmployeeInputDto>
     {
         /// <summary>
         /// Sinh mã nhân viên mới

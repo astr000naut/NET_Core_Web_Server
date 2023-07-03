@@ -19,10 +19,8 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Profiles
             CreateMap<Employee, EmployeeDto>();
 
             // Map từ EmployeeUpdateDto sang EmployeeUpdate
-            CreateMap<EmployeeUpdateDto, EmployeeUpdate>();
+            CreateMap<EmployeeInputDto, EmployeeInput>();
 
-            // Map từ EmployeeCreateDto sang EmployeeCreate
-            CreateMap<EmployeeCreateDto, EmployeeCreate>();
         }
     }
 }

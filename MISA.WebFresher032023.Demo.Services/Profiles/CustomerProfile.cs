@@ -17,9 +17,8 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Profiles
         {
             CreateMap<Customer, CustomerDto>();
 
-            CreateMap<CustomerCreateDto, CustomerCreate>();
+            CreateMap<CustomerInputDto, CustomerInput>();
 
-            CreateMap<CustomerUpdateDto, CustomerUpdate>();
         }
     }
 }

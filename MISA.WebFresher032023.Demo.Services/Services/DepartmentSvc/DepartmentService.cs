@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 {
-    public class DepartmentService : BaseService<Department, DepartmentDto, DepartmentCreate, DepartmentCreateDto, DepartmentUpdate, DepartmentUpdateDto>, IDepartmentService
+    public class DepartmentService : BaseService<Department, DepartmentDto, DepartmentInput, DepartmentInputDto>, IDepartmentService
     {
         private readonly IDepartmentRepository _departmentRepository;
 
@@ -26,34 +26,34 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <summary>
         /// Tạo mới một đơn vị
         /// </summary>
-        /// <param name="departmentCreateDto"></param>
+        /// <param name="departmentInputDto"></param>
         /// <returns></returns>
         /// Author: DNT(25/05/2023)
         /// Modified: DNT(09/06/2023)
-        public override async Task<Guid?> CreateAsync(DepartmentCreateDto departmentCreateDto)
+        public override async Task<Guid?> CreateAsync(DepartmentInputDto departmentInputDto)
         {
-            return await base.CreateAsync(departmentCreateDto);
+            return await base.CreateAsync(departmentInputDto);
         }
 
         /// <summary>
         /// Cập nhật thông tin Department - DONE
         /// </summary>
         /// <param name="departmentId"></param>
-        /// <param name="departmentUpdateDto"></param>
+        /// <param name="departmentInputDto"></param>
         /// <returns></returns>
         /// Author: DNT(25/05/2023)
         /// Modified: DNT(09/06/2023)
-        public override async Task<bool> UpdateAsync(Guid departmentId, DepartmentUpdateDto departmentUpdateDto)
+        public override async Task<bool> UpdateAsync(Guid departmentId, DepartmentInputDto departmentInputDto)
         {
             // Kiểm tra mã đã tồn tại
-            var isDepartmentCodeExist = await _departmentRepository.CheckCodeExistAsync(departmentId, departmentUpdateDto.DepartmentCode);
+            var isDepartmentCodeExist = await _departmentRepository.CheckCodeExistAsync(departmentId, departmentInputDto.DepartmentCode);
 
             if (isDepartmentCodeExist)
             {
                 throw new ConflictException(Error.ConflictCode, Error.DepartmentCodeHasExistMsg, Error.DepartmentCodeHasExistMsg);
             }
 
-            return await base.UpdateAsync(departmentId, departmentUpdateDto);
+            return await base.UpdateAsync(departmentId, departmentInputDto);
         }
 
     }

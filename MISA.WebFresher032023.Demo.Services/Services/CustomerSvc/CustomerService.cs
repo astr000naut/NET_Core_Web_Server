@@ -3,6 +3,7 @@ using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input;
 using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output;
 using MISA.WebFresher032023.Demo.Common.Enums;
 using MISA.WebFresher032023.Demo.Common.Exceptions;
+using MISA.WebFresher032023.Demo.Common.Resources;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Output;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories;
@@ -15,7 +16,7 @@ using static Dapper.SqlMapper;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 {
-    public class CustomerService : BaseService<Customer, CustomerDto, CustomerCreate, CustomerCreateDto, CustomerUpdate, CustomerUpdateDto>, ICustomerService
+    public class CustomerService : BaseService<Customer, CustomerDto, CustomerInput, CustomerInputDto>, ICustomerService
     {
         private readonly ICustomerRepository _customerRepository;
 
@@ -35,21 +36,24 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
             return newCode;
         }
 
-        public override async Task<bool> UpdateAsync(Guid id, CustomerUpdateDto customerUpdateDto)
+        public override async Task<bool> UpdateAsync(Guid id, CustomerInputDto customerInputDto)
         {
             // Kiểm tra khách hàng có tồn tại
             _ = await _customerRepository.GetAsync(id) ?? throw new ConflictException(Error.ConflictCode, Error.InvalidCustomerIdMsg, Error.InvalidCustomerIdMsg);
 
             // Kiểm tra mã đã tồn tại
-            var isCustomerCodeExist = await _baseRepository.CheckCodeExistAsync(id, customerUpdateDto.CustomerCode);
+            var isCustomerCodeExist = await _baseRepository.CheckCodeExistAsync(id, customerInputDto.CustomerCode);
             if (isCustomerCodeExist)
             {
                 throw new ConflictException(Error.ConflictCode, Error.EmployeeCodeHasExistMsg, Error.EmployeeCodeHasExistMsg);
             }
 
-            var customerUpdate = _mapper.Map<CustomerUpdate>(customerUpdateDto);
+            var customerInput = _mapper.Map<CustomerInput>(customerInputDto);
+            customerInput.CustomerId = id;
+            customerInput.ModifiedDate = DateTime.Now.ToLocalTime();
+            customerInput.ModifiedBy = Value.ModifiedBy;
 
-            return await _customerRepository.UpdateAsync(id, customerUpdate);
+            return await _customerRepository.UpdateAsync(customerInput);
         }
 
     }

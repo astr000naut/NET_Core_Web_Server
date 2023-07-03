@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input
 {
     // Base DTO cho Employee
-    public abstract class BaseEmployeeInputDto
+    public class EmployeeInputDto
     {
         // Mã nhân viên Varchar(50)
         [Required]

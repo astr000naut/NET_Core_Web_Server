@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 {
-    public interface IDepartmentRepository : IBaseRepository<Department, DepartmentCreate, DepartmentUpdate>
+    public interface IDepartmentRepository : IBaseRepository<Department, DepartmentInput>
     {
     }
 }

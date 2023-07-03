@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.DataLayer.Repositories.GroupRepo
 {
-    public class GroupRepository : BaseRepository<Group, GroupCreate, GroupUpdate>, IGroupRepository
+    public class GroupRepository : BaseRepository<Group, GroupInput>, IGroupRepository
     { 
         public GroupRepository(IConfiguration configuration) : base(configuration) { }
     }

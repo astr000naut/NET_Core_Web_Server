@@ -10,7 +10,7 @@ using MISA.WebFresher032023.Demo.BusinessLayer.Services;
 namespace MISA.WebFresher032023.Demo.Controllers
 {
     [Route("api/v1/[controller]")]
-    public class DepartmentsController : BaseController<DepartmentDto, DepartmentCreateDto, DepartmentUpdateDto>
+    public class DepartmentsController : BaseController<DepartmentDto, DepartmentInputDto>
     {
         public DepartmentsController(IDepartmentService departmentService) : base(departmentService) { }
     }

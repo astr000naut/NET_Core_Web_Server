@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input;
-using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input.Group;
 using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Output;
@@ -18,9 +17,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Profiles
         {
             CreateMap<Group, GroupDto>();
 
-            CreateMap<GroupCreateDto, GroupCreate>();
-
-            CreateMap<GroupUpdateDto, GroupUpdate>();
+            CreateMap<GroupInputDto, GroupInput>();
         }
     }
 }

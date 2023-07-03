@@ -8,7 +8,7 @@ using MISA.WebFresher032023.Demo.BusinessLayer.Services;
 namespace MISA.WebFresher032023.Demo.API.Controllers
 {
     [Route("api/v1/[controller]")]
-    public class CustomersController : BaseController<CustomerDto, CustomerCreateDto, CustomerUpdateDto>
+    public class CustomersController : BaseController<CustomerDto, CustomerInputDto>
     {
         private readonly ICustomerService _customerService;
 

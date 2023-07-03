@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 {
-    public interface IBaseRepository<TEntity, TEntityCreate, TEntityUpdate>
+    public interface IBaseRepository<TEntity, TEntityInput>
     {
         /// <summary>
         /// Khởi tạo và lấy kết nối đến DB
@@ -22,10 +22,10 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// <summary>
         /// Tạo một Entity
         /// </summary>
-        /// <param name="tEntityCreate"></param>
+        /// <param name="tEntityInput"></param>
         /// <returns>Giá trị boolean biểu thị việc tạo entity thành công hay không</returns>
         /// Author: DNT(20/05/2023)
-        Task<bool> CreateAsync(TEntityCreate tEntityCreate);
+        Task<bool> CreateAsync(TEntityInput tEntityInput);
 
 
         /// <summary>
@@ -49,11 +49,10 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// <summary>
         /// Cập nhật thông tin của một Entity
         /// </summary>
-        /// <param name="id">ID của engity</param>
-        /// <param name="tEntityUpdate"></param>
+        /// <param name="tEntityInput"></param>
         /// <returns>Giá trị boolean biểu thị cập nhật thành công hay không</returns>
         /// /// Author: DNT(20/05/2023)
-        Task<bool> UpdateAsync(Guid id, TEntityUpdate tEntityUpdate);
+        Task<bool> UpdateAsync(TEntityInput tEntityInput);
 
 
         /// <summary>

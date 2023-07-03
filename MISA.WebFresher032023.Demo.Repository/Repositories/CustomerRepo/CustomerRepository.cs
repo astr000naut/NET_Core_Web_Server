@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 {
-    public class CustomerRepository : BaseRepository<Customer, CustomerCreate, CustomerUpdate>, ICustomerRepository
+    public class CustomerRepository : BaseRepository<Customer, CustomerInput>, ICustomerRepository
     {
         public CustomerRepository(IConfiguration configuration) : base(configuration) { }
 
@@ -48,7 +48,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 
         }
 
-        public override async Task<bool> UpdateAsync(Guid id, CustomerUpdate customerUpdate)
+        public override async Task<bool> UpdateAsync(CustomerInput customerInput)
         {
             var connection = await GetOpenConnectionAsync();
 
@@ -57,11 +57,11 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                 var dynamicParams = new DynamicParameters();
                 // dynamicParams.Add("o_newCustomerCode", direction: ParameterDirection.Output);
 
-                foreach (var property in typeof(CustomerUpdate).GetProperties())
+                foreach (var property in typeof(CustomerInput).GetProperties())
                 {
                     var propertyNameToCamelCase = char.ToLower(property.Name[0]) + property.Name[1..];
                     var paramName = "p_" + propertyNameToCamelCase;
-                    var paramValue = property.GetValue(customerUpdate);
+                    var paramValue = property.GetValue(customerInput);
                     dynamicParams.Add(paramName, paramValue);
                 }
 

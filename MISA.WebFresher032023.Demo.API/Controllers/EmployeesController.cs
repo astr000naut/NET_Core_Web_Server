@@ -13,7 +13,7 @@ using MISA.WebFresher032023.Demo.Common.Resources;
 namespace MISA.WebFresher032023.Demo.Controllers
 {
     [Route("api/v1/[controller]")]
-    public class EmployeesController : BaseController<EmployeeDto, EmployeeCreateDto, EmployeeUpdateDto>
+    public class EmployeesController : BaseController<EmployeeDto, EmployeeInputDto>
     {
         private readonly IEmployeeService _employeeService;
 

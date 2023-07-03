@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace MISA.WebFresher032023.Demo.DataLayer.Entities.Input
 {
     // Base Input cho Proc thêm hoặc cập nhật thông tin nhân viên
-    public abstract class BaseEmployeeInput
+    public class EmployeeInput
     {
         // ID nhân viên
         public Guid EmployeeId { get; set; }
@@ -45,5 +45,16 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Entities.Input
         public string BankName { get; set; }
         // Chi nhánh ngân hàng
         public string BankBranch { get; set; }
+
+        // Ngày tạo
+        public DateTime CreatedDate { get; set; }
+
+        // Tạo bởi
+        public string CreatedBy { get; set; }
+
+        // Ngày cập nhật cuối cùng
+        public DateTime ModifiedDate { get; set; }
+        // Cập nhật lần cuối bởi
+        public string ModifiedBy { get; set; }
     }
 }

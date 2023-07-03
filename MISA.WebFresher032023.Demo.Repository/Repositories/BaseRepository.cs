@@ -17,8 +17,8 @@ using DbException = MISA.WebFresher032023.Demo.Common.Exceptions.DbException;
 
 namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 {
-    public abstract class BaseRepository<TEntity, TEntityCreate, TEntityUpdate> 
-        : IBaseRepository<TEntity, TEntityCreate, TEntityUpdate>
+    public abstract class BaseRepository<TEntity, TEntityInput> 
+        : IBaseRepository<TEntity, TEntityInput>
 
     {
         private readonly string _connectionString;
@@ -56,10 +56,10 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// <summary>
         /// Tạo một Entity
         /// </summary>
-        /// <param name="tEntityCreate"></param>
+        /// <param name="tEntityInput"></param>
         /// <returns>Giá trị boolean biểu thị entity được tạo thành công hay chưa</returns>
         /// Author: DNT(20/05/2023)
-        public async Task<bool> CreateAsync(TEntityCreate tEntityCreate)
+        public async Task<bool> CreateAsync(TEntityInput tEntityInput)
         {
             var connection = await GetOpenConnectionAsync();
             var createTransaction = await connection.BeginTransactionAsync();
@@ -67,15 +67,15 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
             {
                 var dynamicParams = new DynamicParameters();
 
-                foreach (var property in typeof(TEntityCreate).GetProperties())
+                foreach (var property in typeof(TEntityInput).GetProperties())
                 {
                     var propertyNameToCamelCase = char.ToLower(property.Name[0]) + property.Name[1..];
                     var paramName = "p_" + propertyNameToCamelCase;
-                    var paramValue = property.GetValue(tEntityCreate);
+                    var paramValue = property.GetValue(tEntityInput);
                     dynamicParams.Add(paramName, paramValue);
-                }
-                var entityClassName = typeof(TEntityCreate).Name;
-                var rowAffected = await connection.ExecuteAsync(StoredProcedureName.GetProcedureNameByEntityClassName(entityClassName), commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: createTransaction);
+                } 
+                var entityClassName = typeof(TEntity).Name;
+                var rowAffected = await connection.ExecuteAsync(StoredProcedureName.GetProcedureNameByEntityClassName(entityClassName + "Create"), commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: createTransaction);
                 await createTransaction.CommitAsync();
 
                 return (rowAffected != 0);
@@ -172,11 +172,10 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// <summary>
         /// Cập nhật thông tin một Entity theo ID
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="tEntityUpdate"></param>
+        /// <param name="tEntityInput"></param>
         /// <returns>Giá trị boolean biểu thị cập nhật thành công hay chưa</returns>
         /// Author: DNT(20/05/2023)
-        public virtual async Task<bool> UpdateAsync(Guid id, TEntityUpdate tEntityUpdate)
+        public virtual async Task<bool> UpdateAsync(TEntityInput tEntityInput)
         {
 
             var connection = await GetOpenConnectionAsync();
@@ -187,20 +186,20 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 
                 var queryString = $"UPDATE {entityName} SET ";
                 
-                foreach (var property in typeof(TEntityUpdate).GetProperties())
+                foreach (var property in typeof(TEntityInput).GetProperties())
                 {
-                    var paramValue = property.GetValue(tEntityUpdate);
-
-                    if (paramValue?.ToString()?.Length >= 0 && property.Name != $"{entityName}Id")
+                    var paramValue = property.GetValue(tEntityInput);
+                    if (paramValue != null && property.Name != $"{entityName}Id")
                     {
                         queryString += $"{property.Name} = @{property.Name} ,";
                     }
+                        
                 }
                
                 queryString = queryString.Remove(queryString.Length - 1);
                 queryString += $"WHERE {entityName}Id = @{entityName}Id;";
-
-                var rowAffected = await connection.ExecuteAsync(queryString, tEntityUpdate, transaction: updateTransaction);
+                
+                var rowAffected = await connection.ExecuteAsync(queryString, tEntityInput, transaction: updateTransaction);
                 await updateTransaction.CommitAsync();
                 return (rowAffected != 0);
             }

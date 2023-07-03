@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 {
-    public interface IDepartmentService : IBaseService<DepartmentDto, DepartmentCreateDto, DepartmentUpdateDto>
+    public interface IDepartmentService : IBaseService<DepartmentDto, DepartmentInputDto>
     {
     }
 }

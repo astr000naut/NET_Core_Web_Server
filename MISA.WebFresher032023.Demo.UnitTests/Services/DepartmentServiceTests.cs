@@ -19,7 +19,7 @@ namespace MISA.WebFresher032023.Demo.UnitTests.Services
     [TestFixture]
     public class DepartmentServiceTests
     {
-        // Chuẩn bị employeeCreateDto
+        // Chuẩn bị EmployeeInputDto
         // employeeRepository
         // mapper
 
@@ -34,7 +34,7 @@ namespace MISA.WebFresher032023.Demo.UnitTests.Services
         public async Task CreateAsync_DepartmentIDNotValid_ReturnException()
         {
             // Arrange
-            var employeeCreateDto = new EmployeeCreateDto()
+            var EmployeeInputDto = new EmployeeInputDto()
             {
                 EmployeeCode = "NV-9876",
                 EmployeeFullName = "Tran Quang Vinh",
@@ -42,13 +42,13 @@ namespace MISA.WebFresher032023.Demo.UnitTests.Services
             };
 
             var employeeRepository = Substitute.For<IEmployeeRepository>();
-            employeeRepository.ValidateDepartmentId(employeeCreateDto.DepartmentId).Returns(false);
+            employeeRepository.ValidateDepartmentId(EmployeeInputDto.DepartmentId).Returns(false);
             var mapper = Substitute.For<IMapper>();
 
             var employeeService = new EmployeeService(employeeRepository, mapper);
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<ConflictException>(async () => await employeeService.CreateAsync(employeeCreateDto));
+            var ex = Assert.ThrowsAsync<ConflictException>(async () => await employeeService.CreateAsync(EmployeeInputDto));
             Assert.That(ex.Message, Is.EqualTo(Error.InvalidDepartmentIdMsg));
         }
 
@@ -57,7 +57,7 @@ namespace MISA.WebFresher032023.Demo.UnitTests.Services
         public async Task CreateAsync_DepartmentIdValid_CodeExist_ReturnException()
         {
             // Arrange
-            var employeeCreateDto = new EmployeeCreateDto()
+            var EmployeeInputDto = new EmployeeInputDto()
             {
                 EmployeeCode = "NV-9876",
                 EmployeeFullName = "Tran Quang Vinh",
@@ -65,15 +65,15 @@ namespace MISA.WebFresher032023.Demo.UnitTests.Services
             };
 
             var employeeRepository = Substitute.For<IEmployeeRepository>();
-            employeeRepository.ValidateDepartmentId(employeeCreateDto.DepartmentId).Returns(true);
-            employeeRepository.CheckCodeExistAsync(null, employeeCreateDto.EmployeeCode).Returns(true);
+            employeeRepository.ValidateDepartmentId(EmployeeInputDto.DepartmentId).Returns(true);
+            employeeRepository.CheckCodeExistAsync(null, EmployeeInputDto.EmployeeCode).Returns(true);
 
             var mapper = Substitute.For<IMapper>();
 
             var employeeService = new EmployeeService(employeeRepository, mapper);
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<ConflictException>(async () => await employeeService.CreateAsync(employeeCreateDto));
+            var ex = Assert.ThrowsAsync<ConflictException>(async () => await employeeService.CreateAsync(EmployeeInputDto));
             Assert.That(ex.Message, Is.EqualTo(Error.EmployeeCodeHasExistMsg));
         }
 
@@ -82,14 +82,14 @@ namespace MISA.WebFresher032023.Demo.UnitTests.Services
         public async Task CreateAsync_AllValid_ReturnGuid()
         {
             // Arrange
-            var employeeCreateDto = new EmployeeCreateDto()
+            var EmployeeInputDto = new EmployeeInputDto()
             {
                 EmployeeCode = "NV-9876",
                 EmployeeFullName = "Tran Quang Vinh",
                 DepartmentId = Guid.Parse("424e77a1-dd49-4bd4-ac0c-6ee95342c676")
             };
 
-            var employeeCreate = new EmployeeCreate()
+            var EmployeeInput = new EmployeeInput()
             {
                 EmployeeCode = "NV-9876",
                 EmployeeFullName = "Tran Quang Vinh",
@@ -97,21 +97,21 @@ namespace MISA.WebFresher032023.Demo.UnitTests.Services
             };
 
             var employeeRepository = Substitute.For<IEmployeeRepository>();
-            employeeRepository.ValidateDepartmentId(employeeCreateDto.DepartmentId).Returns(true);
-            employeeRepository.CheckCodeExistAsync(null, employeeCreateDto.EmployeeCode).Returns(false);
+            employeeRepository.ValidateDepartmentId(EmployeeInputDto.DepartmentId).Returns(true);
+            employeeRepository.CheckCodeExistAsync(null, EmployeeInputDto.EmployeeCode).Returns(false);
 
             var mapper = Substitute.For<IMapper>();
-            mapper.Map<EmployeeCreate>(employeeCreateDto).Returns(employeeCreate);
+            mapper.Map<EmployeeInput>(EmployeeInputDto).Returns(EmployeeInput);
 
-            employeeRepository.CreateAsync(employeeCreate).Returns(true);
+            employeeRepository.CreateAsync(EmployeeInput).Returns(true);
 
             var employeeService = new EmployeeService(employeeRepository, mapper);
 
             // Act 
-            var guid = await employeeService.CreateAsync(employeeCreateDto);
+            var guid = await employeeService.CreateAsync(EmployeeInputDto);
 
             // Assert
-            Assert.That(guid, Is.EqualTo(employeeCreate.EmployeeId));
+            Assert.That(guid, Is.EqualTo(EmployeeInput.EmployeeId));
         }
 
         // Th4 - Department ID valid - Code Valid - ReturnNull
@@ -119,14 +119,14 @@ namespace MISA.WebFresher032023.Demo.UnitTests.Services
         public async Task CreateAsync_AllValid_ReturnNull()
         {
             // Arrange
-            var employeeCreateDto = new EmployeeCreateDto()
+            var EmployeeInputDto = new EmployeeInputDto()
             {
                 EmployeeCode = "NV-9876",
                 EmployeeFullName = "Tran Quang Vinh",
                 DepartmentId = Guid.Parse("424e77a1-dd49-4bd4-ac0c-6ee95342c676")
             };
 
-            var employeeCreate = new EmployeeCreate()
+            var EmployeeInput = new EmployeeInput()
             {
                 EmployeeCode = "NV-9876",
                 EmployeeFullName = "Tran Quang Vinh",
@@ -134,18 +134,18 @@ namespace MISA.WebFresher032023.Demo.UnitTests.Services
             };
 
             var employeeRepository = Substitute.For<IEmployeeRepository>();
-            employeeRepository.ValidateDepartmentId(employeeCreateDto.DepartmentId).Returns(true);
-            employeeRepository.CheckCodeExistAsync(null, employeeCreateDto.EmployeeCode).Returns(false);
+            employeeRepository.ValidateDepartmentId(EmployeeInputDto.DepartmentId).Returns(true);
+            employeeRepository.CheckCodeExistAsync(null, EmployeeInputDto.EmployeeCode).Returns(false);
 
             var mapper = Substitute.For<IMapper>();
-            mapper.Map<EmployeeCreate>(employeeCreateDto).Returns(employeeCreate);
+            mapper.Map<EmployeeInput>(EmployeeInputDto).Returns(EmployeeInput);
 
-            employeeRepository.CreateAsync(employeeCreate).Returns(false);
+            employeeRepository.CreateAsync(EmployeeInput).Returns(false);
 
             var employeeService = new EmployeeService(employeeRepository, mapper);
 
             // Act 
-            var guid = await employeeService.CreateAsync(employeeCreateDto);
+            var guid = await employeeService.CreateAsync(EmployeeInputDto);
 
             // Assert
             Assert.That(guid, Is.EqualTo(null));
@@ -157,14 +157,14 @@ namespace MISA.WebFresher032023.Demo.UnitTests.Services
         public async Task CreateAsync_AllValid_ThrowException()
         {
             // Arrange
-            var employeeCreateDto = new EmployeeCreateDto()
+            var EmployeeInputDto = new EmployeeInputDto()
             {
                 EmployeeCode = "NV-9876",
                 EmployeeFullName = "Tran Quang Vinh",
                 DepartmentId = Guid.Parse("424e77a1-dd49-4bd4-ac0c-6ee95342c676")
             };
 
-            var employeeCreate = new EmployeeCreate()
+            var EmployeeInput = new EmployeeInput()
             {
                 EmployeeCode = "NV-9876",
                 EmployeeFullName = "Tran Quang Vinh",
@@ -172,19 +172,19 @@ namespace MISA.WebFresher032023.Demo.UnitTests.Services
             };
 
             var employeeRepository = Substitute.For<IEmployeeRepository>();
-            employeeRepository.ValidateDepartmentId(employeeCreateDto.DepartmentId).Returns(true);
-            employeeRepository.CheckCodeExistAsync(null, employeeCreateDto.EmployeeCode).Returns(false);
+            employeeRepository.ValidateDepartmentId(EmployeeInputDto.DepartmentId).Returns(true);
+            employeeRepository.CheckCodeExistAsync(null, EmployeeInputDto.EmployeeCode).Returns(false);
 
             var mapper = Substitute.For<IMapper>();
-            mapper.Map<EmployeeCreate>(employeeCreateDto).Returns(employeeCreate);
+            mapper.Map<EmployeeInput>(EmployeeInputDto).Returns(EmployeeInput);
 
-            employeeRepository.CreateAsync(employeeCreate).Returns<Task<bool>>(x => { throw new DbException(Error.DbQueryFail, Error.DbQueryFailMsg, Error.DbQueryFailMsg); });
+            employeeRepository.CreateAsync(EmployeeInput).Returns<Task<bool>>(x => { throw new DbException(Error.DbQueryFail, Error.DbQueryFailMsg, Error.DbQueryFailMsg); });
 
 
             var employeeService = new EmployeeService(employeeRepository, mapper);
 
             // Act 
-            var ex = Assert.ThrowsAsync<DbException>(async () => await employeeService.CreateAsync(employeeCreateDto));
+            var ex = Assert.ThrowsAsync<DbException>(async () => await employeeService.CreateAsync(EmployeeInputDto));
             Assert.That(ex.Message, Is.EqualTo(Error.DbQueryFailMsg));
         }
     }

@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input
 {
-    public class CustomerUpdateDto
+    public class CustomerInputDto
     {
         public Guid CustomerId { get; set; }
         public int CustomerType { get; set; }
+        public bool IsProvider { get; set; }
         public string CustomerTIN { get; set; }
         public string CustomerCode { get; set; }
         public string CustomerFullName { get; set; }
@@ -41,6 +42,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input
         public string IdentityNumber { get; set; }
         public DateTime? IdentityDate { get; set; }
         public string IdentityPlace { get; set; }
+
         public string GroupCodeList { get; set; }
     }
 }
