@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
+using MISA.WebFresher032023.Demo.Common.Enum;
 using MISA.WebFresher032023.Demo.Common.Enums;
 using MISA.WebFresher032023.Demo.Common.Exceptions;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
@@ -65,7 +66,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                     dynamicParams.Add(paramName, paramValue);
                 }
 
-                int rowAffected = await connection.ExecuteAsync("Proc_UpdateCustomer", commandType: CommandType.StoredProcedure, param: dynamicParams);
+                int rowAffected = await connection.ExecuteAsync(StoredProcedureName.UpdateCustomer, commandType: CommandType.StoredProcedure, param: dynamicParams);
                 return rowAffected > 0;
             }
             catch (Exception ex)

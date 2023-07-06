@@ -32,13 +32,24 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
         #endregion
 
         public const string CreateCustomer = "Proc_InsertCustomer";
+        public const string UpdateCustomer = "Proc_UpdateCustomer";
         public const string GetCustomerById = "Proc_GetCustomerById";
         public const string FilterCustomer = "Proc_FilterCustomer";
         public const string CheckCustomerCodeExist = "Proc_CheckCustomerCodeExist";
         public const string DeleteCustomer = "Proc_DeleteCustomerById";
         public const string DeleteMultipleCustomer = "Proc_DeleteMultipleCustomer";
 
+        #region Group Stored Procedure name
         public const string FilterGroup = "Proc_FilterGroup";
+        #endregion
+
+        #region Account Stored Procedure name
+        public const string CreateAccount = "Proc_InsertAccount";
+        public const string UpdateAccount = "Proc_UpdateAccount";
+        public const string GetAccountById = "Proc_GetAccountById";
+        public const string FilterAccount = "Proc_FilterAccount";
+        public const string DeleteAccount = "Proc_DeleteAccountById";
+        #endregion
 
         /// <summary>
         /// Lấy Stored procedure từ string tạo bởi EntityClassName và kiểu hành động
@@ -102,6 +113,17 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
                 #region Group proc
                 case "FilteredList<Group>":
                     return FilterGroup;
+                #endregion
+
+                #region Account proc
+                case "Account":
+                    return GetAccountById;
+                case "AccountCreate":
+                    return CreateAccount;
+                case "FilteredList<Account>":
+                    return FilterAccount;
+                case "AccountDelete":
+                    return DeleteAccount;
                 #endregion
                 default: throw new Exception("Không tìm thấy tên Stored Procedure");
             }
