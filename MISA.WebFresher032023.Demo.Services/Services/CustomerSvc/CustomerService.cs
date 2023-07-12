@@ -4,6 +4,7 @@ using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output;
 using MISA.WebFresher032023.Demo.Common.Enums;
 using MISA.WebFresher032023.Demo.Common.Exceptions;
 using MISA.WebFresher032023.Demo.Common.Resources;
+using MISA.WebFresher032023.Demo.DataLayer;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Output;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories;
@@ -18,11 +19,11 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 {
     public class CustomerService : BaseService<Customer, CustomerDto, CustomerInput, CustomerInputDto>, ICustomerService
     {
-        private readonly ICustomerRepository _customerRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CustomerService(ICustomerRepository customerRepository, IMapper mapper) : base(customerRepository, mapper)
+        public CustomerService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork.CustomerRepository, mapper, unitOfWork)
         {
-            _customerRepository = customerRepository;
+            _unitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -32,14 +33,16 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(26/06/2023)
         public async Task<string> GetNewCodeAsync()
         {
-            var newCode = await _customerRepository.GetNewCodeAsync();
+            var newCode = await _unitOfWork.CustomerRepository.GetNewCodeAsync();
+            _unitOfWork.Commit();
+            _unitOfWork.Dispose();
             return newCode;
         }
 
         public override async Task<bool> UpdateAsync(Guid id, CustomerInputDto customerInputDto)
         {
             // Kiểm tra khách hàng có tồn tại
-            _ = await _customerRepository.GetAsync(id) ?? throw new ConflictException(Error.ConflictCode, Error.InvalidCustomerIdMsg, Error.InvalidCustomerIdMsg);
+            _ = await _unitOfWork.CustomerRepository.GetAsync(id) ?? throw new ConflictException(Error.ConflictCode, Error.InvalidCustomerIdMsg, Error.InvalidCustomerIdMsg);
 
             // Kiểm tra mã đã tồn tại
             var isCustomerCodeExist = await _baseRepository.CheckCodeExistAsync(id, customerInputDto.CustomerCode);
@@ -53,7 +56,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
             customerInput.ModifiedDate = DateTime.Now.ToLocalTime();
             customerInput.ModifiedBy = Value.ModifiedBy;
 
-            return await _customerRepository.UpdateAsync(customerInput);
+            var result = await _unitOfWork.CustomerRepository.UpdateAsync(customerInput);
+            _unitOfWork.Commit();
+            _unitOfWork.Dispose();
+            return result;
         }
 
     }

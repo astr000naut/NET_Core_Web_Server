@@ -16,7 +16,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// </summary>
         /// <returns></returns>
         /// Author: DNT(20/05/2023)
-        Task<DbConnection> GetOpenConnectionAsync();
+/*        Task<DbConnection> GetOpenConnectionAsync();*/
 
 
         /// <summary>

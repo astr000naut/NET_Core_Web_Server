@@ -18,16 +18,17 @@ using MISA.WebFresher032023.Demo.Common.Resources;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories;
 using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input;
+using MISA.WebFresher032023.Demo.DataLayer;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 {
     public class EmployeeService : BaseService<Employee, EmployeeDto, EmployeeInput, EmployeeInputDto>, IEmployeeService
     {
-        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public EmployeeService(IEmployeeRepository employeeRepository, IMapper mapper) : base(employeeRepository, mapper)
+        public EmployeeService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork.EmployeeRepository, mapper, unitOfWork)
         {
-            _employeeRepository = employeeRepository;
+            _unitOfWork = unitOfWork;
         }
 
 
@@ -38,7 +39,9 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(26/05/2023)
         public async Task<string> GetNewCodeAsync()
         {
-            var newCode = await _employeeRepository.GetNewCodeAsync();
+            var newCode = await _unitOfWork.EmployeeRepository.GetNewCodeAsync();
+            _unitOfWork.Commit();
+            _unitOfWork.Dispose();
             return newCode;
         }
 
@@ -53,7 +56,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         public override async Task<Guid?> CreateAsync(EmployeeInputDto employeeInputDto)
         {
             // Kiểm tra đơn vị có tồn tại
-            var isDepartmentIdValid = await _employeeRepository.ValidateDepartmentId(employeeInputDto.DepartmentId);
+            var isDepartmentIdValid = await _unitOfWork.EmployeeRepository.ValidateDepartmentId(employeeInputDto.DepartmentId);
             if (!isDepartmentIdValid)
             {
                 throw new ConflictException(Error.ConflictCode, Error.InvalidDepartmentIdMsg, Error.InvalidDepartmentIdMsg);
@@ -65,7 +68,8 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                 throw new ConflictException(Error.ConflictCode, Error.EmployeeCodeHasExistMsg, Error.EmployeeCodeHasExistMsg);
             }
 
-            return await base.CreateAsync(employeeInputDto);
+            var result = await base.CreateAsync(employeeInputDto);
+            return result;
         }
 
         /// <summary>
@@ -80,10 +84,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         public override async Task<bool> UpdateAsync(Guid id, EmployeeInputDto employeeInputDto)
         {
             // Kiểm tra nhân viên có tồn tại
-            _ = await _employeeRepository.GetAsync(id) ?? throw new ConflictException(Error.ConflictCode, Error.InvalidEmployeeIdMsg, Error.InvalidEmployeeIdMsg);
+            _ = await _unitOfWork.EmployeeRepository.GetAsync(id) ?? throw new ConflictException(Error.ConflictCode, Error.InvalidEmployeeIdMsg, Error.InvalidEmployeeIdMsg);
 
             // Kiểm tra đơn vị có tồn tại
-            var isDepartmentIdValid = await _employeeRepository.ValidateDepartmentId(employeeInputDto.DepartmentId);
+            var isDepartmentIdValid = await _unitOfWork.EmployeeRepository.ValidateDepartmentId(employeeInputDto.DepartmentId);
             if (!isDepartmentIdValid)
             {
                 throw new ConflictException(Error.ConflictCode, Error.InvalidDepartmentIdMsg, Error.InvalidDepartmentIdMsg);
@@ -96,7 +100,8 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
             }
 
             // Cập nhật thông tin nhân viên 
-            return await base.UpdateAsync(id, employeeInputDto);
+            var result = await base.UpdateAsync(id, employeeInputDto);
+            return result;
         }
 
         /// <summary>
@@ -135,7 +140,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                     KeySearch = null,
                 };
                 // Lấy danh sách nhân viên từ repository
-                var employeeList = await _employeeRepository.FilterAsync(employeeFilter);
+                var employeeList = await _unitOfWork.EmployeeRepository.FilterAsync(employeeFilter);
 
                 // Số thứ tự của nhân viên
                 int index = 0;
@@ -236,6 +241,8 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 
                 var stream = new MemoryStream();
                 workbook.SaveAs(stream);
+                _unitOfWork.Commit();
+                _unitOfWork.Dispose();
                 return stream.ToArray();
             }
             catch (Exception ex)

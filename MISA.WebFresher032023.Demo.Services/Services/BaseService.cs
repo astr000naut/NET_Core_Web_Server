@@ -2,6 +2,7 @@
 using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input;
 using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output;
 using MISA.WebFresher032023.Demo.Common.Resources;
+using MISA.WebFresher032023.Demo.DataLayer;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories;
 using System;
@@ -16,12 +17,14 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         : IBaseService<TEntityDto, TEntityInputDto>
     {
         protected readonly IBaseRepository<TEntity, TEntityInput> _baseRepository;
+        private IUnitOfWork _unitOfWork;
         protected readonly IMapper _mapper;
 
-        public BaseService(IBaseRepository<TEntity, TEntityInput> repository, IMapper mapper)
+        public BaseService(IBaseRepository<TEntity, TEntityInput> repository, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _baseRepository = repository;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -49,7 +52,8 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
             createdByProperty?.SetValue(entityInput, Value.CreatedBy);
 
             var isCreated = await _baseRepository.CreateAsync(entityInput);
-
+            _unitOfWork.Commit();
+            _unitOfWork.Dispose();
             return isCreated ? newId : null;
 
         }
@@ -79,7 +83,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
             var modifiedByProperty = type.GetProperty("ModifiedBy");
             modifiedByProperty?.SetValue(entityInput, Value.ModifiedBy);
 
-            return await _baseRepository.UpdateAsync(entityInput);
+            var result = await _baseRepository.UpdateAsync(entityInput);
+            _unitOfWork.Commit();
+            _unitOfWork.Dispose();
+            return result;
         }
 
         /// <summary>
@@ -92,6 +99,8 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         {
             var entity = await _baseRepository.GetAsync(id);
             var entityDto = _mapper.Map<TEntityDto>(entity);
+            _unitOfWork.Commit();
+            _unitOfWork.Dispose();
             return entityDto;
         }
 
@@ -122,7 +131,8 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                 var tEntityDto = _mapper.Map<TEntityDto>(tEntity);
                 tEntityFilteredListDto.FilteredList.Add(tEntityDto);
             }
-
+            _unitOfWork.Commit();
+            _unitOfWork.Dispose();
             return tEntityFilteredListDto;
         }
 
@@ -134,7 +144,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(26/05/2023)
         public async Task<bool> DeleteByIdAsync(Guid id)
         {
-            return await _baseRepository.DeleteByIdAsync(id);
+            var result = await _baseRepository.DeleteByIdAsync(id);
+            _unitOfWork.Commit();
+            _unitOfWork.Dispose();
+            return result;
         }
 
         /// <summary>
@@ -146,7 +159,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(27/05/2023)
         public async Task<bool> CheckCodeExistAsync(Guid? id, string code)
         {
-            return await _baseRepository.CheckCodeExistAsync(id, code);
+            var result = await _baseRepository.CheckCodeExistAsync(id, code);
+            _unitOfWork.Commit();
+            _unitOfWork.Dispose();
+            return result;
         }
 
         /// <summary>
@@ -159,7 +175,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         {
             // Transform list to string
             var stringIdList = string.Join(",", entityIdList);
-            return await _baseRepository.DeleteMultipleAsync(stringIdList);
+            var result = await _baseRepository.DeleteMultipleAsync(stringIdList);
+            _unitOfWork.Commit();
+            _unitOfWork.Dispose();
+            return result;
         }
     }
 }

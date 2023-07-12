@@ -16,7 +16,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 {
     public class CustomerRepository : BaseRepository<Customer, CustomerInput>, ICustomerRepository
     {
-        public CustomerRepository(IConfiguration configuration) : base(configuration) { }
+        public CustomerRepository(IDbTransaction transaction) : base(transaction) { }
 
         /// <summary>
         /// Lấy mã khách hàng mới
@@ -25,14 +25,12 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// Author: DNT(20/06/2023)
         public async Task<string> GetNewCodeAsync()
         {
-            var connection = await GetOpenConnectionAsync();
-
             try
             {
                 var dynamicParams = new DynamicParameters();
                 dynamicParams.Add("o_newCustomerCode", direction: ParameterDirection.Output);
 
-                await connection.ExecuteAsync("Proc_GenerateNewCustomerCode", commandType: CommandType.StoredProcedure, param: dynamicParams);
+                await _connection.ExecuteAsync("Proc_GenerateNewCustomerCode", commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
                 var newEmployeeCode = dynamicParams.Get<string>("o_newCustomerCode");
 
                 return newEmployeeCode;
@@ -42,16 +40,12 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
 
             }
-            finally
-            {
-                await connection.CloseAsync();
-            }
+
 
         }
 
         public override async Task<bool> UpdateAsync(CustomerInput customerInput)
         {
-            var connection = await GetOpenConnectionAsync();
 
             try
             {
@@ -66,16 +60,12 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                     dynamicParams.Add(paramName, paramValue);
                 }
 
-                int rowAffected = await connection.ExecuteAsync(StoredProcedureName.UpdateCustomer, commandType: CommandType.StoredProcedure, param: dynamicParams);
+                int rowAffected = await _connection.ExecuteAsync(StoredProcedureName.UpdateCustomer, commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
                 return rowAffected > 0;
             }
             catch (Exception ex)
             {
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
-            }
-            finally
-            {
-                await connection.CloseAsync();
             }
         }
 

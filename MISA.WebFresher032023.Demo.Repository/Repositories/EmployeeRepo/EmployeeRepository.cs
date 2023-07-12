@@ -17,7 +17,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
     public class EmployeeRepository : BaseRepository<Employee, EmployeeInput>, IEmployeeRepository
     {
 
-        public EmployeeRepository(IConfiguration configuration) : base(configuration) { }
+        public EmployeeRepository(IDbTransaction transaction) : base(transaction) { }
 
         /// <summary>
         /// Lấy mã nhân viên mới
@@ -26,14 +26,13 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// Author: DNT(20/05/2023)
         public async Task<string> GetNewCodeAsync()
         {
-            var connection = await GetOpenConnectionAsync();
 
             try
             {
                 var dynamicParams = new DynamicParameters();
                 dynamicParams.Add("o_newEmployeeCode", direction: ParameterDirection.Output);
 
-                await connection.ExecuteAsync("Proc_GenerateNewEmployeeCode", commandType: CommandType.StoredProcedure, param: dynamicParams);
+                await _connection.ExecuteAsync("Proc_GenerateNewEmployeeCode", commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
                 var newEmployeeCode = dynamicParams.Get<string>("o_newEmployeeCode");
 
                 return newEmployeeCode;
@@ -42,10 +41,6 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
             {
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
 
-            }
-            finally
-            {
-                await connection.CloseAsync();
             }
 
         }
@@ -59,13 +54,12 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// Author: DNT(20/05/2023)
         public async Task<bool> ValidateDepartmentId(Guid? id)
         {
-            var connection = await GetOpenConnectionAsync();
             try
             {
                 var dynamicParams = new DynamicParameters();
                 dynamicParams.Add("p_id", id);
 
-                var department = await connection.QueryFirstOrDefaultAsync<Department>("Proc_GetDepartmentById", commandType: CommandType.StoredProcedure, param: dynamicParams);
+                var department = await _connection.QueryFirstOrDefaultAsync<Department>("Proc_GetDepartmentById", commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
 
                 return department != null;
             }
@@ -73,10 +67,6 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
             {
 
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
-            }
-            finally
-            {
-                await connection.CloseAsync();
             }
         }
     }

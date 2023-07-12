@@ -17,12 +17,10 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories.AccountRepo
 {
     public class AccountRepository : BaseRepository<Account, AccountInput>, IAccountRepository
     {
-        public AccountRepository(IConfiguration configuration) : base(configuration) { }
+        public AccountRepository(IDbTransaction transaction) : base(transaction) { }
 
         public override async Task<bool> UpdateAsync(AccountInput accountInput)
         {
-            var connection = await GetOpenConnectionAsync();
-
             try
             {
                 var dynamicParams = new DynamicParameters();
@@ -35,22 +33,17 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories.AccountRepo
                     dynamicParams.Add(paramName, paramValue);
                 }
 
-                int rowAffected = await connection.ExecuteAsync(StoredProcedureName.UpdateAccount, commandType: CommandType.StoredProcedure, param: dynamicParams);
+                int rowAffected = await _connection.ExecuteAsync(StoredProcedureName.UpdateAccount, commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
                 return rowAffected > 0;
             }
             catch (Exception ex)
             {
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
             }
-            finally
-            {
-                await connection.CloseAsync();
-            }
         }
 
         public async Task<FilteredList<Account>> FilterAccountAsync(AccountFilterInput accountFilterInput)
         {
-            var connection = await GetOpenConnectionAsync();
             try
             {
                 var dynamicParams = new DynamicParameters();
@@ -65,8 +58,8 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories.AccountRepo
                 dynamicParams.Add("p_grade", accountFilterInput.Grade);
                 dynamicParams.Add("o_totalRecord", direction: ParameterDirection.Output);
 
-                var listData = await connection.QueryAsync<Account>(proceduredName,
-                    commandType: CommandType.StoredProcedure, param: dynamicParams);
+                var listData = await _connection.QueryAsync<Account>(proceduredName,
+                    commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
                 var totalRecord = dynamicParams.Get<int>("o_totalRecord");
 
                 FilteredList<Account> filteredList = new()
@@ -79,10 +72,6 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories.AccountRepo
             catch (Exception ex)
             {
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
-            }
-            finally
-            {
-                await connection.CloseAsync();
             }
         }
     }

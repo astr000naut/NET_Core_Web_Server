@@ -21,36 +21,12 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         : IBaseRepository<TEntity, TEntityInput>
 
     {
-        private readonly string _connectionString;
+        protected readonly IDbTransaction _transaction;
+        protected IDbConnection _connection => _transaction.Connection;
 
-        /// <summary>
-        /// Hàm khởi tạo
-        /// </summary>
-        /// <param name="configuration"></param>
-        /// Author: DNT(20/05/2023)
-        public BaseRepository(IConfiguration configuration)
+        public BaseRepository(IDbTransaction transaction)
         {
-            _connectionString = configuration.GetConnectionString("SqlConnection") ?? "";
-        }
-
-
-        /// <summary>
-        /// Khởi tạo kết nối tới DB
-        /// </summary>
-        /// <returns></returns>
-        /// Author: DNT(20/05/2023)
-        public async Task<DbConnection> GetOpenConnectionAsync()
-        {
-            var connection = new MySqlConnection(_connectionString);
-            try
-            {
-                await connection.OpenAsync();
-                return connection;
-            } catch (Exception ex)
-            {
-                await connection.CloseAsync();
-                throw new DbException(Error.DbConnectFail, ex.Message, Error.DbConnectFailMsg);
-            }
+            _transaction = transaction;
         }
 
         /// <summary>
@@ -61,8 +37,6 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// Author: DNT(20/05/2023)
         public async Task<bool> CreateAsync(TEntityInput tEntityInput)
         {
-            var connection = await GetOpenConnectionAsync();
-            var createTransaction = await connection.BeginTransactionAsync();
             try
             {
                 var dynamicParams = new DynamicParameters();
@@ -75,20 +49,13 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                     dynamicParams.Add(paramName, paramValue);
                 } 
                 var entityClassName = typeof(TEntity).Name;
-                var rowAffected = await connection.ExecuteAsync(StoredProcedureName.GetProcedureNameByEntityClassName(entityClassName + "Create"), commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: createTransaction);
-                await createTransaction.CommitAsync();
+                var rowAffected = await _connection.ExecuteAsync(StoredProcedureName.GetProcedureNameByEntityClassName(entityClassName + "Create"), commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
 
                 return (rowAffected != 0);
 
             } catch (Exception ex)
             {
-                await createTransaction.RollbackAsync();
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
-            }
-            finally
-            {
-                await createTransaction.DisposeAsync();
-                await connection.CloseAsync();
             }
         }
 
@@ -100,8 +67,6 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// Author: DNT(20/05/2023)
         public async Task<TEntity?> GetAsync(Guid id)
         {
-            var connection = await GetOpenConnectionAsync();
-            
             try
             {
                 var entityClassName = typeof(TEntity).Name;
@@ -110,17 +75,13 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                 dynamicParams.Add("p_id", id);
 
 
-                var entity = await connection.QueryFirstOrDefaultAsync<TEntity?>(StoredProcedureName.GetProcedureNameByEntityClassName(entityClassName),
-                    commandType: CommandType.StoredProcedure, param: dynamicParams);
+                var entity = await _connection.QueryFirstOrDefaultAsync<TEntity?>(StoredProcedureName.GetProcedureNameByEntityClassName(entityClassName),
+                    commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
 
                 return entity;
             } catch (Exception ex)
             {
-               
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
-            } finally
-            {
-                await connection.CloseAsync();
             }
    
         }
@@ -134,7 +95,6 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// Author: DNT(29/05/2023)
         public async Task<FilteredList<TEntity>> FilterAsync(EntityFilter entityFilter)
         {
-            var connection = await GetOpenConnectionAsync();
             try
             {
                 var dynamicParams = new DynamicParameters();
@@ -149,8 +109,8 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                 dynamicParams.Add("p_keySearch", entityFilter.KeySearch);
                 dynamicParams.Add("o_totalRecord", direction: ParameterDirection.Output);
 
-                var listData = await connection.QueryAsync<TEntity?>(proceduredName,
-                    commandType: CommandType.StoredProcedure, param: dynamicParams);
+                var listData = await _connection.QueryAsync<TEntity?>(proceduredName,
+                    commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
                 var totalRecord = dynamicParams.Get<int>("o_totalRecord");
 
                 FilteredList<TEntity> filteredList = new()
@@ -163,9 +123,6 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
             catch (Exception ex)
             {
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
-            } finally
-            {
-                await connection.CloseAsync();
             }
         }
 
@@ -178,8 +135,6 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         public virtual async Task<bool> UpdateAsync(TEntityInput tEntityInput)
         {
 
-            var connection = await GetOpenConnectionAsync();
-            var updateTransaction = await connection.BeginTransactionAsync();
             try
             {
                 var entityName = typeof(TEntity).Name;
@@ -199,19 +154,12 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                 queryString = queryString.Remove(queryString.Length - 1);
                 queryString += $"WHERE {entityName}Id = @{entityName}Id;";
                 
-                var rowAffected = await connection.ExecuteAsync(queryString, tEntityInput, transaction: updateTransaction);
-                await updateTransaction.CommitAsync();
+                var rowAffected = await _connection.ExecuteAsync(queryString, tEntityInput, transaction: _transaction);
                 return (rowAffected != 0);
             }
             catch (Exception ex)
             {
-                await updateTransaction.RollbackAsync();
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
-            }
-            finally
-            {
-                await updateTransaction.DisposeAsync();
-                await connection.CloseAsync();
             }
         }
 
@@ -223,8 +171,6 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// Author: DNT(20/05/2023)
         public async Task<bool> DeleteByIdAsync(Guid id)
         {
-            var connection = await GetOpenConnectionAsync();
-            var deleteTransaction = await connection.BeginTransactionAsync();
             try
             {
                 var dynamicParams = new DynamicParameters();
@@ -233,17 +179,11 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                 var storedProcedureKey = entityClassName + "Delete";
                 dynamicParams.Add("p_id", id);
                 
-                var rowAffected = await connection.ExecuteAsync(StoredProcedureName.GetProcedureNameByEntityClassName(storedProcedureKey), commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: deleteTransaction);
-                await deleteTransaction.CommitAsync();
+                var rowAffected = await _connection.ExecuteAsync(StoredProcedureName.GetProcedureNameByEntityClassName(storedProcedureKey), commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
                 return (rowAffected != 0);
             } catch(Exception ex)
             {
-                await deleteTransaction.RollbackAsync();
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
-            } finally
-            {
-                await deleteTransaction.DisposeAsync(); 
-                await connection.CloseAsync();
             }
         }
 
@@ -256,8 +196,6 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// Author: DNT(26/05/2023)
         public async Task<int> DeleteMultipleAsync(string stringIdList)
         {
-            var connection = await GetOpenConnectionAsync();
-            var deleteTransaction = await connection.BeginTransactionAsync();
             try
             {
                 var dynamicParams = new DynamicParameters();
@@ -268,18 +206,12 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 
                 var proceduredName = StoredProcedureName.GetProcedureNameByEntityClassName(storedProcedureKey);
                 
-                var rowAffected = await connection.ExecuteAsync(proceduredName, commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: deleteTransaction);
-                await deleteTransaction.CommitAsync();
+                var rowAffected = await _connection.ExecuteAsync(proceduredName, commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
                 return rowAffected;
             }
             catch (Exception ex)
-            {
-                await deleteTransaction.RollbackAsync();
+            {   
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
-            } finally
-            {
-                await deleteTransaction.DisposeAsync();
-                await connection.CloseAsync();
             }
         }
 
@@ -292,7 +224,6 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         /// Author: DNT(20/05/2023)
         public async Task<bool> CheckCodeExistAsync(Guid? id, string code)
         {
-            var connection = await GetOpenConnectionAsync();
             try
             {
                 var dynamicParams = new DynamicParameters();
@@ -305,17 +236,13 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 
                 var proceduredName = StoredProcedureName.GetProcedureNameByEntityClassName(storedProcedureKey);
 
-                await connection.ExecuteAsync(proceduredName, commandType: CommandType.StoredProcedure, param: dynamicParams);
+                await _connection.ExecuteAsync(proceduredName, commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
                 var isExist = dynamicParams.Get<bool>("o_isExist");
                 return isExist;
             }
             catch (Exception ex)
             {
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
-            }
-            finally
-            {
-                await connection.CloseAsync();
             }
         }
     }

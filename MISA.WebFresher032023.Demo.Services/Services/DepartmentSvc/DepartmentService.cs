@@ -3,6 +3,7 @@ using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input;
 using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output;
 using MISA.WebFresher032023.Demo.Common.Enums;
 using MISA.WebFresher032023.Demo.Common.Exceptions;
+using MISA.WebFresher032023.Demo.DataLayer;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Output;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories;
@@ -16,11 +17,11 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 {
     public class DepartmentService : BaseService<Department, DepartmentDto, DepartmentInput, DepartmentInputDto>, IDepartmentService
     {
-        private readonly IDepartmentRepository _departmentRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DepartmentService(IDepartmentRepository departmentRepository, IMapper mapper) : base(departmentRepository, mapper)
+        public DepartmentService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork.DepartmentRepository, mapper, unitOfWork)
         {
-            _departmentRepository = departmentRepository;
+            _unitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -46,14 +47,15 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         public override async Task<bool> UpdateAsync(Guid departmentId, DepartmentInputDto departmentInputDto)
         {
             // Kiểm tra mã đã tồn tại
-            var isDepartmentCodeExist = await _departmentRepository.CheckCodeExistAsync(departmentId, departmentInputDto.DepartmentCode);
+            var isDepartmentCodeExist = await _unitOfWork.DepartmentRepository.CheckCodeExistAsync(departmentId, departmentInputDto.DepartmentCode);
 
             if (isDepartmentCodeExist)
             {
                 throw new ConflictException(Error.ConflictCode, Error.DepartmentCodeHasExistMsg, Error.DepartmentCodeHasExistMsg);
             }
 
-            return await base.UpdateAsync(departmentId, departmentInputDto);
+            var result = await base.UpdateAsync(departmentId, departmentInputDto);
+            return result;
         }
 
     }
