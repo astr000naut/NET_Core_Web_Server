@@ -17,7 +17,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories.AccountRepo
 {
     public class AccountRepository : BaseRepository<Account, AccountInput>, IAccountRepository
     {
-        public AccountRepository(IDbTransaction transaction) : base(transaction) { }
+        public AccountRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { }
 
         public override async Task<bool> UpdateAsync(AccountInput accountInput)
         {
@@ -33,7 +33,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories.AccountRepo
                     dynamicParams.Add(paramName, paramValue);
                 }
 
-                int rowAffected = await _connection.ExecuteAsync(StoredProcedureName.UpdateAccount, commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
+                int rowAffected = await _unitOfWork.Connection.ExecuteAsync(StoredProcedureName.UpdateAccount, commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _unitOfWork.Transaction);
                 return rowAffected > 0;
             }
             catch (Exception ex)
@@ -58,8 +58,8 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories.AccountRepo
                 dynamicParams.Add("p_grade", accountFilterInput.Grade);
                 dynamicParams.Add("o_totalRecord", direction: ParameterDirection.Output);
 
-                var listData = await _connection.QueryAsync<Account>(proceduredName,
-                    commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
+                var listData = await _unitOfWork.Connection.QueryAsync<Account>(proceduredName,
+                    commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _unitOfWork.Transaction);
                 var totalRecord = dynamicParams.Get<int>("o_totalRecord");
 
                 FilteredList<Account> filteredList = new()

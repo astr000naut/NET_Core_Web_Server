@@ -18,10 +18,12 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
     public class DepartmentService : BaseService<Department, DepartmentDto, DepartmentInput, DepartmentInputDto>, IDepartmentService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IDepartmentRepository _departmentRepository;
 
-        public DepartmentService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork.DepartmentRepository, mapper, unitOfWork)
+        public DepartmentService(IDepartmentRepository departmentRepository, IMapper mapper, IUnitOfWork unitOfWork) : base(departmentRepository, mapper, unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            _departmentRepository = departmentRepository;
         }
 
         /// <summary>
@@ -46,16 +48,32 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Modified: DNT(09/06/2023)
         public override async Task<bool> UpdateAsync(Guid departmentId, DepartmentInputDto departmentInputDto)
         {
-            // Kiểm tra mã đã tồn tại
-            var isDepartmentCodeExist = await _unitOfWork.DepartmentRepository.CheckCodeExistAsync(departmentId, departmentInputDto.DepartmentCode);
-
-            if (isDepartmentCodeExist)
+            Guid uKey = Guid.NewGuid();
+            try
             {
-                throw new ConflictException(Error.ConflictCode, Error.DepartmentCodeHasExistMsg, Error.DepartmentCodeHasExistMsg);
-            }
+                _unitOfWork.setManipulationKey(uKey);
+                await _unitOfWork.OpenAsync(uKey);
+                await _unitOfWork.BeginAsync(uKey);
 
-            var result = await base.UpdateAsync(departmentId, departmentInputDto);
-            return result;
+                // Kiểm tra mã đã tồn tại
+                var isDepartmentCodeExist = await _departmentRepository.CheckCodeExistAsync(departmentId, departmentInputDto.DepartmentCode);
+
+                if (isDepartmentCodeExist)
+                {
+                    throw new ConflictException(Error.ConflictCode, Error.DepartmentCodeHasExistMsg, Error.DepartmentCodeHasExistMsg);
+                }
+
+                var result = await base.UpdateAsync(departmentId, departmentInputDto);
+                await _unitOfWork.CommitAsync(uKey);
+                return result;
+            } catch
+            {
+                throw;
+            } finally
+            {
+                await _unitOfWork.DisposeAsync(uKey);
+                await _unitOfWork.CloseAsync(uKey);
+            }
         }
 
     }

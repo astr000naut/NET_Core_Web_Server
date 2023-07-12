@@ -21,12 +21,11 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
         : IBaseRepository<TEntity, TEntityInput>
 
     {
-        protected readonly IDbTransaction _transaction;
-        protected IDbConnection _connection => _transaction.Connection;
+        protected readonly IUnitOfWork _unitOfWork;
 
-        public BaseRepository(IDbTransaction transaction)
+        public BaseRepository(IUnitOfWork unitOfWork)
         {
-            _transaction = transaction;
+            _unitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -49,7 +48,8 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                     dynamicParams.Add(paramName, paramValue);
                 } 
                 var entityClassName = typeof(TEntity).Name;
-                var rowAffected = await _connection.ExecuteAsync(StoredProcedureName.GetProcedureNameByEntityClassName(entityClassName + "Create"), commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
+                
+                var rowAffected = await _unitOfWork.Connection.ExecuteAsync(StoredProcedureName.GetProcedureNameByEntityClassName(entityClassName + "Create"), commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _unitOfWork.Transaction);
 
                 return (rowAffected != 0);
 
@@ -75,8 +75,8 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                 dynamicParams.Add("p_id", id);
 
 
-                var entity = await _connection.QueryFirstOrDefaultAsync<TEntity?>(StoredProcedureName.GetProcedureNameByEntityClassName(entityClassName),
-                    commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
+                var entity = await _unitOfWork.Connection.QueryFirstOrDefaultAsync<TEntity?>(StoredProcedureName.GetProcedureNameByEntityClassName(entityClassName),
+                    commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _unitOfWork.Transaction);
 
                 return entity;
             } catch (Exception ex)
@@ -109,8 +109,8 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                 dynamicParams.Add("p_keySearch", entityFilter.KeySearch);
                 dynamicParams.Add("o_totalRecord", direction: ParameterDirection.Output);
 
-                var listData = await _connection.QueryAsync<TEntity?>(proceduredName,
-                    commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
+                var listData = await _unitOfWork.Connection.QueryAsync<TEntity?>(proceduredName,
+                    commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _unitOfWork.Transaction);
                 var totalRecord = dynamicParams.Get<int>("o_totalRecord");
 
                 FilteredList<TEntity> filteredList = new()
@@ -154,7 +154,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                 queryString = queryString.Remove(queryString.Length - 1);
                 queryString += $"WHERE {entityName}Id = @{entityName}Id;";
                 
-                var rowAffected = await _connection.ExecuteAsync(queryString, tEntityInput, transaction: _transaction);
+                var rowAffected = await _unitOfWork.Connection.ExecuteAsync(queryString, tEntityInput, transaction: _unitOfWork.Transaction);
                 return (rowAffected != 0);
             }
             catch (Exception ex)
@@ -179,7 +179,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                 var storedProcedureKey = entityClassName + "Delete";
                 dynamicParams.Add("p_id", id);
                 
-                var rowAffected = await _connection.ExecuteAsync(StoredProcedureName.GetProcedureNameByEntityClassName(storedProcedureKey), commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
+                var rowAffected = await _unitOfWork.Connection.ExecuteAsync(StoredProcedureName.GetProcedureNameByEntityClassName(storedProcedureKey), commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _unitOfWork.Transaction);
                 return (rowAffected != 0);
             } catch(Exception ex)
             {
@@ -206,7 +206,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 
                 var proceduredName = StoredProcedureName.GetProcedureNameByEntityClassName(storedProcedureKey);
                 
-                var rowAffected = await _connection.ExecuteAsync(proceduredName, commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
+                var rowAffected = await _unitOfWork.Connection.ExecuteAsync(proceduredName, commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _unitOfWork.Transaction);
                 return rowAffected;
             }
             catch (Exception ex)
@@ -236,7 +236,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 
                 var proceduredName = StoredProcedureName.GetProcedureNameByEntityClassName(storedProcedureKey);
 
-                await _connection.ExecuteAsync(proceduredName, commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
+                await _unitOfWork.Connection.ExecuteAsync(proceduredName, commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _unitOfWork.Transaction);
                 var isExist = dynamicParams.Get<bool>("o_isExist");
                 return isExist;
             }

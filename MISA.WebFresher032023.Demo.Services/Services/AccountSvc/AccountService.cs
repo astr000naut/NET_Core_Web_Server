@@ -18,35 +18,51 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.AccountSvc
     {
 
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IAccountRepository _accountRepository;
         
-        public AccountService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork.AccountRepository, mapper, unitOfWork)
+        public AccountService(IAccountRepository accountRepository, IMapper mapper, IUnitOfWork unitOfWork) : base(accountRepository, mapper, unitOfWork)
         {
+            _accountRepository = accountRepository;
             _unitOfWork = unitOfWork;
         }
 
         public async Task<FilteredListDto<AccountDto>> FilterAccountAsync(AccountFilterInputDto accountFilterInputDto)
         {
-            var accountFilterInput = _mapper.Map<AccountFilterInput>(accountFilterInputDto);
-
-            // Lấy dữ liệu từ Repository 
-            var accountFilteredList = await _unitOfWork.AccountRepository.FilterAccountAsync(accountFilterInput);
-
-            // Khởi tạo kêt quả trả về
-            var filteredListDto = new FilteredListDto<AccountDto>
+            Guid uKey = Guid.NewGuid();
+            try
             {
-                TotalRecord = accountFilteredList.TotalRecord,
-                FilteredList = new List<AccountDto?>()
-            };
+                _unitOfWork.setManipulationKey(uKey);
+                await _unitOfWork.OpenAsync(uKey);
 
-            // Map dữ liệu nhận được từ Repository sang Dto
-            foreach (var account in accountFilteredList.ListData)
-            {
-                var accountDto = _mapper.Map<AccountDto>(account);
-                filteredListDto.FilteredList.Add(accountDto);
+                var accountFilterInput = _mapper.Map<AccountFilterInput>(accountFilterInputDto);
+
+                // Lấy dữ liệu từ Repository 
+                var accountFilteredList = await _accountRepository.FilterAccountAsync(accountFilterInput);
+
+                // Khởi tạo kêt quả trả về
+                var filteredListDto = new FilteredListDto<AccountDto>
+                {
+                    TotalRecord = accountFilteredList.TotalRecord,
+                    FilteredList = new List<AccountDto?>()
+                };
+
+                // Map dữ liệu nhận được từ Repository sang Dto
+                foreach (var account in accountFilteredList.ListData)
+                {
+                    var accountDto = _mapper.Map<AccountDto>(account);
+                    filteredListDto.FilteredList.Add(accountDto);
+                }
+
+                return filteredListDto;
             }
-            _unitOfWork.Commit();
-            _unitOfWork.Dispose();
-            return filteredListDto;
+            catch
+            {
+                throw;
+            } finally
+            {
+                await _unitOfWork.CloseAsync(uKey);
+            }
+            
         }
 
     }

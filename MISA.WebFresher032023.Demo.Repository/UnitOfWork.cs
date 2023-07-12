@@ -18,106 +18,111 @@ namespace MISA.WebFresher032023.Demo.DataLayer
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private IDbConnection _connection;
-        private IDbTransaction _transaction;
-
-        private AccountRepository _accountRepository;
-        private CustomerRepository _customerRepository;
-        private DepartmentRepository _departmentRepository;
-        private EmployeeRepository  _employeeRepository;
-        private GroupRepository _groupRepository;
+        private DbConnection _connection;
+        private DbTransaction _transaction;
+        private Guid? _manipulationKey;
 
         public UnitOfWork(IConfiguration configuration)
         {
             string connectionString = configuration.GetConnectionString("SqlConnection") ?? "";
             _connection = new MySqlConnection(connectionString);
-            _connection.Open();
-            _transaction = _connection.BeginTransaction();
+            _manipulationKey = null;
         }
 
-        public void Commit()
+        public void setManipulationKey(Guid key)
         {
-            try
+            if (_manipulationKey == null) 
+                _manipulationKey = key;
+        }
+
+        public DbConnection Connection => _connection;
+
+        public DbTransaction Transaction => _transaction;
+
+        public void Begin(Guid key)
+        {
+            if (key == _manipulationKey)
+            {
+                _transaction = _connection.BeginTransaction();
+            }
+        }
+
+        public async Task BeginAsync(Guid key)
+        {
+            if (key == _manipulationKey)
+            {
+                _transaction = await _connection.BeginTransactionAsync();
+            }
+        }
+
+        public void Commit(Guid key)
+        {
+            if (key == _manipulationKey)
             {
                 _transaction.Commit();
             }
-            catch(Exception ex)
+        }
+
+        public async Task CommitAsync(Guid key)
+        {
+            if (key == _manipulationKey)
+            {
+                await _transaction.CommitAsync();
+            }
+        }
+
+
+        public async Task DisposeAsync(Guid key)
+        {
+            if (key == _manipulationKey)
+            {
+                if (_transaction != null)
+                    await _transaction.DisposeAsync();
+
+                _transaction = null;
+            }
+        }
+
+        public async Task OpenAsync(Guid key)
+        {
+            if (key == _manipulationKey)
+            {
+                await _connection.OpenAsync();
+            }
+        }
+
+        public async Task CloseAsync(Guid key)
+        {
+            if (key == _manipulationKey)
+            {
+                await _connection.CloseAsync();
+                _manipulationKey = null;
+            }
+        }
+
+
+        public void Rollback(Guid key)
+        {
+            if (key == _manipulationKey)
             {
                 _transaction.Rollback();
-                throw new DbException(Error.DbConnectFail, ex.Message, Error.DbConnectFailMsg);
             }
-            finally {
-                _transaction.Dispose();
-                _transaction = _connection.BeginTransaction();
-                ResetRepositories();
+        }
+
+        public async Task RollbackAsync(Guid key)
+        {
+            if (key == _manipulationKey)
+            {
+                await _transaction.RollbackAsync();
             }
         }
 
         public void Dispose()
         {
             if (_transaction != null)
-            {
                 _transaction.Dispose();
-                _transaction = null;
-            }
 
-            if (_connection != null)
-            {
-                _connection.Dispose();
-                _connection = null;
-            }
-        }
-
-        public void ResetRepositories()
-        {
-            _accountRepository = null;
-            _customerRepository = null;
-            _departmentRepository = null;
-            _employeeRepository = null;
-            _groupRepository = null;
-        }
-
-
-
-
-        public AccountRepository AccountRepository
-        {
-            get
-            {
-                return _accountRepository ??= new AccountRepository(_transaction);
-            }
-        }
-
-        public CustomerRepository CustomerRepository
-        {
-            get
-            {
-                return _customerRepository ??= new CustomerRepository(_transaction);
-            }
-        }
-
-        public DepartmentRepository DepartmentRepository
-        {
-            get
-            {
-                return _departmentRepository ??= new DepartmentRepository(_transaction);
-            }
-        }
-
-        public EmployeeRepository EmployeeRepository
-        {
-            get
-            {
-                return _employeeRepository ??= new EmployeeRepository(_transaction);
-            }
-        }
-
-        public GroupRepository GroupRepository
-        {
-            get
-            {
-                return _groupRepository ??= new GroupRepository(_transaction);
-            }
+            _transaction = null;
         }
     }
 }

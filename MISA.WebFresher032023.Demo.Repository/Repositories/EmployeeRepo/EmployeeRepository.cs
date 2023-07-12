@@ -17,7 +17,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
     public class EmployeeRepository : BaseRepository<Employee, EmployeeInput>, IEmployeeRepository
     {
 
-        public EmployeeRepository(IDbTransaction transaction) : base(transaction) { }
+        public EmployeeRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { }
 
         /// <summary>
         /// Lấy mã nhân viên mới
@@ -32,7 +32,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                 var dynamicParams = new DynamicParameters();
                 dynamicParams.Add("o_newEmployeeCode", direction: ParameterDirection.Output);
 
-                await _connection.ExecuteAsync("Proc_GenerateNewEmployeeCode", commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
+                await _unitOfWork.Connection.ExecuteAsync("Proc_GenerateNewEmployeeCode", commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _unitOfWork.Transaction);
                 var newEmployeeCode = dynamicParams.Get<string>("o_newEmployeeCode");
 
                 return newEmployeeCode;
@@ -59,7 +59,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                 var dynamicParams = new DynamicParameters();
                 dynamicParams.Add("p_id", id);
 
-                var department = await _connection.QueryFirstOrDefaultAsync<Department>("Proc_GetDepartmentById", commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
+                var department = await _unitOfWork.Connection.QueryFirstOrDefaultAsync<Department>("Proc_GetDepartmentById", commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _unitOfWork.Transaction);
 
                 return department != null;
             }

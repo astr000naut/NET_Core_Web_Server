@@ -16,7 +16,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 {
     public class CustomerRepository : BaseRepository<Customer, CustomerInput>, ICustomerRepository
     {
-        public CustomerRepository(IDbTransaction transaction) : base(transaction) { }
+        public CustomerRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { }
 
         /// <summary>
         /// Lấy mã khách hàng mới
@@ -30,7 +30,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                 var dynamicParams = new DynamicParameters();
                 dynamicParams.Add("o_newCustomerCode", direction: ParameterDirection.Output);
 
-                await _connection.ExecuteAsync("Proc_GenerateNewCustomerCode", commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
+                await _unitOfWork.Connection.ExecuteAsync("Proc_GenerateNewCustomerCode", commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _unitOfWork.Transaction);
                 var newEmployeeCode = dynamicParams.Get<string>("o_newCustomerCode");
 
                 return newEmployeeCode;
@@ -60,7 +60,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
                     dynamicParams.Add(paramName, paramValue);
                 }
 
-                int rowAffected = await _connection.ExecuteAsync(StoredProcedureName.UpdateCustomer, commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _transaction);
+                int rowAffected = await _unitOfWork.Connection.ExecuteAsync(StoredProcedureName.UpdateCustomer, commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _unitOfWork.Transaction);
                 return rowAffected > 0;
             }
             catch (Exception ex)

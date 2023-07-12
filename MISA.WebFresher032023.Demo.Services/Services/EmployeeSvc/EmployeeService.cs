@@ -25,10 +25,12 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
     public class EmployeeService : BaseService<Employee, EmployeeDto, EmployeeInput, EmployeeInputDto>, IEmployeeService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IEmployeeRepository _employeeRepository;
 
-        public EmployeeService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork.EmployeeRepository, mapper, unitOfWork)
+        public EmployeeService(IEmployeeRepository employeeRepository, IMapper mapper, IUnitOfWork unitOfWork) : base(employeeRepository, mapper, unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            _employeeRepository = employeeRepository;
         }
 
 
@@ -39,10 +41,20 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(26/05/2023)
         public async Task<string> GetNewCodeAsync()
         {
-            var newCode = await _unitOfWork.EmployeeRepository.GetNewCodeAsync();
-            _unitOfWork.Commit();
-            _unitOfWork.Dispose();
-            return newCode;
+            Guid uKey = Guid.NewGuid();
+            try
+            {
+                _unitOfWork.setManipulationKey(uKey);
+                await _unitOfWork.OpenAsync(uKey);
+                var newCode = await _employeeRepository.GetNewCodeAsync();
+                return newCode;
+            } catch
+            {
+                throw;
+            } finally
+            {
+                await _unitOfWork.CloseAsync(uKey);
+            }
         }
 
         /// <summary>
@@ -55,21 +67,37 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Modified: DNT(09/06/2023)
         public override async Task<Guid?> CreateAsync(EmployeeInputDto employeeInputDto)
         {
-            // Kiểm tra đơn vị có tồn tại
-            var isDepartmentIdValid = await _unitOfWork.EmployeeRepository.ValidateDepartmentId(employeeInputDto.DepartmentId);
-            if (!isDepartmentIdValid)
+            Guid uKey = Guid.NewGuid();
+            try
             {
-                throw new ConflictException(Error.ConflictCode, Error.InvalidDepartmentIdMsg, Error.InvalidDepartmentIdMsg);
-            }
-            // Kiểm tra mã đã tồn tại
-            var isEmployeeCodeExist = await _baseRepository.CheckCodeExistAsync(null, employeeInputDto.EmployeeCode);
-            if (isEmployeeCodeExist)
-            {
-                throw new ConflictException(Error.ConflictCode, Error.EmployeeCodeHasExistMsg, Error.EmployeeCodeHasExistMsg);
-            }
+                _unitOfWork.setManipulationKey(uKey);
+                await _unitOfWork.OpenAsync(uKey);
+                await _unitOfWork.BeginAsync(uKey);
 
-            var result = await base.CreateAsync(employeeInputDto);
-            return result;
+                // Kiểm tra đơn vị có tồn tại
+                var isDepartmentIdValid = await _employeeRepository.ValidateDepartmentId(employeeInputDto.DepartmentId);
+                if (!isDepartmentIdValid)
+                {
+                    throw new ConflictException(Error.ConflictCode, Error.InvalidDepartmentIdMsg, Error.InvalidDepartmentIdMsg);
+                }
+                // Kiểm tra mã đã tồn tại
+                var isEmployeeCodeExist = await _baseRepository.CheckCodeExistAsync(null, employeeInputDto.EmployeeCode);
+                if (isEmployeeCodeExist)
+                {
+                    throw new ConflictException(Error.ConflictCode, Error.EmployeeCodeHasExistMsg, Error.EmployeeCodeHasExistMsg);
+                }
+                var result = await base.CreateAsync(employeeInputDto);
+                await _unitOfWork.CommitAsync(uKey);
+                return result;
+
+            } catch
+            {
+                throw;  
+            } finally
+            {
+                await _unitOfWork.DisposeAsync(uKey);
+                await _unitOfWork.CloseAsync(uKey);
+            }
         }
 
         /// <summary>
@@ -83,25 +111,42 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Modified: DNT(09/06/2023)
         public override async Task<bool> UpdateAsync(Guid id, EmployeeInputDto employeeInputDto)
         {
-            // Kiểm tra nhân viên có tồn tại
-            _ = await _unitOfWork.EmployeeRepository.GetAsync(id) ?? throw new ConflictException(Error.ConflictCode, Error.InvalidEmployeeIdMsg, Error.InvalidEmployeeIdMsg);
-
-            // Kiểm tra đơn vị có tồn tại
-            var isDepartmentIdValid = await _unitOfWork.EmployeeRepository.ValidateDepartmentId(employeeInputDto.DepartmentId);
-            if (!isDepartmentIdValid)
+            Guid uKey = Guid.NewGuid();
+            try
             {
-                throw new ConflictException(Error.ConflictCode, Error.InvalidDepartmentIdMsg, Error.InvalidDepartmentIdMsg);
-            }
-            // Kiểm tra mã đã tồn tại
-            var isEmployeeCodeExist = await _baseRepository.CheckCodeExistAsync(id, employeeInputDto.EmployeeCode);
-            if (isEmployeeCodeExist)
-            {
-                throw new ConflictException(Error.ConflictCode, Error.EmployeeCodeHasExistMsg, Error.EmployeeCodeHasExistMsg);
-            }
+                _unitOfWork.setManipulationKey(uKey);
+                await _unitOfWork.OpenAsync(uKey);
+                await _unitOfWork.BeginAsync(uKey);
 
-            // Cập nhật thông tin nhân viên 
-            var result = await base.UpdateAsync(id, employeeInputDto);
-            return result;
+                // Kiểm tra nhân viên có tồn tại
+                _ = await _employeeRepository.GetAsync(id) ?? throw new ConflictException(Error.ConflictCode, Error.InvalidEmployeeIdMsg, Error.InvalidEmployeeIdMsg);
+
+                // Kiểm tra đơn vị có tồn tại
+                var isDepartmentIdValid = await _employeeRepository.ValidateDepartmentId(employeeInputDto.DepartmentId);
+                if (!isDepartmentIdValid)
+                {
+                    throw new ConflictException(Error.ConflictCode, Error.InvalidDepartmentIdMsg, Error.InvalidDepartmentIdMsg);
+                }
+                // Kiểm tra mã đã tồn tại
+                var isEmployeeCodeExist = await _baseRepository.CheckCodeExistAsync(id, employeeInputDto.EmployeeCode);
+                if (isEmployeeCodeExist)
+                {
+                    throw new ConflictException(Error.ConflictCode, Error.EmployeeCodeHasExistMsg, Error.EmployeeCodeHasExistMsg);
+                }
+
+                // Cập nhật thông tin nhân viên 
+                var result = await base.UpdateAsync(id, employeeInputDto);
+                await _unitOfWork.CommitAsync(uKey);
+                return result;
+
+            } catch
+            {
+                throw;
+            } finally
+            {
+                await _unitOfWork.DisposeAsync(uKey);
+                await _unitOfWork.CloseAsync(uKey);
+            }
         }
 
         /// <summary>
@@ -111,8 +156,11 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(06/06/2023)
         public async Task<byte[]> ExportEmployeesToExcelAsync()
         {
+            Guid uKey = Guid.NewGuid();
             try
             {
+                _unitOfWork.setManipulationKey(uKey);
+                await _unitOfWork.OpenAsync(uKey);
                 // Tạo data table
                 var dt = new DataTable
                 {
@@ -140,7 +188,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                     KeySearch = null,
                 };
                 // Lấy danh sách nhân viên từ repository
-                var employeeList = await _unitOfWork.EmployeeRepository.FilterAsync(employeeFilter);
+                var employeeList = await _employeeRepository.FilterAsync(employeeFilter);
 
                 // Số thứ tự của nhân viên
                 int index = 0;
@@ -241,13 +289,14 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 
                 var stream = new MemoryStream();
                 workbook.SaveAs(stream);
-                _unitOfWork.Commit();
-                _unitOfWork.Dispose();
                 return stream.ToArray();
             }
             catch (Exception ex)
             {
                 throw new InternalException(Error.ExportFail, ex.Message, Error.ExportFailMsg);
+            } finally
+            {
+                await _unitOfWork.CloseAsync(uKey);
             }
         }
     }

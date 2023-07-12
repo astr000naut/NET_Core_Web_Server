@@ -33,6 +33,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Dependency Injection
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped <ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped <IDepartmentRepository   , DepartmentRepository>();
+builder.Services.AddScoped <IEmployeeRepository , EmployeeRepository>();
+builder.Services.AddScoped <IGroupRepository, GroupRepository>();
 
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();

@@ -12,6 +12,6 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories.GroupRepo
 {
     public class GroupRepository : BaseRepository<Group, GroupInput>, IGroupRepository
     { 
-        public GroupRepository(IDbTransaction transaction) : base(transaction) { }
+        public GroupRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { }
     }
 }

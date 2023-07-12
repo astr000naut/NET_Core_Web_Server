@@ -20,10 +20,12 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
     public class CustomerService : BaseService<Customer, CustomerDto, CustomerInput, CustomerInputDto>, ICustomerService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ICustomerRepository _customerRepository;
 
-        public CustomerService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork.CustomerRepository, mapper, unitOfWork)
+        public CustomerService(ICustomerRepository customerRepository, IMapper mapper, IUnitOfWork unitOfWork) : base(customerRepository, mapper, unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            _customerRepository = customerRepository;
         }
 
         /// <summary>
@@ -33,33 +35,60 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(26/06/2023)
         public async Task<string> GetNewCodeAsync()
         {
-            var newCode = await _unitOfWork.CustomerRepository.GetNewCodeAsync();
-            _unitOfWork.Commit();
-            _unitOfWork.Dispose();
-            return newCode;
+            Guid uKey = Guid.NewGuid();
+            try
+            {
+                _unitOfWork.setManipulationKey(uKey);
+                await _unitOfWork.OpenAsync(uKey);
+                var newCode = await _customerRepository.GetNewCodeAsync();
+                return newCode;
+            } catch
+            {
+                throw;
+            } finally
+            {
+                await _unitOfWork.CloseAsync(uKey);
+            }
+            
         }
 
         public override async Task<bool> UpdateAsync(Guid id, CustomerInputDto customerInputDto)
         {
-            // Kiểm tra khách hàng có tồn tại
-            _ = await _unitOfWork.CustomerRepository.GetAsync(id) ?? throw new ConflictException(Error.ConflictCode, Error.InvalidCustomerIdMsg, Error.InvalidCustomerIdMsg);
-
-            // Kiểm tra mã đã tồn tại
-            var isCustomerCodeExist = await _baseRepository.CheckCodeExistAsync(id, customerInputDto.CustomerCode);
-            if (isCustomerCodeExist)
+            Guid uKey = Guid.NewGuid();
+           try
             {
-                throw new ConflictException(Error.ConflictCode, Error.EmployeeCodeHasExistMsg, Error.EmployeeCodeHasExistMsg);
+                _unitOfWork.setManipulationKey(uKey);
+                await _unitOfWork.OpenAsync(uKey);
+                await _unitOfWork.BeginAsync(uKey);
+
+                // Kiểm tra khách hàng có tồn tại
+                _ = await _customerRepository.GetAsync(id) ?? throw new ConflictException(Error.ConflictCode, Error.InvalidCustomerIdMsg, Error.InvalidCustomerIdMsg);
+
+                // Kiểm tra mã đã tồn tại
+                var isCustomerCodeExist = await _baseRepository.CheckCodeExistAsync(id, customerInputDto.CustomerCode);
+                if (isCustomerCodeExist)
+                {
+                    throw new ConflictException(Error.ConflictCode, Error.EmployeeCodeHasExistMsg, Error.EmployeeCodeHasExistMsg);
+                }
+
+                var customerInput = _mapper.Map<CustomerInput>(customerInputDto);
+                customerInput.CustomerId = id;
+                customerInput.ModifiedDate = DateTime.Now.ToLocalTime();
+                customerInput.ModifiedBy = Value.ModifiedBy;
+
+                var result = await _customerRepository.UpdateAsync(customerInput);
+                await _unitOfWork.CommitAsync(uKey);
+                return result;
+
+            } catch
+            {
+                throw;
             }
-
-            var customerInput = _mapper.Map<CustomerInput>(customerInputDto);
-            customerInput.CustomerId = id;
-            customerInput.ModifiedDate = DateTime.Now.ToLocalTime();
-            customerInput.ModifiedBy = Value.ModifiedBy;
-
-            var result = await _unitOfWork.CustomerRepository.UpdateAsync(customerInput);
-            _unitOfWork.Commit();
-            _unitOfWork.Dispose();
-            return result;
+            finally
+            {
+                await _unitOfWork.DisposeAsync(uKey);
+                await _unitOfWork.CloseAsync(uKey);
+            }
         }
 
     }

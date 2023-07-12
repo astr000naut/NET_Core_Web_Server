@@ -17,9 +17,11 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.GroupSvc
     public class GroupService : BaseService<Group, GroupDto, GroupInput, GroupInputDto>, IGroupService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IGroupRepository _groupRepository;
 
-        public GroupService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork.GroupRepository, mapper, unitOfWork)
+        public GroupService(IGroupRepository groupRepository, IMapper mapper, IUnitOfWork unitOfWork) : base(groupRepository, mapper, unitOfWork)
         {
+            _groupRepository = groupRepository;
             _unitOfWork = unitOfWork;
         }
     }

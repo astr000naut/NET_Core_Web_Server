@@ -15,7 +15,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories
 {
     public class DepartmentRepository : BaseRepository<Department, DepartmentInput>, IDepartmentRepository
     {
-        public DepartmentRepository(IDbTransaction transaction) : base(transaction) { }
+        public DepartmentRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { }
 
     }
 }

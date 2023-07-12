@@ -13,6 +13,7 @@ using MISA.WebFresher032023.Demo.Common.Enums;
 using NSubstitute.ExceptionExtensions;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories;
+using MISA.WebFresher032023.Demo.DataLayer;
 
 namespace MISA.WebFresher032023.Demo.UnitTests.Services
 {
@@ -42,10 +43,11 @@ namespace MISA.WebFresher032023.Demo.UnitTests.Services
             };
 
             var employeeRepository = Substitute.For<IEmployeeRepository>();
+            var unitOfWOrk = Substitute.For<IUnitOfWork>();
             employeeRepository.ValidateDepartmentId(EmployeeInputDto.DepartmentId).Returns(false);
             var mapper = Substitute.For<IMapper>();
 
-            var employeeService = new EmployeeService(employeeRepository, mapper);
+            var employeeService = new EmployeeService(employeeRepository, mapper, unitOfWOrk);
 
             // Act & Assert
             var ex = Assert.ThrowsAsync<ConflictException>(async () => await employeeService.CreateAsync(EmployeeInputDto));
@@ -65,12 +67,13 @@ namespace MISA.WebFresher032023.Demo.UnitTests.Services
             };
 
             var employeeRepository = Substitute.For<IEmployeeRepository>();
+            var unitOfWOrk = Substitute.For<IUnitOfWork>();
             employeeRepository.ValidateDepartmentId(EmployeeInputDto.DepartmentId).Returns(true);
             employeeRepository.CheckCodeExistAsync(null, EmployeeInputDto.EmployeeCode).Returns(true);
 
             var mapper = Substitute.For<IMapper>();
 
-            var employeeService = new EmployeeService(employeeRepository, mapper);
+            var employeeService = new EmployeeService(employeeRepository, mapper, unitOfWOrk);
 
             // Act & Assert
             var ex = Assert.ThrowsAsync<ConflictException>(async () => await employeeService.CreateAsync(EmployeeInputDto));
@@ -97,6 +100,7 @@ namespace MISA.WebFresher032023.Demo.UnitTests.Services
             };
 
             var employeeRepository = Substitute.For<IEmployeeRepository>();
+            var unitOfWOrk = Substitute.For<IUnitOfWork>();
             employeeRepository.ValidateDepartmentId(EmployeeInputDto.DepartmentId).Returns(true);
             employeeRepository.CheckCodeExistAsync(null, EmployeeInputDto.EmployeeCode).Returns(false);
 
@@ -105,7 +109,7 @@ namespace MISA.WebFresher032023.Demo.UnitTests.Services
 
             employeeRepository.CreateAsync(employeeInput).Returns(true);
 
-            var employeeService = new EmployeeService(employeeRepository, mapper);
+            var employeeService = new EmployeeService(employeeRepository, mapper, unitOfWOrk);
 
             // Act 
             var guid = await employeeService.CreateAsync(EmployeeInputDto);
@@ -134,6 +138,7 @@ namespace MISA.WebFresher032023.Demo.UnitTests.Services
             };
 
             var employeeRepository = Substitute.For<IEmployeeRepository>();
+            var unitOfWOrk = Substitute.For<IUnitOfWork>();
             employeeRepository.ValidateDepartmentId(EmployeeInputDto.DepartmentId).Returns(true);
             employeeRepository.CheckCodeExistAsync(null, EmployeeInputDto.EmployeeCode).Returns(false);
 
@@ -142,7 +147,7 @@ namespace MISA.WebFresher032023.Demo.UnitTests.Services
 
             employeeRepository.CreateAsync(employeeInput).Returns(false);
 
-            var employeeService = new EmployeeService(employeeRepository, mapper);
+            var employeeService = new EmployeeService(employeeRepository, mapper, unitOfWOrk);
 
             // Act 
             var guid = await employeeService.CreateAsync(EmployeeInputDto);
@@ -172,6 +177,7 @@ namespace MISA.WebFresher032023.Demo.UnitTests.Services
             };
 
             var employeeRepository = Substitute.For<IEmployeeRepository>();
+            var unitOfWOrk = Substitute.For<IUnitOfWork>();
             employeeRepository.ValidateDepartmentId(EmployeeInputDto.DepartmentId).Returns(true);
             employeeRepository.CheckCodeExistAsync(null, EmployeeInputDto.EmployeeCode).Returns(false);
 
@@ -181,7 +187,7 @@ namespace MISA.WebFresher032023.Demo.UnitTests.Services
             employeeRepository.CreateAsync(employeeInput).Returns<Task<bool>>(x => { throw new DbException(Error.DbQueryFail, Error.DbQueryFailMsg, Error.DbQueryFailMsg); });
 
 
-            var employeeService = new EmployeeService(employeeRepository, mapper);
+            var employeeService = new EmployeeService(employeeRepository, mapper, unitOfWOrk);
 
             // Act 
             var ex = Assert.ThrowsAsync<DbException>(async () => await employeeService.CreateAsync(EmployeeInputDto));
