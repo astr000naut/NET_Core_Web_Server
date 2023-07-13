@@ -16,8 +16,4 @@
     <ProjectReference Include="..\MISA.WebFresher032023.Demo.Repository\MISA.WebFresher032023.Demo.DataLayer.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="TransactionService\" />
-  </ItemGroup>
-
 </Project>

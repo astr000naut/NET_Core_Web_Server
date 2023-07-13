@@ -2,17 +2,19 @@ using MISA.WebFresher032023.Demo.API.Middleware;
 using MISA.WebFresher032023.Demo.BusinessLayer.Services;
 using MISA.WebFresher032023.Demo.BusinessLayer.Services.AccountSvc;
 using MISA.WebFresher032023.Demo.BusinessLayer.Services.GroupSvc;
+using MISA.WebFresher032023.Demo.BusinessLayer.Services.ReceiptSvc;
 using MISA.WebFresher032023.Demo.DataLayer;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories.AccountRepo;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories.GroupRepo;
+using MISA.WebFresher032023.Demo.DataLayer.Repositories.ReceiptRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Cors
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
-{
+{   
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
@@ -38,12 +40,14 @@ builder.Services.AddScoped <ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped <IDepartmentRepository   , DepartmentRepository>();
 builder.Services.AddScoped <IEmployeeRepository , EmployeeRepository>();
 builder.Services.AddScoped <IGroupRepository, GroupRepository>();
+builder.Services.AddScoped<IReceiptRepository, ReceiptRepository>();
 
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IGroupService, GroupService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IReceiptService, ReceiptService>();
 
 var app = builder.Build();
 

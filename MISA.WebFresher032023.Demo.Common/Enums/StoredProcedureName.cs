@@ -51,6 +51,16 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
         public const string DeleteAccount = "Proc_DeleteAccountById";
         #endregion
 
+
+        #region Receipt Stored Procedure name
+        public const string CreateReceipt = "Proc_InsertReceipt";
+        public const string GetReceiptById = "Proc_GetReceiptById";
+        public const string FilterReceipt = "Proc_FilterReceipt";
+        public const string UpdateReceipt = "Proc_UpdateReceipt";
+        public const string DeleteReceipt = "Proc_DeleteReceiptById";
+        public const string DeleteMultipleReceipt = "Proc_DeleteMultipleReceipt";
+
+        #endregion
         /// <summary>
         /// Lấy Stored procedure từ string tạo bởi EntityClassName và kiểu hành động
         /// </summary>
@@ -124,6 +134,21 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
                     return FilterAccount;
                 case "AccountDelete":
                     return DeleteAccount;
+                #endregion
+
+                #region Receipt proc
+                case "Receipt":
+                    return GetReceiptById;
+                case "ReceiptCreate":
+                    return CreateReceipt;
+                case "ReceiptUpdate":
+                    return UpdateReceipt;
+                case "FilteredList<Receipt>":
+                    return FilterReceipt;
+                case "ReceiptDelete":
+                    return DeleteReceipt;
+                case "ReceiptDeleteMultiple":
+                    return DeleteMultipleReceipt;
                 #endregion
                 default: throw new Exception("Không tìm thấy tên Stored Procedure");
             }

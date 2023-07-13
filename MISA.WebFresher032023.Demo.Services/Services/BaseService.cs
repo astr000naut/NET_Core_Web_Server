@@ -127,7 +127,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <param name="id">ID của entity</param>
         /// <returns>Entity DTO chứa thông tin của entity</returns>
         /// Author: DNT(26/05/2023)
-        public async Task<TEntityDto?> GetAsync(Guid id)
+        public virtual async Task<TEntityDto?> GetAsync(Guid id)
         {
             Guid uKey = Guid.NewGuid();
             try
