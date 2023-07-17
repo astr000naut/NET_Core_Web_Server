@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.Office2010.Word;
 using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input;
 using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output;
+using MISA.WebFresher032023.Demo.Common.Enums;
+using MISA.WebFresher032023.Demo.Common.Exceptions;
 using MISA.WebFresher032023.Demo.DataLayer;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Output;
@@ -63,6 +66,33 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.AccountSvc
                 await _unitOfWork.CloseAsync(uKey);
             }
             
+        }
+
+        public override async Task<bool> DeleteByIdAsync(Guid id)
+        {
+            Guid uKey = Guid.NewGuid();
+            try
+            {
+                _unitOfWork.setManipulationKey(uKey);
+                await _unitOfWork.OpenAsync(uKey);
+                await _unitOfWork.BeginAsync(uKey);
+
+                var account = await _accountRepository.GetAsync(id);
+                if (account.IsParent)
+                {
+                    throw new ConflictException(Error.ConflictCode, Error.AccountDeleteConflictMsg, Error.AccountDeleteConflictMsg);
+                } else
+                {
+                    return await _accountRepository.DeleteByIdAsync(id);
+                }
+
+            }
+            finally
+            {
+                await _unitOfWork.DisposeAsync(uKey);
+                await _unitOfWork.CloseAsync(uKey);
+            }
+
         }
 
     }

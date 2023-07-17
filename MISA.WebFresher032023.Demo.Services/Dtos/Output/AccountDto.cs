@@ -22,5 +22,6 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output
         public int? DetailByAccountObjectKind { get; set; }
         public int Grade { get; set; }
         public string MCodeId { get; set; }
+        public bool? ForeignCurrencyAccounting { get; set; }
     }
 }

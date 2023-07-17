@@ -49,6 +49,7 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
         public const string GetAccountById = "Proc_GetAccountById";
         public const string FilterAccount = "Proc_FilterAccount";
         public const string DeleteAccount = "Proc_DeleteAccountById";
+        public const string CheckAccountCodeExist = "Proc_CheckAccountCodeExist";
         #endregion
 
 
@@ -134,6 +135,8 @@ namespace MISA.WebFresher032023.Demo.Common.Enum
                     return FilterAccount;
                 case "AccountDelete":
                     return DeleteAccount;
+                case "AccountCheckCodeExist":
+                    return CheckAccountCodeExist;
                 #endregion
 
                 #region Receipt proc

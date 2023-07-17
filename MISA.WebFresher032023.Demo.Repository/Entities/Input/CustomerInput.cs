@@ -32,11 +32,17 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Entities.Input
         public int MaximizeDebtAmount { get; set; }
         public string ReceiveAccount { get; set; }
         public string PayAccount { get; set; }
+        public Guid? PayAccountId { get; set; }
+        public Guid? ReceiveAccountId { get; set; }
         public string BankAccountList { get; set; }
         public string Country { get; set; }
         public string ProvinceOrCity { get; set; }
         public string District { get; set; }
         public string WardOrCommune { get; set; }
+        public int CountryId { get; set; }
+        public int ProvinceOrCityId { get; set; }
+        public int DistrictId { get; set; }
+        public int WardOrCommuneId { get; set; }
         public string ShippingAddressList { get; set; }
         public string Description { get; set; }
         public string IdentityNumber { get; set; }

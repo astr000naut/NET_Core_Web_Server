@@ -195,7 +195,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// <param name="id"></param>
         /// <returns>true - false : xóa thành công hay không</returns>
         /// Author: DNT(26/05/2023)
-        public async Task<bool> DeleteByIdAsync(Guid id)
+        public virtual async Task<bool> DeleteByIdAsync(Guid id)
         {
             Guid uKey = Guid.NewGuid();
             try

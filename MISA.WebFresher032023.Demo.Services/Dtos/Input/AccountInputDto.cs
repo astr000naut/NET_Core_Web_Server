@@ -19,6 +19,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input
         public bool? DetailByBankAccount { get; set; }
         public bool? DetailByAccountObject { get; set; }
         public int? DetailByAccountObjectKind { get; set; }
+        public bool? ForeignCurrencyAccounting { get; set; }
 
     }
 }

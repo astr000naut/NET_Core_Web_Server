@@ -18,8 +18,8 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Entities.Output
       public string? employeeName { get; set; }
       public string? reason { get; set; }
       public int? documentIncluded { get; set; }
-      public DateTime postedDate { get; set; }
-      public DateTime receiptDate { get; set; }
+      public DateTime? postedDate { get; set; }
+      public DateTime? receiptDate { get; set; }
       public string receiptNo { get; set; }
       public long totalAmount { get; set; }
     }

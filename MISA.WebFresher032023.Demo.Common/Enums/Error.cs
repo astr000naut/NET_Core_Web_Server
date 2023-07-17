@@ -38,6 +38,7 @@ namespace MISA.WebFresher032023.Demo.Common.Enums
         public const string DepartmentCodeHasExistMsg = "Mã nhân đơn vị đã tồn tại, vui lòng kiểm tra lại";
         public const string InvalidEmployeeIdMsg = "Không tồn tại nhân viên với ID này";
         public const string InvalidCustomerIdMsg = "Không tồn tại khách hàng với ID này";
+        public const string AccountDeleteConflictMsg = "Không thể xóa danh mục cha nếu chưa xóa danh mục con";
 
         #endregion
 
