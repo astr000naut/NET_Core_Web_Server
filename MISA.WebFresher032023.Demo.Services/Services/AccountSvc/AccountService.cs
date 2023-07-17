@@ -31,11 +31,11 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.AccountSvc
 
         public async Task<FilteredListDto<AccountDto>> FilterAccountAsync(AccountFilterInputDto accountFilterInputDto)
         {
-            Guid uKey = Guid.NewGuid();
+            var mKey = _unitOfWork.getManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
 
                 var accountFilterInput = _mapper.Map<AccountFilterInput>(accountFilterInputDto);
 
@@ -63,19 +63,19 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.AccountSvc
                 throw;
             } finally
             {
-                await _unitOfWork.CloseAsync(uKey);
+                await _unitOfWork.CloseAsync(mKey);
             }
             
         }
 
         public override async Task<bool> DeleteByIdAsync(Guid id)
         {
-            Guid uKey = Guid.NewGuid();
+            var mKey = _unitOfWork.getManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
-                await _unitOfWork.BeginAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
+                await _unitOfWork.BeginAsync(mKey);
 
                 var account = await _accountRepository.GetAsync(id);
                 if (account.IsParent)
@@ -89,8 +89,8 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.AccountSvc
             }
             finally
             {
-                await _unitOfWork.DisposeAsync(uKey);
-                await _unitOfWork.CloseAsync(uKey);
+                await _unitOfWork.DisposeAsync(mKey);
+                await _unitOfWork.CloseAsync(mKey);
             }
 
         }

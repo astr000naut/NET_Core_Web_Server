@@ -20,61 +20,62 @@ namespace MISA.WebFresher032023.Demo.DataLayer
     {
         private DbConnection _connection;
         private DbTransaction _transaction;
-        private Guid? _manipulationKey;
+        private int _manipulationKey;
 
         public UnitOfWork(IConfiguration configuration)
         {
             string connectionString = configuration.GetConnectionString("SqlConnection") ?? "";
             _connection = new MySqlConnection(connectionString);
-            _manipulationKey = null;
+            _manipulationKey = 0;
         }
 
-        public void setManipulationKey(Guid key)
+        public void setManipulationKey(int key)
         {
-            if (_manipulationKey == null) 
-                _manipulationKey = key;
+            _manipulationKey = key;
         }
+
+        public int getManipulationKey() { return _manipulationKey; }
 
         public DbConnection Connection => _connection;
 
         public DbTransaction Transaction => _transaction;
 
-        public void Begin(Guid key)
+        public void Begin(int key)
         {
-            if (key == _manipulationKey)
+            if (key == 0)
             {
                 _transaction = _connection.BeginTransaction();
             }
         }
 
-        public async Task BeginAsync(Guid key)
+        public async Task BeginAsync(int key)
         {
-            if (key == _manipulationKey)
+            if (key == 0)
             {
                 _transaction = await _connection.BeginTransactionAsync();
             }
         }
 
-        public void Commit(Guid key)
+        public void Commit(int key)
         {
-            if (key == _manipulationKey)
+            if (key == 0)
             {
                 _transaction.Commit();
             }
         }
 
-        public async Task CommitAsync(Guid key)
+        public async Task CommitAsync(int key)
         {
-            if (key == _manipulationKey)
+            if (key == 0)
             {
                 await _transaction.CommitAsync();
             }
         }
 
 
-        public async Task DisposeAsync(Guid key)
+        public async Task DisposeAsync(int key)
         {
-            if (key == _manipulationKey)
+            if (key == 0)
             {
                 if (_transaction != null)
                     await _transaction.DisposeAsync();
@@ -83,35 +84,34 @@ namespace MISA.WebFresher032023.Demo.DataLayer
             }
         }
 
-        public async Task OpenAsync(Guid key)
+        public async Task OpenAsync(int key)
         {
-            if (key == _manipulationKey)
+            if (key == 0)
             {
                 await _connection.OpenAsync();
             }
         }
 
-        public async Task CloseAsync(Guid key)
+        public async Task CloseAsync(int key)
         {
-            if (key == _manipulationKey)
+            if (key == 0)
             {
                 await _connection.CloseAsync();
-                _manipulationKey = null;
             }
         }
 
 
-        public void Rollback(Guid key)
+        public void Rollback(int key)
         {
-            if (key == _manipulationKey)
+            if (key == 0)
             {
                 _transaction.Rollback();
             }
         }
 
-        public async Task RollbackAsync(Guid key)
+        public async Task RollbackAsync(int key)
         {
-            if (key == _manipulationKey)
+            if (key == 0)
             {
                 await _transaction.RollbackAsync();
             }

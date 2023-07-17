@@ -26,12 +26,12 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.ReceiptSvc
 
         public override async Task<Guid?> CreateAsync(ReceiptInputDto receiptInputDto)
         {
-            Guid uKey = Guid.NewGuid();
+            var mKey = _unitOfWork.getManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
-                await _unitOfWork.BeginAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
+                await _unitOfWork.BeginAsync(mKey);
 
                 // Validate dto
 
@@ -52,24 +52,24 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.ReceiptSvc
                 }
 
                 // Commit
-                await _unitOfWork.CommitAsync(uKey);
+                await _unitOfWork.CommitAsync(mKey);
                 return newReceiptId;
             }
             finally
             {
-                await _unitOfWork.DisposeAsync(uKey);
-                await _unitOfWork.CloseAsync(uKey);
+                await _unitOfWork.DisposeAsync(mKey);
+                await _unitOfWork.CloseAsync(mKey);
             }
 
         }
 
         public override async Task<ReceiptDto?> GetAsync(Guid id)
         {
-            Guid uKey = Guid.NewGuid();
+            var mKey = _unitOfWork.getManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
 
                 // Lấy receipt
                 var receipt = await _baseRepository.GetAsync(id);
@@ -93,19 +93,19 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.ReceiptSvc
             }
             finally
             {
-                await _unitOfWork.CloseAsync(uKey);
+                await _unitOfWork.CloseAsync(mKey);
             }
 
         }
 
         public override async Task<bool> UpdateAsync(Guid id, ReceiptInputDto receiptInputDto)
         {
-            Guid uKey = Guid.NewGuid();
+            var mKey = _unitOfWork.getManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
-                await _unitOfWork.BeginAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
+                await _unitOfWork.BeginAsync(mKey);
 
                 // Validate dto
 
@@ -127,13 +127,13 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.ReceiptSvc
 
                 var updateSuccess = await _baseRepository.UpdateAsync(receiptInput);
                 // Commit
-                await _unitOfWork.CommitAsync(uKey);
+                await _unitOfWork.CommitAsync(mKey);
                 return updateSuccess;
             }
             finally
             {
-                await _unitOfWork.DisposeAsync(uKey);
-                await _unitOfWork.CloseAsync(uKey);
+                await _unitOfWork.DisposeAsync(mKey);
+                await _unitOfWork.CloseAsync(mKey);
             }
         }
 

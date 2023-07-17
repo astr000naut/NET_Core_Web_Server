@@ -26,11 +26,11 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.LocationSvc
 
         public async Task<List<DistrictDto>> getDistrictList(int provinceId)
         {
-            Guid uKey = Guid.NewGuid();
+            var mKey = _unitOfWork.getManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
                 var districtList = await _locationRepository.getDistrictList(provinceId);
                 var districtListDto = new List<DistrictDto>();
                 foreach (var district in districtList)
@@ -42,17 +42,17 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.LocationSvc
             }
             finally
             {
-                await _unitOfWork.CloseAsync(uKey);
+                await _unitOfWork.CloseAsync(mKey);
             }
         }
 
         public async Task<List<ProvinceDto>> getProvinceList(int countryId)
         {
-            Guid uKey = Guid.NewGuid();
+            var mKey = _unitOfWork.getManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
                 var provinceList = await _locationRepository.getProvinceList(countryId);
                 var provinceListDto = new List<ProvinceDto>();
                 foreach (var province in provinceList)
@@ -64,17 +64,17 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.LocationSvc
             }
             finally
             {
-                await _unitOfWork.CloseAsync(uKey);
+                await _unitOfWork.CloseAsync(mKey);
             }
         }
 
         public async Task<List<WardDto>> getWardList(int districtId)
         {
-            Guid uKey = Guid.NewGuid();
+            var mKey = _unitOfWork.getManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey);
+                await _unitOfWork.OpenAsync(mKey);
                 var wardList = await _locationRepository.getWardList(districtId);
                 var wardListDto = new List<WardDto>();
                 foreach (var ward in wardList)
@@ -86,7 +86,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.LocationSvc
             }
             finally
             {
-                await _unitOfWork.CloseAsync(uKey);
+                await _unitOfWork.CloseAsync(mKey);
             }
         }
     }

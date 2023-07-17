@@ -41,11 +41,11 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(26/05/2023)
         public async Task<string> GetNewCodeAsync()
         {
-            Guid uKey = Guid.NewGuid();
+            var mKey = _unitOfWork.getManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
                 var newCode = await _employeeRepository.GetNewCodeAsync();
                 return newCode;
             } catch
@@ -53,7 +53,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                 throw;
             } finally
             {
-                await _unitOfWork.CloseAsync(uKey);
+                await _unitOfWork.CloseAsync(mKey);
             }
         }
 
@@ -67,12 +67,12 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Modified: DNT(09/06/2023)
         public override async Task<Guid?> CreateAsync(EmployeeInputDto employeeInputDto)
         {
-            Guid uKey = Guid.NewGuid();
+            var mKey = _unitOfWork.getManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
-                await _unitOfWork.BeginAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
+                await _unitOfWork.BeginAsync(mKey);
 
                 // Kiểm tra đơn vị có tồn tại
                 var isDepartmentIdValid = await _employeeRepository.ValidateDepartmentId(employeeInputDto.DepartmentId);
@@ -87,7 +87,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                     throw new ConflictException(Error.ConflictCode, Error.EmployeeCodeHasExistMsg, Error.EmployeeCodeHasExistMsg);
                 }
                 var result = await base.CreateAsync(employeeInputDto);
-                await _unitOfWork.CommitAsync(uKey);
+                await _unitOfWork.CommitAsync(mKey);
                 return result;
 
             } catch
@@ -95,8 +95,8 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                 throw;  
             } finally
             {
-                await _unitOfWork.DisposeAsync(uKey);
-                await _unitOfWork.CloseAsync(uKey);
+                await _unitOfWork.DisposeAsync(mKey);
+                await _unitOfWork.CloseAsync(mKey);
             }
         }
 
@@ -111,12 +111,12 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Modified: DNT(09/06/2023)
         public override async Task<bool> UpdateAsync(Guid id, EmployeeInputDto employeeInputDto)
         {
-            Guid uKey = Guid.NewGuid();
+            var mKey = _unitOfWork.getManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
-                await _unitOfWork.BeginAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
+                await _unitOfWork.BeginAsync(mKey);
 
                 // Kiểm tra nhân viên có tồn tại
                 _ = await _employeeRepository.GetAsync(id) ?? throw new ConflictException(Error.ConflictCode, Error.InvalidEmployeeIdMsg, Error.InvalidEmployeeIdMsg);
@@ -136,7 +136,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 
                 // Cập nhật thông tin nhân viên 
                 var result = await base.UpdateAsync(id, employeeInputDto);
-                await _unitOfWork.CommitAsync(uKey);
+                await _unitOfWork.CommitAsync(mKey);
                 return result;
 
             } catch
@@ -144,8 +144,8 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                 throw;
             } finally
             {
-                await _unitOfWork.DisposeAsync(uKey);
-                await _unitOfWork.CloseAsync(uKey);
+                await _unitOfWork.DisposeAsync(mKey);
+                await _unitOfWork.CloseAsync(mKey);
             }
         }
 
@@ -156,11 +156,11 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(06/06/2023)
         public async Task<byte[]> ExportEmployeesToExcelAsync()
         {
-            Guid uKey = Guid.NewGuid();
+            var mKey = _unitOfWork.getManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
                 // Tạo data table
                 var dt = new DataTable
                 {
@@ -296,7 +296,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                 throw new InternalException(Error.ExportFail, ex.Message, Error.ExportFailMsg);
             } finally
             {
-                await _unitOfWork.CloseAsync(uKey);
+                await _unitOfWork.CloseAsync(mKey);
             }
         }
     }

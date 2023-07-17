@@ -35,11 +35,11 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(26/06/2023)
         public async Task<string> GetNewCodeAsync()
         {
-            Guid uKey = Guid.NewGuid();
+            var mKey = _unitOfWork.getManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
                 var newCode = await _customerRepository.GetNewCodeAsync();
                 return newCode;
             } catch
@@ -47,19 +47,19 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                 throw;
             } finally
             {
-                await _unitOfWork.CloseAsync(uKey);
+                await _unitOfWork.CloseAsync(mKey);
             }
             
         }
 
         public override async Task<bool> UpdateAsync(Guid id, CustomerInputDto customerInputDto)
         {
-            Guid uKey = Guid.NewGuid();
-           try
+            var mKey = _unitOfWork.getManipulationKey();
+            try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
-                await _unitOfWork.BeginAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
+                await _unitOfWork.BeginAsync(mKey);
 
                 // Kiểm tra khách hàng có tồn tại
                 _ = await _customerRepository.GetAsync(id) ?? throw new ConflictException(Error.ConflictCode, Error.InvalidCustomerIdMsg, Error.InvalidCustomerIdMsg);
@@ -77,7 +77,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                 customerInput.ModifiedBy = Value.ModifiedBy;
 
                 var result = await _customerRepository.UpdateAsync(customerInput);
-                await _unitOfWork.CommitAsync(uKey);
+                await _unitOfWork.CommitAsync(mKey);
                 return result;
 
             } catch
@@ -86,8 +86,8 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
             }
             finally
             {
-                await _unitOfWork.DisposeAsync(uKey);
-                await _unitOfWork.CloseAsync(uKey);
+                await _unitOfWork.DisposeAsync(mKey);
+                await _unitOfWork.CloseAsync(mKey);
             }
         }
 

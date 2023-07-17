@@ -15,15 +15,16 @@ namespace MISA.WebFresher032023.Demo.DataLayer
     {
         DbConnection Connection { get; }
         DbTransaction Transaction { get; }
-        void setManipulationKey(Guid key);
-        Task OpenAsync(Guid key);
-        Task CloseAsync(Guid key);
-        void Begin(Guid key);
-        Task BeginAsync(Guid key);
-        void Commit(Guid key);
-        Task CommitAsync(Guid key);
-        void Rollback(Guid key);
-        Task RollbackAsync(Guid key);
-        Task DisposeAsync(Guid key);
+        void setManipulationKey(int key);
+        int getManipulationKey();
+        Task OpenAsync(int key);
+        Task CloseAsync(int key);
+        void Begin(int key);
+        Task BeginAsync(int key);
+        void Commit(int key);
+        Task CommitAsync(int key);
+        void Rollback(int key);
+        Task RollbackAsync(int key);
+        Task DisposeAsync(int key);
     }
 }

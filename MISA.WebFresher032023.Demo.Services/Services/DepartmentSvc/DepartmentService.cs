@@ -48,12 +48,12 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Modified: DNT(09/06/2023)
         public override async Task<bool> UpdateAsync(Guid departmentId, DepartmentInputDto departmentInputDto)
         {
-            Guid uKey = Guid.NewGuid();
+            var mKey = _unitOfWork.getManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
-                await _unitOfWork.BeginAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
+                await _unitOfWork.BeginAsync(mKey);
 
                 // Kiểm tra mã đã tồn tại
                 var isDepartmentCodeExist = await _departmentRepository.CheckCodeExistAsync(departmentId, departmentInputDto.DepartmentCode);
@@ -64,15 +64,15 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                 }
 
                 var result = await base.UpdateAsync(departmentId, departmentInputDto);
-                await _unitOfWork.CommitAsync(uKey);
+                await _unitOfWork.CommitAsync(mKey);
                 return result;
             } catch
             {
                 throw;
             } finally
-            {
-                await _unitOfWork.DisposeAsync(uKey);
-                await _unitOfWork.CloseAsync(uKey);
+            {   
+                await _unitOfWork.DisposeAsync(mKey);
+                await _unitOfWork.CloseAsync(mKey);
             }
         }
 

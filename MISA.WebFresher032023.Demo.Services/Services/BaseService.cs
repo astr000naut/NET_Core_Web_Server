@@ -38,12 +38,12 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Modified: DNT(09/06/2023)
         public virtual async Task<Guid?> CreateAsync(TEntityInputDto tEntityInputDto)
         {
-            Guid uKey = Guid.NewGuid();
+            var mKey = _unitOfWork.getManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
-                await _unitOfWork.BeginAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
+                await _unitOfWork.BeginAsync(mKey);
                 var entityInput = _mapper.Map<TEntityInput>(tEntityInputDto);
                 Type type = typeof(TEntityInput);
                 var entityName = typeof(TEntity).Name;
@@ -60,17 +60,17 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 
                 var isCreated = await _baseRepository.CreateAsync(entityInput);
 
-                await _unitOfWork.CommitAsync(uKey);
+                await _unitOfWork.CommitAsync(mKey);
                 return isCreated ? newId : null;
 
             } catch
             {
-                await _unitOfWork.RollbackAsync(uKey);
+                await _unitOfWork.RollbackAsync(mKey);
                 throw;
             } finally
             {
-                await _unitOfWork.DisposeAsync(uKey);
-                await _unitOfWork.CloseAsync(uKey);
+                await _unitOfWork.DisposeAsync(mKey);
+                await _unitOfWork.CloseAsync(mKey);
             }
 
         }
@@ -85,12 +85,12 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Modified: DNT(09/06/2023)
         public virtual async Task<bool> UpdateAsync(Guid id, TEntityInputDto tEntityInputDto)
         {
-            Guid uKey = Guid.NewGuid();
+            var mKey = _unitOfWork.getManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
-                await _unitOfWork.BeginAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
+                await _unitOfWork.BeginAsync(mKey);
                 var entityInput = _mapper.Map<TEntityInput>(tEntityInputDto);
 
                 Type type = typeof(TEntityInput);
@@ -107,17 +107,17 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                 modifiedByProperty?.SetValue(entityInput, Value.ModifiedBy);
 
                 var result = await _baseRepository.UpdateAsync(entityInput);
-                await _unitOfWork.CommitAsync(uKey);    
+                await _unitOfWork.CommitAsync(mKey);    
                 return result;
             } catch
             {
-                await _unitOfWork.RollbackAsync(uKey);
+                await _unitOfWork.RollbackAsync(mKey);
                 throw;
 
             } finally
             {
-                await _unitOfWork.DisposeAsync(uKey);
-                await _unitOfWork.CloseAsync(uKey); 
+                await _unitOfWork.DisposeAsync(mKey);
+                await _unitOfWork.CloseAsync(mKey); 
             }
         }
 
@@ -129,11 +129,11 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(26/05/2023)
         public virtual async Task<TEntityDto?> GetAsync(Guid id)
         {
-            Guid uKey = Guid.NewGuid();
+            var mKey = _unitOfWork.getManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
                 var entity = await _baseRepository.GetAsync(id);
                 var entityDto = _mapper.Map<TEntityDto>(entity);
                 return entityDto;
@@ -142,7 +142,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                 throw;
             } finally
             {
-                await _unitOfWork.CloseAsync(uKey);
+                await _unitOfWork.CloseAsync(mKey);
             }
         }
 
@@ -154,11 +154,11 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(29/05/2023)
         public async Task<FilteredListDto<TEntityDto>> FilterAsync(EntityFilterDto entityFilterDto)
         {
-            Guid uKey = Guid.NewGuid();
+            var mKey = _unitOfWork.getManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
                 // Map từ EntityFilterDto sang EntityFilter
                 var entityFilter = _mapper.Map<EntityFilter>(entityFilterDto);
 
@@ -185,7 +185,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
             }
              finally
             {
-                await _unitOfWork.CloseAsync(uKey);
+                await _unitOfWork.CloseAsync(mKey);
             }
         }
 
@@ -197,23 +197,23 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(26/05/2023)
         public virtual async Task<bool> DeleteByIdAsync(Guid id)
         {
-            Guid uKey = Guid.NewGuid();
+            var mKey = _unitOfWork.getManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
-                await _unitOfWork.BeginAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
+                await _unitOfWork.BeginAsync(mKey);
                 var result = await _baseRepository.DeleteByIdAsync(id);
-                await _unitOfWork.CommitAsync(uKey);
+                await _unitOfWork.CommitAsync(mKey);
                 return result;
             }
             catch {
-                await _unitOfWork.RollbackAsync(uKey);
+                await _unitOfWork.RollbackAsync(mKey);
                 throw; 
             }
             finally {
-                await _unitOfWork.DisposeAsync(uKey);
-                await _unitOfWork.CloseAsync(uKey);
+                await _unitOfWork.DisposeAsync(mKey);
+                await _unitOfWork.CloseAsync(mKey);
             }
         }
 
@@ -226,11 +226,11 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(27/05/2023)
         public async Task<bool> CheckCodeExistAsync(Guid? id, string code)
         {
-            Guid uKey = Guid.NewGuid();
+            var mKey = _unitOfWork.getManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
                 var result = await _baseRepository.CheckCodeExistAsync(id, code);
                 return result;
             }
@@ -240,7 +240,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
             }
             finally
             {
-                await _unitOfWork.CloseAsync(uKey);
+                await _unitOfWork.CloseAsync(mKey);
             }
             
         }
@@ -253,28 +253,28 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(26/05/2023)
         public async Task<int> DeleteMultipleAsync(List<Guid> entityIdList)
         {
-            Guid uKey = Guid.NewGuid();
+            var mKey = _unitOfWork.getManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(uKey);
-                await _unitOfWork.OpenAsync(uKey);
-                await _unitOfWork.BeginAsync(uKey);
+                _unitOfWork.setManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
+                await _unitOfWork.BeginAsync(mKey);
 
                 // Transform list to string
                 var stringIdList = string.Join(",", entityIdList);
                 var result = await _baseRepository.DeleteMultipleAsync(stringIdList);
-                _unitOfWork.Commit(uKey);
+                _unitOfWork.Commit(mKey);
                 return result;
             }
             catch
             {
-                await _unitOfWork.RollbackAsync(uKey);
+                await _unitOfWork.RollbackAsync(mKey);
                 throw;
             }
             finally
             {
-                await _unitOfWork.DisposeAsync(uKey);
-                await _unitOfWork.CloseAsync(uKey);
+                await _unitOfWork.DisposeAsync(mKey);
+                await _unitOfWork.CloseAsync(mKey);
             }
 
         }
