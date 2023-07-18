@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.DataLayer
 {
-    public interface IUnitOfWork:IDisposable
+    public interface IUnitOfWork : IDisposable
     {
         DbConnection Connection { get; }
         DbTransaction Transaction { get; }
-        void setManipulationKey(int key);
-        int getManipulationKey();
+        void SetManipulationKey(int key);
+        int GetManipulationKey();
         Task OpenAsync(int key);
         Task CloseAsync(int key);
         void Begin(int key);

@@ -23,5 +23,13 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
             var newCode = await _customerService.GetNewCodeAsync();
             return Ok(newCode);
         }
+
+        [Route("ExportData")]
+        [HttpPost]
+        public async Task<IActionResult> ExportAccountData(ExportExcelDto exportExcelDto)
+        {
+            byte[] excelFileBytes = await _customerService.ExportExcelAsync(exportExcelDto);
+            return File(excelFileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", exportExcelDto.FileName);
+        }
     }
 }

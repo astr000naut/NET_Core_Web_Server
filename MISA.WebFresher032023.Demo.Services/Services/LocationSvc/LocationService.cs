@@ -26,10 +26,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.LocationSvc
 
         public async Task<List<DistrictDto>> getDistrictList(int provinceId)
         {
-            var mKey = _unitOfWork.getManipulationKey();
+            var mKey = _unitOfWork.GetManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(mKey + 1);
+                _unitOfWork.SetManipulationKey(mKey + 1);
                 await _unitOfWork.OpenAsync(mKey);
                 var districtList = await _locationRepository.getDistrictList(provinceId);
                 var districtListDto = new List<DistrictDto>();
@@ -48,10 +48,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.LocationSvc
 
         public async Task<List<ProvinceDto>> getProvinceList(int countryId)
         {
-            var mKey = _unitOfWork.getManipulationKey();
+            var mKey = _unitOfWork.GetManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(mKey + 1);
+                _unitOfWork.SetManipulationKey(mKey + 1);
                 await _unitOfWork.OpenAsync(mKey);
                 var provinceList = await _locationRepository.getProvinceList(countryId);
                 var provinceListDto = new List<ProvinceDto>();
@@ -70,10 +70,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.LocationSvc
 
         public async Task<List<WardDto>> getWardList(int districtId)
         {
-            var mKey = _unitOfWork.getManipulationKey();
+            var mKey = _unitOfWork.GetManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(mKey);
+                _unitOfWork.SetManipulationKey(mKey);
                 await _unitOfWork.OpenAsync(mKey);
                 var wardList = await _locationRepository.getWardList(districtId);
                 var wardListDto = new List<WardDto>();

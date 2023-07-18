@@ -29,12 +29,12 @@ namespace MISA.WebFresher032023.Demo.DataLayer
             _manipulationKey = 0;
         }
 
-        public void setManipulationKey(int key)
+        public void SetManipulationKey(int key)
         {
             _manipulationKey = key;
         }
 
-        public int getManipulationKey() { return _manipulationKey; }
+        public int GetManipulationKey() { return _manipulationKey; }
 
         public DbConnection Connection => _connection;
 

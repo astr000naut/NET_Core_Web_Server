@@ -15,6 +15,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input
         public string? ParentNumber { get; set; }
         public Guid? ParentId { get; set; }
         public int CategoryKind { get; set; }
+        public string CategoryKindName { get; set; }
         public string Description { get; set; }
         public bool? DetailByBankAccount { get; set; }
         public bool? DetailByAccountObject { get; set; }

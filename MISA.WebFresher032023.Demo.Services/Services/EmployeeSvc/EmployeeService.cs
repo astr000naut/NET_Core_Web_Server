@@ -41,10 +41,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(26/05/2023)
         public async Task<string> GetNewCodeAsync()
         {
-            var mKey = _unitOfWork.getManipulationKey();
+            var mKey = _unitOfWork.GetManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(mKey + 1);
+                _unitOfWork.SetManipulationKey(mKey + 1);
                 await _unitOfWork.OpenAsync(mKey);
                 var newCode = await _employeeRepository.GetNewCodeAsync();
                 return newCode;
@@ -67,10 +67,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Modified: DNT(09/06/2023)
         public override async Task<Guid?> CreateAsync(EmployeeInputDto employeeInputDto)
         {
-            var mKey = _unitOfWork.getManipulationKey();
+            var mKey = _unitOfWork.GetManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(mKey + 1);
+                _unitOfWork.SetManipulationKey(mKey + 1);
                 await _unitOfWork.OpenAsync(mKey);
                 await _unitOfWork.BeginAsync(mKey);
 
@@ -111,10 +111,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Modified: DNT(09/06/2023)
         public override async Task<bool> UpdateAsync(Guid id, EmployeeInputDto employeeInputDto)
         {
-            var mKey = _unitOfWork.getManipulationKey();
+            var mKey = _unitOfWork.GetManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(mKey + 1);
+                _unitOfWork.SetManipulationKey(mKey + 1);
                 await _unitOfWork.OpenAsync(mKey);
                 await _unitOfWork.BeginAsync(mKey);
 
@@ -156,10 +156,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(06/06/2023)
         public async Task<byte[]> ExportEmployeesToExcelAsync()
         {
-            var mKey = _unitOfWork.getManipulationKey();
+            var mKey = _unitOfWork.GetManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(mKey + 1);
+                _unitOfWork.SetManipulationKey(mKey + 1);
                 await _unitOfWork.OpenAsync(mKey);
                 // Tạo data table
                 var dt = new DataTable
@@ -168,17 +168,17 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
                 };
 
                 // Dựng cấu trúc của data table
-                dt.Columns.Add(EmployeeExport.Col_1, typeof(int));
-                dt.Columns.Add(EmployeeExport.Col_2, typeof(string));
-                dt.Columns.Add(EmployeeExport.Col_3, typeof(string));
-                dt.Columns.Add(EmployeeExport.Col_4, typeof(string));
-                dt.Columns.Add(EmployeeExport.Col_5, typeof(DateTime));
-                dt.Columns.Add(EmployeeExport.Col_6, typeof(string));
-                dt.Columns.Add(EmployeeExport.Col_7, typeof(string));
-                dt.Columns.Add(EmployeeExport.Col_8, typeof(string));
-                dt.Columns.Add(EmployeeExport.Col_9, typeof(string));
-                dt.Columns.Add(EmployeeExport.Col_10, typeof(string));
-                dt.Columns.Add(EmployeeExport.Col_11, typeof(string));
+                dt.Columns.Add(EmployeeExport.Col_1);
+                dt.Columns.Add(EmployeeExport.Col_2);
+                dt.Columns.Add(EmployeeExport.Col_3);
+                dt.Columns.Add(EmployeeExport.Col_4);
+                dt.Columns.Add(EmployeeExport.Col_5);
+                dt.Columns.Add(EmployeeExport.Col_6);
+                dt.Columns.Add(EmployeeExport.Col_7);
+                dt.Columns.Add(EmployeeExport.Col_8);
+                dt.Columns.Add(EmployeeExport.Col_9);
+                dt.Columns.Add(EmployeeExport.Col_10);
+                dt.Columns.Add(EmployeeExport.Col_11);
 
                 // Tạo filter param
                 var employeeFilter = new EntityFilter()

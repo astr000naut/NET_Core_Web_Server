@@ -15,4 +15,8 @@
     <None Remove="NewFolder\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Functions\" />
+  </ItemGroup>
+
 </Project>

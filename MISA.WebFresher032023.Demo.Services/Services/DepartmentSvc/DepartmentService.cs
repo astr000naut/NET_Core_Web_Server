@@ -48,10 +48,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Modified: DNT(09/06/2023)
         public override async Task<bool> UpdateAsync(Guid departmentId, DepartmentInputDto departmentInputDto)
         {
-            var mKey = _unitOfWork.getManipulationKey();
+            var mKey = _unitOfWork.GetManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(mKey + 1);
+                _unitOfWork.SetManipulationKey(mKey + 1);
                 await _unitOfWork.OpenAsync(mKey);
                 await _unitOfWork.BeginAsync(mKey);
 

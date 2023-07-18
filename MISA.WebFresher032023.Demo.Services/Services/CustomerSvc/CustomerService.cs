@@ -8,6 +8,8 @@ using MISA.WebFresher032023.Demo.DataLayer;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Output;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories;
+using OfficeOpenXml.Style;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,10 +37,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(26/06/2023)
         public async Task<string> GetNewCodeAsync()
         {
-            var mKey = _unitOfWork.getManipulationKey();
+            var mKey = _unitOfWork.GetManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(mKey + 1);
+                _unitOfWork.SetManipulationKey(mKey + 1);
                 await _unitOfWork.OpenAsync(mKey);
                 var newCode = await _customerRepository.GetNewCodeAsync();
                 return newCode;
@@ -54,10 +56,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 
         public override async Task<bool> UpdateAsync(Guid id, CustomerInputDto customerInputDto)
         {
-            var mKey = _unitOfWork.getManipulationKey();
+            var mKey = _unitOfWork.GetManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(mKey + 1);
+                _unitOfWork.SetManipulationKey(mKey + 1);
                 await _unitOfWork.OpenAsync(mKey);
                 await _unitOfWork.BeginAsync(mKey);
 

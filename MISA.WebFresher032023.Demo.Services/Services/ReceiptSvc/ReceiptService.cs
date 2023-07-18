@@ -5,6 +5,8 @@ using MISA.WebFresher032023.Demo.DataLayer;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Output;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories.ReceiptRepo;
+using OfficeOpenXml.Style;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,10 +28,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.ReceiptSvc
 
         public override async Task<Guid?> CreateAsync(ReceiptInputDto receiptInputDto)
         {
-            var mKey = _unitOfWork.getManipulationKey();
+            var mKey = _unitOfWork.GetManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(mKey + 1);
+                _unitOfWork.SetManipulationKey(mKey + 1);
                 await _unitOfWork.OpenAsync(mKey);
                 await _unitOfWork.BeginAsync(mKey);
 
@@ -38,7 +40,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.ReceiptSvc
                 // Tạo mới receipt
                 var receiptInput = _mapper.Map<ReceiptInput>(receiptInputDto);
                 var newReceiptId = Guid.NewGuid();
-                receiptInput.receiptId = newReceiptId;
+                receiptInput.ReceiptId = newReceiptId;
                 receiptInput.CreatedDate = DateTime.Now.ToLocalTime();
 
                 await _baseRepository.CreateAsync(receiptInput);    
@@ -46,7 +48,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.ReceiptSvc
                 
 
                 // Tạo mới các receipt detail
-                foreach (var receiptDetailInputDto in receiptInputDto.receiptDetailList)
+                foreach (var receiptDetailInputDto in receiptInputDto.ReceiptDetailList)
                 {
                    await CreateReceiptDetailAsync(newReceiptId, receiptDetailInputDto);
                 }
@@ -65,10 +67,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.ReceiptSvc
 
         public override async Task<ReceiptDto?> GetAsync(Guid id)
         {
-            var mKey = _unitOfWork.getManipulationKey();
+            var mKey = _unitOfWork.GetManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(mKey + 1);
+                _unitOfWork.SetManipulationKey(mKey + 1);
                 await _unitOfWork.OpenAsync(mKey);
 
                 // Lấy receipt
@@ -83,7 +85,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.ReceiptSvc
                     var receiptDetailDto = _mapper.Map<ReceiptDetailDto>(receiptDetail);
                     receiptDetailListDto.Add(receiptDetailDto);
                 }
-                receiptDto.receiptDetailList = receiptDetailListDto;
+                receiptDto.ReceiptDetailList = receiptDetailListDto;
 
                 return receiptDto;
             }
@@ -100,30 +102,30 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.ReceiptSvc
 
         public override async Task<bool> UpdateAsync(Guid id, ReceiptInputDto receiptInputDto)
         {
-            var mKey = _unitOfWork.getManipulationKey();
+            var mKey = _unitOfWork.GetManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(mKey + 1);
+                _unitOfWork.SetManipulationKey(mKey + 1);
                 await _unitOfWork.OpenAsync(mKey);
                 await _unitOfWork.BeginAsync(mKey);
 
                 // Validate dto
 
                 // Update các receipt detail
-                foreach (var receiptDetailInputDto in receiptInputDto.receiptDetailList)
+                foreach (var receiptDetailInputDto in receiptInputDto.ReceiptDetailList)
                 {
-                    if (receiptDetailInputDto.status == "delete")
-                        await DeleteReceiptDetailAsync(receiptDetailInputDto.receiptDetailId);
-                    else if (receiptDetailInputDto.status == "create")
+                    if (receiptDetailInputDto.Status == "delete")
+                        await DeleteReceiptDetailAsync(receiptDetailInputDto.ReceiptDetailId);
+                    else if (receiptDetailInputDto.Status == "create")
                         await CreateReceiptDetailAsync(id, receiptDetailInputDto);
-                    else if (receiptDetailInputDto.status == "update")
+                    else if (receiptDetailInputDto.Status == "update")
                         await UpdateReceiptDetailAsync(receiptDetailInputDto);
 
                 }
 
                 // Update Receipt
                 var receiptInput = _mapper.Map<ReceiptInput>(receiptInputDto);
-                receiptInput.receiptId = id;
+                receiptInput.ReceiptId = id;
 
                 var updateSuccess = await _baseRepository.UpdateAsync(receiptInput);
                 // Commit
@@ -141,8 +143,8 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.ReceiptSvc
         {
             var receipDetailInput = _mapper.Map<ReceiptDetailInput>(receiptDetailInputDto);
             var rdNewId = Guid.NewGuid();
-            receipDetailInput.receiptDetailId = rdNewId;
-            receipDetailInput.receiptId = receiptId;
+            receipDetailInput.ReceiptDetailId = rdNewId;
+            receipDetailInput.ReceiptId = receiptId;
             receipDetailInput.CreatedDate = DateTime.Now.ToLocalTime();
 
             await _receiptRepository.InsertReceiptDetailAsync(receipDetailInput);

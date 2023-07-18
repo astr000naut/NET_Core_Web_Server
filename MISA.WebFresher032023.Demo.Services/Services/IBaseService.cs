@@ -69,5 +69,8 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(26/05/2023)
 
         Task<int> DeleteMultipleAsync(List<Guid> entityIdList);
+
+        Task<byte[]> ExportExcelAsync(ExportExcelDto exportExcelDto);
+
     }
 }

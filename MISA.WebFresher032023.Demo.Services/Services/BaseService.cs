@@ -7,11 +7,14 @@ using MISA.WebFresher032023.Demo.Common.Resources;
 using MISA.WebFresher032023.Demo.DataLayer;
 using MISA.WebFresher032023.Demo.DataLayer.Entities.Input;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories;
+using OfficeOpenXml.Style;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
 {
@@ -38,10 +41,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Modified: DNT(09/06/2023)
         public virtual async Task<Guid?> CreateAsync(TEntityInputDto tEntityInputDto)
         {
-            var mKey = _unitOfWork.getManipulationKey();
+            var mKey = _unitOfWork.GetManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(mKey + 1);
+                _unitOfWork.SetManipulationKey(mKey + 1);
                 await _unitOfWork.OpenAsync(mKey);
                 await _unitOfWork.BeginAsync(mKey);
                 var entityInput = _mapper.Map<TEntityInput>(tEntityInputDto);
@@ -85,10 +88,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Modified: DNT(09/06/2023)
         public virtual async Task<bool> UpdateAsync(Guid id, TEntityInputDto tEntityInputDto)
         {
-            var mKey = _unitOfWork.getManipulationKey();
+            var mKey = _unitOfWork.GetManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(mKey + 1);
+                _unitOfWork.SetManipulationKey(mKey + 1);
                 await _unitOfWork.OpenAsync(mKey);
                 await _unitOfWork.BeginAsync(mKey);
                 var entityInput = _mapper.Map<TEntityInput>(tEntityInputDto);
@@ -129,10 +132,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(26/05/2023)
         public virtual async Task<TEntityDto?> GetAsync(Guid id)
         {
-            var mKey = _unitOfWork.getManipulationKey();
+            var mKey = _unitOfWork.GetManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(mKey + 1);
+                _unitOfWork.SetManipulationKey(mKey + 1);
                 await _unitOfWork.OpenAsync(mKey);
                 var entity = await _baseRepository.GetAsync(id);
                 var entityDto = _mapper.Map<TEntityDto>(entity);
@@ -154,10 +157,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(29/05/2023)
         public async Task<FilteredListDto<TEntityDto>> FilterAsync(EntityFilterDto entityFilterDto)
         {
-            var mKey = _unitOfWork.getManipulationKey();
+            var mKey = _unitOfWork.GetManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(mKey + 1);
+                _unitOfWork.SetManipulationKey(mKey + 1);
                 await _unitOfWork.OpenAsync(mKey);
                 // Map từ EntityFilterDto sang EntityFilter
                 var entityFilter = _mapper.Map<EntityFilter>(entityFilterDto);
@@ -197,10 +200,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(26/05/2023)
         public virtual async Task<bool> DeleteByIdAsync(Guid id)
         {
-            var mKey = _unitOfWork.getManipulationKey();
+            var mKey = _unitOfWork.GetManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(mKey + 1);
+                _unitOfWork.SetManipulationKey(mKey + 1);
                 await _unitOfWork.OpenAsync(mKey);
                 await _unitOfWork.BeginAsync(mKey);
                 var result = await _baseRepository.DeleteByIdAsync(id);
@@ -226,10 +229,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(27/05/2023)
         public async Task<bool> CheckCodeExistAsync(Guid? id, string code)
         {
-            var mKey = _unitOfWork.getManipulationKey();
+            var mKey = _unitOfWork.GetManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(mKey + 1);
+                _unitOfWork.SetManipulationKey(mKey + 1);
                 await _unitOfWork.OpenAsync(mKey);
                 var result = await _baseRepository.CheckCodeExistAsync(id, code);
                 return result;
@@ -253,10 +256,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
         /// Author: DNT(26/05/2023)
         public async Task<int> DeleteMultipleAsync(List<Guid> entityIdList)
         {
-            var mKey = _unitOfWork.getManipulationKey();
+            var mKey = _unitOfWork.GetManipulationKey();
             try
             {
-                _unitOfWork.setManipulationKey(mKey + 1);
+                _unitOfWork.SetManipulationKey(mKey + 1);
                 await _unitOfWork.OpenAsync(mKey);
                 await _unitOfWork.BeginAsync(mKey);
 
@@ -274,6 +277,133 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services
             finally
             {
                 await _unitOfWork.DisposeAsync(mKey);
+                await _unitOfWork.CloseAsync(mKey);
+            }
+
+        }
+
+        public virtual async Task<byte[]> ExportExcelAsync(ExportExcelDto exportExcelDto)
+        {
+            var mKey = _unitOfWork.GetManipulationKey();
+            try
+            {
+                _unitOfWork.SetManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
+
+                var entityFilterDto = new EntityFilterDto();
+                entityFilterDto.Skip = 0;
+                entityFilterDto.KeySearch = exportExcelDto.KeySearch;
+
+                var entityList = await FilterAsync(entityFilterDto);
+
+                ExcelPackage excel = new ExcelPackage();
+
+                var workSheet = excel.Workbook.Worksheets.Add("Sheet1");
+                ExcelWorksheet ws = excel.Workbook.Worksheets[0];
+
+                ws.Cells.Style.Font.Size = 13;
+                ws.Cells.Style.Font.Name = "Times New Roman";
+                ws.Rows.CustomHeight = false;
+                ws.Cells.Style.Indent = 1;
+                // Bật wrap text cho tất cả các cell
+                ws.Cells.Style.WrapText = true;
+
+                //Số lượng cột của header
+                var countColHeader = exportExcelDto.Columns.Count;
+
+                // merge các column lại từ col 1 đến số col header để tạo heading
+                ws.Cells[1, 1].Value = exportExcelDto.TableHeading;
+                ws.Cells[1, 1, 1, countColHeader].Merge = true;
+
+                // in đậm heading
+                ws.Cells[1, 1, 1, countColHeader].Style.Font.Bold = true;
+
+
+                int colIndex = 1;
+                int rowIndex = 2;
+
+                // tạo các header 
+                for (int i = 0; i < exportExcelDto.Columns.Count; ++i)
+                {
+                    var item = exportExcelDto.Columns[i];
+                    var cell = ws.Cells[rowIndex, colIndex];
+
+                    //set màu thành gray
+                    var fill = cell.Style.Fill;
+                    fill.PatternType = ExcelFillStyle.Solid;
+                    fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+
+                    //căn chỉnh các border
+                    var border = cell.Style.Border;
+                    border.Bottom.Style =
+                        border.Top.Style =
+                        border.Left.Style =
+                        border.Right.Style = ExcelBorderStyle.Thin;
+
+                    //Độ rộng của các cột
+                    ws.Columns[i + 1].Width = item.Width;
+
+                    // In đậm
+                    ws.Cells[2, i + 1].Style.Font.Bold = true;
+
+                    // align text
+                    ws.Columns[i + 1].Style.HorizontalAlignment = item.Align switch
+                    {
+                        "left" => ExcelHorizontalAlignment.Left,
+                        "right" => ExcelHorizontalAlignment.Right,
+                        _ => ExcelHorizontalAlignment.Center,
+                    };
+
+                    cell.Value = item.Caption;
+                    ++colIndex;
+                }
+
+                // căn giữa heading
+                ws.Cells[1, 1, 1, countColHeader].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                // đổ dữ liệu vào sheet
+                foreach (var entityDto in entityList.FilteredList)
+                {
+                    ++rowIndex;
+                    colIndex = 1;
+                    ws.Cells[rowIndex, colIndex++].Value = rowIndex - 2;
+
+                    for (int i = 1; i < exportExcelDto.Columns.Count; i++)
+                    {
+                        var colValue = entityDto?.GetType().GetProperty(exportExcelDto.Columns[i].Name)?.GetValue(entityDto);
+                        switch (exportExcelDto.Columns[i].Type)
+                        {
+                            case "number":
+                                long value = (long)colValue;
+                                ws.Cells[rowIndex, colIndex++].Value = value.ToString("N0", new CultureInfo("vi-VN")); ;
+                                break;
+                            case "date":
+                                DateTime date = (DateTime)colValue;
+                                ws.Cells[rowIndex, colIndex++].Value = date.ToString("dd/MM/yyyy");
+                                break;
+                            default:
+                                ws.Cells[rowIndex, colIndex++].Value = colValue;
+                                break;
+
+                        }
+                    }
+                }
+
+                // Thêm border cho các cells
+                if (entityList.FilteredList.Count > 0)
+                {
+                    var cellBorder = ws.Cells[3, 1, 2 + entityList.FilteredList.Count, exportExcelDto.Columns.Count].Style.Border;
+                    cellBorder.Bottom.Style =
+                        cellBorder.Top.Style =
+                        cellBorder.Left.Style =
+                        cellBorder.Right.Style = ExcelBorderStyle.Thin;
+                }
+
+                byte[] bin = excel.GetAsByteArray();
+                return bin;
+            }
+            finally
+            {
                 await _unitOfWork.CloseAsync(mKey);
             }
 

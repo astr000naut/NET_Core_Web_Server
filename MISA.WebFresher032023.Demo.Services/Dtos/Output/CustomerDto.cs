@@ -30,7 +30,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output
         public string EnvoiceContactMobile { get; set; }
         public string PaymentTermName { get; set; }
         public int? DueTime { get; set; }
-        public int MaximizeDebtAmount { get; set; }
+        public int? MaximizeDebtAmount { get; set; }
         public string ReceiveAccount { get; set; }
         public string PayAccount { get; set; }
         public Guid? PayAccountId { get; set; }
@@ -40,10 +40,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output
         public string ProvinceOrCity { get; set; }
         public string District { get; set; }
         public string WardOrCommune { get; set; }
-        public int CountryId { get; set; }
-        public int ProvinceOrCityId { get; set; }
-        public int DistrictId { get; set; }
-        public int WardOrCommuneId { get; set; }
+        public int? CountryId { get; set; }
+        public int? ProvinceOrCityId { get; set; }
+        public int? DistrictId { get; set; }
+        public int? WardOrCommuneId { get; set; }
         public string ShippingAddressList { get; set; }
         public string Description { get; set; }
         public string IdentityNumber { get; set; }

@@ -4,6 +4,7 @@ using MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Output;
 using MISA.WebFresher032023.Demo.BusinessLayer.Services.AccountSvc;
 using MISA.WebFresher032023.Demo.Common.Enums;
 using MISA.WebFresher032023.Demo.Common.Exceptions;
+using MISA.WebFresher032023.Demo.Common.Resources;
 
 namespace MISA.WebFresher032023.Demo.API.Controllers
 {
@@ -24,6 +25,14 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
 
             var filteredList = await _accountService.FilterAccountAsync(accountFilterInputDto);
             return Ok(filteredList);
+        }
+
+        [Route("ExportData")]
+        [HttpPost]
+        public async Task<IActionResult> ExportAccountData(ExportExcelDto exportExcelDto)
+        {
+            byte[] excelFileBytes = await _accountService.ExportExcelAsync(exportExcelDto);
+            return File(excelFileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", exportExcelDto.FileName);
         }
     }
 }
