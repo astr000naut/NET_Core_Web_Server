@@ -13,11 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MISA.WebFresher032023.Demo.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MISA.WebFresher032023.Demo.API", "MISA.WebFresher032023.Demo.API\MISA.WebFresher032023.Demo.API.csproj", "{12A1D7C0-8839-4C1F-ACF2-EE5D281732FD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configs", "Configs", "{4E124D72-CD74-4BD7-AC16-0E39F9F588C9}"
-	ProjectSection(SolutionItems) = preProject
-		MISA.WebFresher032023.Demo.Common\Configs\Default.json = MISA.WebFresher032023.Demo.Common\Configs\Default.json
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

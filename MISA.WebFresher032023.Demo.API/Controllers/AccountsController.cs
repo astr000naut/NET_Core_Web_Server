@@ -34,5 +34,13 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
             byte[] excelFileBytes = await _accountService.ExportExcelAsync(exportExcelDto);
             return File(excelFileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", exportExcelDto.FileName);
         }
+
+        [Route("ChangeUsingStatus")]
+        [HttpPut]
+        public async Task<IActionResult> ChangeUsingStatus(AccountChangeUsingStatusDto accountChangeUsingStatusDto)
+        {
+            var result = await _accountService.ChangeUsingStatusAsync(accountChangeUsingStatusDto);
+            return Ok(result);
+        }
     }
 }

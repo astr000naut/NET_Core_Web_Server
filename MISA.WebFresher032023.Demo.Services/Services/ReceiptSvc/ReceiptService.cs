@@ -114,6 +114,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.ReceiptSvc
                 // Update các receipt detail
                 foreach (var receiptDetailInputDto in receiptInputDto.ReceiptDetailList)
                 {
+                    // enum
                     if (receiptDetailInputDto.Status == "delete")
                         await DeleteReceiptDetailAsync(receiptDetailInputDto.ReceiptDetailId);
                     else if (receiptDetailInputDto.Status == "create")
@@ -166,9 +167,9 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.ReceiptSvc
             return await _receiptRepository.GetNewReceiptNoAsync();
         }
 
-        public async Task<long> GetTotalReceive()
+        public async Task<long> GetTotalReceive(string keySearch)
         {
-            return await _receiptRepository.GetTotalReceive();
+            return await _receiptRepository.GetTotalReceive(keySearch);
         }
     }
 }

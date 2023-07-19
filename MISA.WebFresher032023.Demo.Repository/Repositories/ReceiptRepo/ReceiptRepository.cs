@@ -73,16 +73,19 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories.ReceiptRepo
             }
         }
 
-        public async Task<long> GetTotalReceive()
+        public async Task<long> GetTotalReceive(string keySearch)
         {
             try
             {
                 var dynamicParams = new DynamicParameters();
+                dynamicParams.Add("p_keySearch", keySearch);
                 dynamicParams.Add("o_totalReceive", direction: ParameterDirection.Output);
                 await _unitOfWork.Connection.ExecuteAsync("Proc_GetReceiptTotalReceive",
                     commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _unitOfWork.Transaction);
-                var totalReceive = dynamicParams.Get<decimal>("o_totalReceive");
-                return (long)totalReceive;
+                var totalReceive = dynamicParams.Get<decimal?>("o_totalReceive");
+                if (totalReceive != null)
+                    return (long) totalReceive;
+                return 0;
             }
             catch (Exception ex)
             {

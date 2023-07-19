@@ -74,5 +74,32 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories.AccountRepo
                 throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
             }
         }
+
+        public async Task<bool> ChangeUsingStatusAsync(string mCodeId, bool usingStatus)
+        {
+            try
+            {
+                var dynamicParams = new DynamicParameters();
+
+
+                var proceduredName = "Proc_ChangeAccountUsingStatus";
+
+                var usingStatusName = UsingStatus.isUsing;
+                if (!usingStatus) usingStatusName = UsingStatus.isNotUsing;
+
+                dynamicParams.Add("p_mCodeId", mCodeId);
+                dynamicParams.Add("p_usingStatus", usingStatus);
+                dynamicParams.Add("p_usingStatusName", usingStatusName);
+
+
+                var rowAffected = await _unitOfWork.Connection.ExecuteAsync(proceduredName,
+                    commandType: CommandType.StoredProcedure, param: dynamicParams, transaction: _unitOfWork.Transaction);
+                return rowAffected != 0;
+            }
+            catch (Exception ex)
+            {
+                throw new DbException(Error.DbQueryFail, ex.Message, Error.DbQueryFailMsg);
+            }
+        }
     }
 }

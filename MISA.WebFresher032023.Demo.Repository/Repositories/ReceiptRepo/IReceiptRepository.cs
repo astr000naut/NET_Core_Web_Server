@@ -17,6 +17,6 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories.ReceiptRepo
 
         Task<string> GetNewReceiptNoAsync();
 
-        Task<long> GetTotalReceive();
+        Task<long> GetTotalReceive(string keySearch);
     }
 }

@@ -11,5 +11,6 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories.AccountRepo
     public interface IAccountRepository : IBaseRepository<Account, AccountInput>
     {
         Task<FilteredList<Account>> FilterAccountAsync(AccountFilterInput accountFilterInput);
+        Task<bool> ChangeUsingStatusAsync(string mCodeId, bool usingStatus);
     }
 }

@@ -84,13 +84,15 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.AccountSvc
 
                 var account = await _accountRepository.GetAsync(id);
                 if (account.IsParent)
-                {
                     throw new ConflictException(Error.ConflictCode, Error.AccountDeleteConflictMsg, Error.AccountDeleteConflictMsg);
-                } else
-                {
-                    return await _accountRepository.DeleteByIdAsync(id);
-                }
 
+                var result = await _accountRepository.DeleteByIdAsync(id);
+                await _unitOfWork.CommitAsync(mKey);
+                return result;
+
+            } catch
+            {
+                throw;
             }
             finally
             {
@@ -225,6 +227,31 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.AccountSvc
                 await _unitOfWork.CloseAsync(mKey);
             }
 
+        }
+
+        public async Task<bool> ChangeUsingStatusAsync(AccountChangeUsingStatusDto accountChangeUsingStatusDto)
+        {
+            var mKey = _unitOfWork.GetManipulationKey();
+            try
+            {
+                _unitOfWork.SetManipulationKey(mKey + 1);
+                await _unitOfWork.OpenAsync(mKey);
+                await _unitOfWork.BeginAsync(mKey);
+                var mCodeId = accountChangeUsingStatusDto.MCodeId;
+                var usingStatus = accountChangeUsingStatusDto.UsingStatus;
+                var result = await _accountRepository.ChangeUsingStatusAsync(mCodeId, usingStatus);
+                await _unitOfWork.CommitAsync(mKey);
+                return result;
+
+            } catch
+            {
+                throw;
+            }
+            finally
+            {
+                await _unitOfWork.DisposeAsync(mKey);
+                await _unitOfWork.CloseAsync(mKey);
+            }
         }
     }
 }

@@ -23,9 +23,10 @@ namespace MISA.WebFresher032023.Demo.DataLayer
         private DbTransaction _transaction;
         private int _manipulationKey;
 
-        public UnitOfWork(AppConfig appConfig)
+        public UnitOfWork(IConfiguration configuration)
         {
-            _connection = new MySqlConnection(appConfig.ConnectionString);
+            string connectionString = configuration.GetConnectionString("SqlConnection") ?? "";
+            _connection = new MySqlConnection(connectionString);
             _manipulationKey = 0;
         }
 

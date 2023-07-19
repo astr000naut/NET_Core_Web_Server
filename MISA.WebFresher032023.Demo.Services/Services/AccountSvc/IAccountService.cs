@@ -11,5 +11,7 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.AccountSvc
     public interface IAccountService : IBaseService<AccountDto, AccountInputDto>
     {
         Task<FilteredListDto<AccountDto>> FilterAccountAsync(AccountFilterInputDto accountFilterInputDto);
+
+        Task<bool> ChangeUsingStatusAsync(AccountChangeUsingStatusDto accountChangeUsingStatusDto);
     }
 }

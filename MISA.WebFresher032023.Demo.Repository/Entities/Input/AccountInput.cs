@@ -25,5 +25,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Entities.Input
         public DateTime? ModifiedDate { get; set; }
         public string? ModifiedBy { get; set; }
         public bool? ForeignCurrencyAccounting { get; set; }
+        public bool? UsingStatus { get; set; }
+        public string UsingStatusName { get; set; }
     }
 }

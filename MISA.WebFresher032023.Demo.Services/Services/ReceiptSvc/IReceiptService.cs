@@ -9,6 +9,6 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.ReceiptSvc
     {
         Task<string> GetNewReceiptNoAsync();
 
-        Task<long> GetTotalReceive();
+        Task<long> GetTotalReceive(string keySearch);
     }
 }

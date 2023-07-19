@@ -38,9 +38,9 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
 
         [Route("GetTotalReceive")]
         [HttpGet]
-        public async Task<IActionResult> GetTotalReceive()
+        public async Task<IActionResult> GetTotalReceive(string? keySearch)
         {
-            var totalReceive = await _receiptService.GetTotalReceive();
+            var totalReceive = await _receiptService.GetTotalReceive(keySearch);
             return Ok(totalReceive);
         }
     }
