@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace MISA.WebFresher032023.Demo.Common.Configs
 {
-    public class Config
+    public class AppConfig
     {
+        public string ConnectionString { get; set; }
     }
 }

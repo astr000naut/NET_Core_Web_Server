@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using MISA.WebFresher032023.Demo.Common.Configs;
 using MISA.WebFresher032023.Demo.Common.Enums;
 using MISA.WebFresher032023.Demo.Common.Exceptions;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories;
@@ -22,10 +23,9 @@ namespace MISA.WebFresher032023.Demo.DataLayer
         private DbTransaction _transaction;
         private int _manipulationKey;
 
-        public UnitOfWork(IConfiguration configuration)
+        public UnitOfWork(AppConfig appConfig)
         {
-            string connectionString = configuration.GetConnectionString("SqlConnection") ?? "";
-            _connection = new MySqlConnection(connectionString);
+            _connection = new MySqlConnection(appConfig.ConnectionString);
             _manipulationKey = 0;
         }
 

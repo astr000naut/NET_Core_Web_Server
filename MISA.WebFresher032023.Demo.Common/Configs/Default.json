@@ -1,0 +1,3 @@
+{
+  "ConnectionString": "Server=localhost;Port=3306;Database=misa_web202303_mf1611_ntdung;Uid=root;Pwd=secret;"
+}

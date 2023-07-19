@@ -1,15 +1,17 @@
-using MISA.WebFresher032023.Demo.API.Middleware;
+﻿using MISA.WebFresher032023.Demo.API.Middleware;
 using MISA.WebFresher032023.Demo.BusinessLayer.Services;
 using MISA.WebFresher032023.Demo.BusinessLayer.Services.AccountSvc;
 using MISA.WebFresher032023.Demo.BusinessLayer.Services.GroupSvc;
 using MISA.WebFresher032023.Demo.BusinessLayer.Services.LocationSvc;
 using MISA.WebFresher032023.Demo.BusinessLayer.Services.ReceiptSvc;
+using MISA.WebFresher032023.Demo.Common.Configs;
 using MISA.WebFresher032023.Demo.DataLayer;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories.AccountRepo;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories.GroupRepo;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories.LocationRepo;
 using MISA.WebFresher032023.Demo.DataLayer.Repositories.ReceiptRepo;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +38,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Dependency Injection
+AppConfig config = ConfigHelper.ReadDefaultConfig();
+builder.Services.AddSingleton(config);
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped <ICustomerRepository, CustomerRepository>();
