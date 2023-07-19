@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,9 +17,11 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Dtos.Input
         public int? Take { get; set; }
 
         // String dùng để filter bản ghi
+        [StringLength(100)]
         public string? KeySearch { get; set; }
 
         // danh sách id của các tài khoản tổng hợp
+        [StringLength(500)]
         public string? ParentIdList { get; set; }
 
         // bậc
