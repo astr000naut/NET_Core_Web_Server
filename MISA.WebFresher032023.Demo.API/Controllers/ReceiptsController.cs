@@ -35,5 +35,13 @@ namespace MISA.WebFresher032023.Demo.API.Controllers
             byte[] excelFileBytes = await _receiptService.ExportExcelAsync(exportExcelDto);
             return File(excelFileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", exportExcelDto.FileName);
         }
+
+        [Route("GetTotalReceive")]
+        [HttpGet]
+        public async Task<IActionResult> GetTotalReceive()
+        {
+            var totalReceive = await _receiptService.GetTotalReceive();
+            return Ok(totalReceive);
+        }
     }
 }

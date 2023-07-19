@@ -165,5 +165,10 @@ namespace MISA.WebFresher032023.Demo.BusinessLayer.Services.ReceiptSvc
         {
             return await _receiptRepository.GetNewReceiptNoAsync();
         }
+
+        public async Task<long> GetTotalReceive()
+        {
+            return await _receiptRepository.GetTotalReceive();
+        }
     }
 }

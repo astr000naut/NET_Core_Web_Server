@@ -16,5 +16,7 @@ namespace MISA.WebFresher032023.Demo.DataLayer.Repositories.ReceiptRepo
         Task<IEnumerable<ReceiptDetail>> GetReceiptDetailListAsync(Guid id);
 
         Task<string> GetNewReceiptNoAsync();
+
+        Task<long> GetTotalReceive();
     }
 }
