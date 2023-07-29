@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Documents\**" />
+    <Content Remove="Documents\**" />
+    <EmbeddedResource Remove="Documents\**" />
+    <None Remove="Documents\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="MySqlConnector" Version="2.2.6" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
@@ -14,10 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MISA.WebFresher032023.Demo.Services\MISA.WebFresher032023.Demo.BusinessLayer.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Documents\" />
   </ItemGroup>
 
 </Project>

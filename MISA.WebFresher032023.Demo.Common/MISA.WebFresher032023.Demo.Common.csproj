@@ -7,16 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Functions\**" />
     <Compile Remove="NewFolder1\**" />
     <Compile Remove="NewFolder\**" />
+    <EmbeddedResource Remove="Functions\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
     <EmbeddedResource Remove="NewFolder\**" />
+    <None Remove="Functions\**" />
     <None Remove="NewFolder1\**" />
     <None Remove="NewFolder\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Functions\" />
   </ItemGroup>
 
 </Project>
